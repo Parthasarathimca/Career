@@ -1,0 +1,48 @@
+<script>
+deleteDoorItem=(url,pk)=>{
+    $.ajax({
+            url: url,
+            data: {"pk":pk
+                },
+            success: function (data) {
+            data=JSON.parse(data)
+                if(data['status']==200){
+            Swal.fire({
+                    title:    'Deleted!',
+                    text: 'Your data has been deleted.',
+                    icon:  'success',
+                    customClass: {
+                    confirmButton: 'btn btn-primary',
+                    },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.replace('{% url obj_ref room_id %}');
+                        }
+                    });
+                }
+
+            }
+        });
+    }
+$(document).on("click", ".del-data", function (e) {
+    pk= $(this).data('delete_id')
+    delete_url = $(this).data('url')
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-secondary'
+            },
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                console.log("Hello")
+            deleteDoorItem(delete_url,pk)
+            }
+        })
+        e.preventDefault();
+});
+</script>

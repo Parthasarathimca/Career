@@ -1,0 +1,10 @@
+*.pyc
+__pycache__/
+*public/
+*color_pics/
+# *fixtures/
+COS/settings.py
+.env
+*.env
+*.idea/
+COS/.env

@@ -1,0 +1,227 @@
+{% extends 'room_options/base_room_option.html' %} {% load static custom_tag %}
+{% load room_extras %}
+{% block navbartitle %}Toe Kicks{% endblock %}
+{% block option_title %}Toe Kicks{% endblock %}
+{% block crumb %}Toe Kicks{% endblock %}
+
+{% block room_form %}
+
+       <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
+            <h3 class="card-title selected_room">
+                Selected Room : {{ room }}
+            </h3>
+
+        </div>
+     <div class="mt-4">
+        <div class="card mb-5 mb-xxl-8" id="standard-cleat">
+
+
+<form method="POST" action="" id="create-toe-kick-form" name="toe-kick">
+            {% csrf_token %}
+
+
+
+            <div class="card mb-5 mb-xxl-4">
+                <div class="card-body">
+
+                    <div class="mb-8">
+
+
+                        <div class="col-md-6">
+
+                            <div class="row justify-content-center align-items-center mb-6 col-md-12">
+                                <div class="col-md-4 col-4 fv-row">
+                                    <label class="form-check-label fs-6 fw-bold mb-2 required">Qty</label>
+                                    {{ form.quantity }}
+                                </div>
+                                <div class="col-md-1 col-1 fv-row mt-4">
+                                    <label class="fs-6 fw-bold">@</label>
+                                </div>
+                                <div class="col-md-3 col-3 fv-row">
+                                    <label class="form-check-label fs-6 fw-bold mb-2 required">Width</label>
+                                    {{ form.width }}
+                                </div>
+                                <div class="col-md-1 col-1 fv-row mt-4">
+                                    <span class="fs-6 fw-bold">X</span>
+                                </div>
+                                <div class="col-md-3 col-3 fv-row">
+                                    <label class="form-check-label fs-6 fw-bold mb-2 required">Height</label>
+                                    {{ form.height }}
+                                </div>
+                            </div>
+
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <label class="form-check-label fs-6 fw-bold mb-3 required" for="1mm">
+                                            End Caps ?
+                                        </label>
+                                        <div class="d-flex flex-row mb-8 flex-wrap border grouping-box pb-0">
+                                            <div
+                                                class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                                                <input class="form-check-input end-caps" id="ec-yes" type="radio" value="True"
+                                                     {% if toe_kick %}{% chk_true form.end_caps.value True %}{% endif %}
+                                               name="{{form.end_caps.name}}" />
+                                                <label class="form-check-label" for="1mm">Yes</label>
+                                            </div>
+                                            <div
+                                                class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                                                <input class="form-check-input end-caps" type="radio" value="False" id="ec-no"
+                                                     {% if toe_kick %}{% chk_true form.end_caps.value False %}{% endif %}
+                                               name="{{form.end_caps.name}}" />
+                                                <label class="form-check-label" for="1mm">No</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6 face-color d-none">
+                                        <label class="form-check-label fs-6 fw-bold mb-3 required" for="1mm">
+                                        Face Color - same as:
+                                        </label>
+                                        <div class="d-flex flex-row mb-8 flex-wrap border grouping-box pb-0">
+                                            <div
+                                                class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                                                <input class="form-check-input face-color" type="radio" value="main"
+                                                    id="1mm" {% if toe_kick %}{% chk_true form.face_color.value "main" %}{% endif %}
+                                               name="{{form.face_color.name}}" />
+                                                <label class="form-check-label" for="1mm">Main</label>
+                                            </div>
+                                            <div
+                                                class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                                                <input class="form-check-input face-color" type="radio" value="doorndrawer"
+                                                    id="doice" {% if toe_kick %}{% chk_true form.face_color.value "doorndrawer" %}{% endif %}
+                                               name="{{form.face_color.name}}" />
+                                                <label class="form-check-label" for="1mm">Door "n Drawer</label>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+
+                                <div class="col-md-6 toe-depth-block mb-8 d-none">
+                                    <label class="fs-6 fw-bold mb-3 mt-md-0 mt-3 required">Depth</label>
+
+                                    <select class="form-select form-select-solid depth toe-depth  mb-3" data-control="select2" data-hide-search="true" data-placeholder="Select Depth" name="{{form.toe_kick_depth.name}}">
+
+                                        {% for value, text in form.toe_kick_depth.field.choices %}
+                                        <option {% if form.toe_kick_depth.value == value %} selected {% endif %} value="{{value}}">{{text}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+
+                            <div class="col-md-6 mt-2">
+                                <!--begin::Input group-->
+                                <div class="d-flex flex-stack mb-8">
+                                <!--begin::Label-->
+                                    <div class="me-5">
+                                        <label class="fs-6 fw-bold">Plywood</label>
+                                    </div>
+                                    <!--end::Label-->
+                                    <!--begin::Switch-->
+                                    <label class="form-check form-switch form-check-custom form-check-solid">
+                                            <span class="form-check-label fw-bold text-gray-400 me-2">No</span>
+                                            {{ form.plywood }}
+                                            <span class="form-check-label fw-bold text-gray-400">yes</span>
+                                        </label>
+                                <!--end::Switch-->
+                                </div>
+                            </div>
+
+                            <div class="notes mb-5 mb-xxl-8">
+                                <label class="fs-6 fw-bold mb-2">Notes:</label>
+                                <textarea class="form-control 1_shelf_notes form-control-solid" name="{{form.notes.name}}">{% if form.notes.value %}{{form.notes.value}}{% endif %}</textarea>
+                            </div>
+
+                            {% if toe_kick %}
+                                <div class="d-flex justify-content-end pt-7">
+                                    <a class="btn btn-secondary me-2" href="{% url 'room_options:toe-kick' room_id=room.id  %}">Cancel</a>
+                                    <button class="btn btn-primary submit-form" type="submit">Update</button>
+                                </div>
+                                {% else %}
+                                <div class="d-flex justify-content-end pt-7">
+                                    <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                                    <button class="btn btn-primary submit-form" id="cleat_submit" type="submit">Submit</button>
+                                </div>
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+            </div>
+        </div>
+
+    {% include 'room_options/toe kicks/_toe_kick_table.html' with cleats=cleats %}
+{% endblock %}
+{% block extra_scripts %}
+     {% include 'room_options/_delete_room_option.html' with obj_ref='room_options:toe-kick' room_id=room.id %}
+    <script>
+     $(document).on("change",'.end-caps',function() {
+                if ($(this).prop("checked") == true) {
+                    if ($(this).val() == "True") {
+                        $(".toe-depth-block").removeClass("d-none");
+                        $(".face-color").removeClass("d-none");
+                        // $(".submit-partition").attr("id" , )
+                    } else {
+                        $(".toe-depth-block").addClass("d-none");
+                        $(".face-color").addClass("d-none");
+                    }
+                }
+            });
+      $("#toe-submit").on("click", function() {
+
+                if($('.toe-kicks').val() == "" && $('.toe-width').val() == "" && $('.toe-height').val() == "" && $("input[name='end_caps']:checked").length == 0 && $("input[name='face_color']:checked").length == 0) {
+                    sweetAlert("Please fill in all the required fields.");
+                    return false;
+                }
+                   else if ($('.toe-kicks').val() == "") {
+                        sweetAlert("Quantity is required.");
+                        return false;
+                    }
+                    else if ($('.toe-width').val() == "") {
+                        sweetAlert("Width is required.");
+                        return false;
+                    }
+                    else if ($('.toe-height').val() == "") {
+                        sweetAlert("Height is required.");
+                        return false;
+                    }
+                    else if ($("input[name='end_caps']:checked").length == 0) {
+                        sweetAlert("Please choose endcaps.");
+                        return false;
+                    }
+                    else if($('.toe-depth').is(':visible') && $('.toe-depth').val() == ""){
+                        sweetAlert("Depth is required.");
+                        return false;
+                    }
+                    else if ($("input[name='face_color']").is(":visible") && $("input[name='face_color']:checked").length == 0) {
+                        sweetAlert("Please choose face color.");
+                        return false;
+                    }
+          }
+          )
+
+     </script>
+     {% if toe_kick %}
+            <script>
+            $(document).ready(function() {
+               {% if toe_kick.end_caps %}
+                $(".toe-depth-block").removeClass("d-none");
+                $(".face-color").removeClass("d-none");
+            {% endif %}
+
+
+            })
+            </script>
+    {% endif %}
+{% endblock %}
+
+
+
+
+
+   

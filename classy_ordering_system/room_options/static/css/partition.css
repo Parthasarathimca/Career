@@ -1,0 +1,59 @@
+.pattern-img{
+    margin-top: 20px ;
+    max-height: 55vh;
+}
+form .error {
+  color: #ff0000;
+}
+label.error{
+    display:block;
+    clear: both;
+}
+.partition_table table tr td .svg-icon svg [fill]:not(.permanent):not(g)  {
+    /* transition: fill .3s ease; */
+    fill: #770d29 !important;
+}
+.radio_sec{    
+    padding: 10px;
+    border-radius: 5px;
+}
+.empty_mirror{
+    margin-top: 20px;
+    transform: skew(170deg);
+    width: 150px;
+    height: 200px;  
+    border: 1px solid #770d29;   
+    padding: 10px 10px 10px 10px;  
+    margin-left: 100px; 
+}
+
+.colored_mirror{
+    background-color:#770d29;       
+    width: 125px;
+    height: 175px;
+}
+
+@media screen and (max-width:767px) {
+   
+    .custom_continue_btn{  
+        width: 100%;
+    }
+
+}
+
+
+@media screen and (min-width:768px) {
+    
+    .l-shelf-img{
+        height: 300px;
+        margin-left: 140px;
+        margin-top: 30px;
+    }
+
+}
+
+
+
+
+
+

@@ -1,0 +1,49 @@
+
+        <div class="row">
+            <div class="col-lg-4">
+                <h3 class="card-title align-items-start   d-block justify-content-between">
+                    <span class="card-label fs-3 mb-1 d-block mb-3"> <em
+                            class="text-muted">Client ID:</em>
+                        #{{ room.job.client_id }}</span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"><em
+                            class="text-muted">Job ID:</em>
+                        #{{ room.job.job_id }}</span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"><em
+                            class="text-muted">Customer
+                            Name:</em> </span>
+                </h3>
+            </div>
+            <div class="col-lg-4">
+                <h3 class="card-title align-items-start   d-block justify-content-between">
+                    <span class="card-label fs-3 mb-1 d-block mb-3"> <em
+                            class="text-muted">Room Material:</em>
+                        {{ room.mat_type }}</span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"> <em
+                            class="text-muted">Room Board Color</em> {{ room.bd_color }} </span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"><em
+                            class="text-muted">Room Edge Color:</em>
+                            {{ room.ed_color }} </span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"><em
+                        class="text-muted">Room Edge Type:</em>
+                        {{ room.ed_type }} </span>
+                </h3>
+            </div>
+            <div class="col-lg-4">
+                
+                <h3 class="card-title align-items-start   d-block justify-content-between">
+                    <span class="card-label fs-3 mb-1 d-block mb-3"> <em
+                        class="text-muted">Door 'n Drawer Meterial Type:</em>
+                    {{ room.dd_mat_type }}</span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"> <em
+                            class="text-muted">Door 'n Drawer Board Color:</em>
+                            {{ room.dd_color }}</span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"> <em
+                            class="text-muted">Door 'n Drawer Edge Color:</em> {{  room.dd_ed_color }} </span>
+                    <span class="card-label fs-3 mb-1 d-block mb-3"><em
+                            class="text-muted">Door 'n Drawer Edge Type:</em>
+                            {{  room.dd_ed_type }} </span>
+                    
+                </h3>
+            </div>
+        </div>
+    

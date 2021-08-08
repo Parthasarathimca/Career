@@ -1,0 +1,533 @@
+{% extends "room_options/base_room_option.html" %}
+{% load room_extras %}
+{% load static %}
+
+{% block navbartitle %} Corner-Shelf {% endblock %}
+{% block option_title %}Corner-Shelf{% endblock %}
+{% block crumb %}Corner-Shelf{% endblock %}
+
+
+{% block room_form %}
+<div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
+    <h3 class="card-title ">
+        Selected Room : {{ room }}
+    </h3>
+</div>
+
+<form method="POST" action="" id='corner_self_form' >
+    {% csrf_token %}
+    <div class="card mb-5 mb-xxl-8 mt-8" id="kt_post">
+        <div class="card-body mb-5 mb-xxl-8">
+            <div class="card-header border-0 pt-5">
+                <h3
+                    class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+                    <h2>Standard</h2>
+                </h3>
+            </div>
+            <div class="row">
+                <div class="col-xl-7 col-md-8">
+                    <div class="row align-items-center position-relative">
+                        <div class="col-md-4 mt-4 text-end">
+                            <div class="me-6 sideA">
+                                <span class="fs-6 fw-bold required">Side A:</span>
+                                <input name="{{form.width.name}}"  {% if order_items.width %} value="{{order_items.width}}" {% endif %} type="text" class="form-control form-control-solid numberWithFloat side-a">
+                            </div>
+                        </div>
+                        <div class="col-md-4  mt-md-0 mt-6">
+                            <div class="mb-3 ms-6">
+                                <span class="fs-6 fw-bold required">Side B:</span>
+                                <input name="{{form.width2.name}}"  {% if order_items.width2 %} value="{{order_items.width2}}" {% endif %} type="text" class="form-control form-control-solid shelf_width side-b mx-0 numberWithFloat">
+                            </div>
+                            <div>
+                                <img src="{% static 'images/corner-shape.png' %}" class="img-fluid mt-4 corner-shelf" alt="image" />
+                            </div>        
+                            <div class="mt-8 sideA1 ms-6">
+                                <span class="fs-6 fw-bold required">Side A1:</span>
+                                <input name="{{form.depth.name}}" {% if order_items.depth %} value="{{order_items.depth}}" {% endif %} type="text" class="form-control form-control-solid numberWithFloat side-a1">
+                            </div>        
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="sideA1 ms-4">
+                                <span class="fs-6 fw-bold required">Side B1:</span>
+                                <input name="{{form.depth2.name}}" {% if order_items.depth2 %} value="{{order_items.depth2}}" {% endif %} type="text" class="form-control form-control-solid numberWithFloat side-b1">
+                            </div>    
+                            <div class="mt-8 sideA1 ms-4 col-md-4 lShelf-qty">
+                                <span class="fs-6 fw-bold required">Qty:</span>
+                                <input name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %} type="text" class="form-control form-control-solid  onlyNumber quantity">
+                            </div>                                                                                                            
+                        </div>
+                    </div>
+                        <div class="row mt-8">
+                            <div class="col-md-6">
+                                <span class="fs-6 fw-bold required">Notch for Mitered Pard</span> {{ order_items.notch_mitered_pard}}
+                                <div
+                                    class="mt-3 border d-flex text-center align-items-center grouping-box p-0">
+                                    <div 
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input   {% if order_items.notch_mitered_pard == True %} checked {% endif %}   name="{{form.notch_mitered_pard.name}}" class="form-check-input notch_input" type="radio" value="true" id="all"
+                                             />
+                                        <label class="form-check-label" for="all">
+                                            Yes
+                                        </label>
+
+                                    </div>
+                                    <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input name="{{form.notch_mitered_pard.name}}"  {% if order_items.notch_mitered_pard == False %} checked {% endif %} class="form-check-input notch_input" type="radio" value="false" id="KD"
+                                             />
+                                        <label class="form-check-label" for="KD">
+                                            No
+                                        </label>
+                                    </div>
+
+                                    <!-- </div>  -->
+
+                                </div>
+                            </div>
+                                                                                    
+                        </div> 
+
+                        <div class="row mt-8">
+                            <div class="col-md-6">
+                                <label class="fs-6 fw-bold required">Material Type </label>
+                                <div class="mt-3 border d-flex grouping-box p-0">
+                                   
+                                    {% for value, text in form.mat_type.field.choices %}
+                                    {%if value %}
+                                        <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input  name="{{form.mat_type.name}}" {% if order_items.mat_type == value %} checked {% endif %} class="form-check-input" type="radio" value="{{value}}"
+                                            id="mel"  />
+                                        <label class="form-check-label" for="{{form.mat_type.name}}">
+                                            {{text}}
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                            <!-- <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
+                                   -->
+                                    <!-- <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input class="form-check-input" type="radio" value=""
+                                            id="PB" name="mel" />
+                                        <label class="form-check-label" for="PB">
+                                            PB
+                                        </label>
+                                    </div> -->
+
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="fs-6 fw-bold required">Shelf Type</label>
+                                <div class="mt-3 border d-flex grouping-box p-0">
+                                    {% for value, text in form.shelf_type.field.choices %}
+                                    {% if value %}
+                                    <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input {% if order_items.shelf_type == value %} checked {% endif %} class="form-check-input shelf_type_radio" type="radio" value="{{value}}"
+                                            id="adj" name="{{form.shelf_type.name}}" />
+                                        <label class="form-check-label" for="all">
+                                         {{text}}
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                    <!-- <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input class="form-check-input  shelf_type_radio" type="radio" value="Kd"
+                                            id="KD" name="type" />
+                                        <label class="form-check-label" for="KD">
+                                            KD
+                                        </label>
+                                    </div> -->
+                                </div>
+
+                              
+
+                            </div>
+                        </div>
+
+                        <div class="row mt-8 d-none partition_check">                                                        
+                            <div class="col-md-6">
+                                <span class="fs-6 fw-bold">Partitions </span>
+                                <div
+                                    class="mt-3 mb-3 border d-flex text-center align-items-center grouping-box p-0">
+                                    {% for value, text in form.shelfs_partitions.field.choices %}
+                                    {% if value %}
+                                    <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input {% if order_items.shelfs_partitions == value %} checked {% endif %}  class="form-check-input " type="radio" value="{{value}}" id="sq"
+                                            name="{{form.shelfs_partitions.name}}" />
+                                        <label class="form-check-label" for="sq">
+                                           {{text}}
+                                        </label>
+
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                    <!-- <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input class="form-check-input form-control-solid" type="radio" value="" id="rind"
+                                            name="partition" />
+                                        <label class="form-check-label" for="rind">
+                                            Rind
+                                        </label>
+                                    </div>             -->
+                                </div>
+                                <span class="text-danger">* Affects Drilling pattern</span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <span class="fs-6 fw-bold">Drill for Toe Kick </span>
+                                <div
+                                    class="mt-3 mb-3 border d-flex text-center align-items-center grouping-box p-0">
+                                    <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input {% if order_items.drill_toe_kick == False %} checked {% endif %}  class="form-check-input " type="radio" value="false" id="no"
+                                            name="{{form.drill_toe_kick.name}}" />
+                                        <label class="form-check-label" for="no">
+                                           No
+                                        </label>
+
+                                    </div>
+                                    <div
+                                        class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input {% if order_items.drill_toe_kick == True %} checked {% endif %} class="form-check-input " type="radio" value="true" id="yes"
+                                            name="{{form.drill_toe_kick.name}}" />
+                                        <label class="form-check-label" for="yes">
+                                           Yes
+                                        </label>
+                                    </div>            
+                                </div>
+                                <span class="text-danger">* Affects Drilling pattern ONLY Qty of 1 Allowed</span>
+                            </div>
+
+                        </div>  
+                        
+                        <div class="notes mt-8">
+                            <label class="fs-6 fw-bold mb-2">Notes:</label>
+                            <textarea  name="{{form.notes.name}}" class="form-control 1_shelf_notes form-control-solid">{% if order_items.notes  %} {{ order_items.notes }}  {% endif %}</textarea>
+                        </div>  
+
+                        <div class="mt-8 d-none kd-note">
+                            <i>                                                            
+                                    Notes: Normal drilling of KD's for L-shelf is done with KD's facing down. On units that sit on a toe kick, the drilling is reserved and is drilled with the KD's facing upward on the bottom KD shelf.
+                               
+                            </i>                                                       
+                        </div>
+                        <div class="d-flex justify-content-end pt-7">
+                            <button type="reset" id="clear_door"
+                                class="btn btn-secondary me-2 clear-btn"
+                                data-kt-search-element="preferences-dismiss">Clear</button>
+                            <button type="submit" id="submit_door"
+                                class="btn btn-primary submit-l-shelf">Submit</button>
+                        </div>
+                    
+                </div>
+                
+                <!--end::Feeds Widget 1-->
+            </div>
+            <!--end::Row-->                                        
+        </div>
+        
+    </div>
+</form>
+<div class="card mb-5 mb-xxl-8" id="kt_post">
+    <div class="card-header border-0 pt-5" id="kt_content_container">
+        <h3
+            class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+            <!-- <span class="card-label fs-3 mb-1">Room 1</span> -->
+            <h2>L shelf</h2>
+        </h3>
+    </div>
+
+    <div class="card-body">
+        <div class=" table-responsive">
+            <table class="table door_tbl table-bordered table-alternet">
+                <thead>
+                    <tr>
+                        <th>S.No</th>
+                        <th>Action</th>
+                        <th>Room</th>
+                        <!-- <th>Category</th> -->
+                        <th>Description</th>
+                        <th>Material</th>
+                        <th>Qty</th>
+                        <th>Side A</th>
+                        <th>Side A1</th>
+                        <th>Side B</th>
+                        <th>Side B1</th>
+                        <th>Notch for Mitered Pard</th>
+                        <th>Shelf Type</th>
+                        <th>Partitions</th>
+                        <th>Drill for Toe kick </th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody class="l_shelf_tbody">
+                    {% for each_l_shelf in corner_shelf %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="min-w-125px text-center">
+                                <a href="{% url 'room_options:corner-shelf' room.id %}?room_item={{each_l_shelf.id}}"
+                                    class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                    >
+                                    <span data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                        title="Edit">
+                                        <span class="svg-icon svg-icon-3">
+                                            <svg xmlns="http://www.w3.org/2000/svg"
+                                                width="24px" height="24px"
+                                                viewBox="0 0 24 24" version="1.1">
+                                                <path
+                                                    d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)" />
+                                                <path
+                                                    d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
+                                                    fill="#000000" fill-rule="nonzero"
+                                                    opacity="0.3" />
+                                            </svg>
+                                        </span>
+                                    </span>
+                                </a>
+                                <a
+                                    class="btn btn-icon btn-active-light-primary w-30px h-30px me-3 del-data"
+                                    data-bs-toggle="tooltip" title="Delete"
+                                    data-kt-customer-payment-method="delete" data-delete_id="{{ each_l_shelf.id }}">
+                                    <span class="svg-icon svg-icon-3 mt-n1">
+                                        <svg xmlns="http://www.w3.org/2000/svg"
+                                            xmlns:xlink="http://www.w3.org/1999/xlink"
+                                            width="24px" height="24px" viewBox="0 0 24 24"
+                                            version="1.1">
+                                            <g stroke="none" stroke-width="1" fill="none"
+                                                fill-rule="evenodd">
+                                                <rect x="0" y="0" width="24" height="24" />
+                                                <path
+                                                    d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                                                    fill="#000000" fill-rule="nonzero" />
+                                                <path
+                                                    d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                    fill="#000000" opacity="0.3" />
+                                            </g>
+                                        </svg>
+                                    </span>
+                                </a>
+                            </td>
+                            <td>{{ each_l_shelf.room }}</td>
+                            <!-- <td>{{ each_l_shelf.part_sub_category }}</td> -->
+                            <td>{{each_l_shelf.description}}({{ each_l_shelf.get_shelf_type_display }}) </td>
+                            <td>{{each_l_shelf.get_mat_type_display}}   </td>
+                            <td>{{ each_l_shelf.quantity }}</td>    
+                            <td>{{ each_l_shelf.width }}</td>
+                            <td>{{ each_l_shelf.depth }}</td>
+                            <td>{{ each_l_shelf.width2 }}</td>
+                            <td>{{ each_l_shelf.depth2 }}</td>
+                            <td>{{ each_l_shelf.notch_mitered_pard }}</td>
+                            <td>{{ each_l_shelf.get_shelf_type_display }}</td>
+                            <td>{{ each_l_shelf.get_shelfs_partitions_display }}</td>
+                            <td>{{ each_l_shelf.drill_toe_kick }}</td>
+                        
+                            <td>{{ each_l_shelf.notes }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+            </table>
+        </div>
+    </div>
+    <!--end::Feeds Widget 1-->
+    <!--end::Col-->
+
+</div>
+
+
+{% endblock %}
+
+
+{% block extra_scripts %}
+
+<script>
+    $(".clear-btn").click(function (e) {
+        $("select").select2('val', "all");
+        $(".partition_check").addClass("d-none");
+        e.preventDefault();
+    });
+
+    $('#corner_self_form').on('submit', function(e){
+    //$(".submit-l-shelf1").click(function (e) {
+        var sideA = $(".side-a").val();
+        var sideB = $(".side-b").val();
+        var sideA1 = $(".side-a1").val();
+        var sideB1 = $(".side-b1").val();
+        var qty = $(".quantity").val();
+        // var Material_type = $("input[name='mel']:checked").val()
+        // var all = $("input[name='all']:checked").val()
+        if(sideA == "" && sideB == "" && sideA1 == "" && sideB1 == "" && qty == "" && $("input[name='notch_mitered_pard']:checked").length == 0 &&  $("input[name='mat_type']:checked").length == 0 && $("input[name='shelf_type']:checked").length == 0){
+            sweetAlert("Please fill in all the required fields.");
+            return false;
+        }
+       else if (sideA == "") {
+            sweetAlert("Side A is required.");
+            return false;
+        }
+        else if (sideB == "") {
+            sweetAlert("Side B is required.");
+            return false;
+        }
+        else if (sideA1 == "") {
+            sweetAlert("Side A1 is required.");
+            return false;
+        }
+        else if (sideB1 == ""){
+            sweetAlert("Side B1 is required.");
+            return false;
+        }
+        else if (qty == ""){
+            sweetAlert("Quantity is required.");
+            return false;
+        }
+        else if ($("input[name='notch_mitered_pard']:checked").length == 0){
+               sweetAlert("Choose option for Notch for Mitered Pard.");
+               return false;
+        }
+        else if ($("input[name='mat_type']:checked").length == 0)
+         {
+            sweetAlert("Choose option for Material type.");
+            return false;
+         }
+         else if ($("input[name='shelf_type']:checked").length == 0)
+         {
+            sweetAlert("Choose option for shelf type.");
+            return false;
+         }
+         else if($('.partition_check').is(':visible') && $("input[name='shelfs_partitions']:checked").length == 0){
+            sweetAlert("Choose partition.");
+            return false;
+         }
+         else if($('.partition_check').is(':visible') && $("input[name='drill_toe_kick']:checked").length == 0){
+            sweetAlert("Choose drill for toe kick.");
+            return false;
+         }
+      
+
+    });
+
+
+// $(document).ready(function() {
+$(document).on('change','.shelf_type_radio',function() {
+
+    if ($(this).prop("checked") == true) {
+        console.log("val", $(this).val());
+        if ($(this).val() == "2") {
+           $(".partition_check").removeClass("d-none");
+           $(".kd-note").removeClass("d-none");
+        } else {
+            $(".partition_check").addClass("d-none");
+            $(".kd-note").addClass("d-none");
+        }
+    }
+});
+// });
+isUpdate= ()=>{
+      if(window.location.search.indexOf('room_item')==1){
+         return true;
+      }
+      else{
+         return false;
+      }
+   }
+updateSetups =() => {
+      if(isUpdate()){
+         $("#submit_door").text('Update')
+         $("#clear_door").text('cancel')
+        
+      }
+      else{
+         $("#submit_door").text('Submit')
+         $("#clear_door").text('Clear')
+
+      }
+   }
+
+ $(document).ready(function() {
+     updateSetups();
+     if(window.location.search){ 
+    $('.shelf_type_radio').trigger("change");
+     }
+ })
+
+$('.notch_input').change(function() {
+        //$("input[name='notch_mitered_pard']:checked").val()
+    if ($(this).prop("checked") == true) {
+        console.log("val", $(this).val());
+        if ($(this).val() == "true") {                      
+                $(".corner-shelf").attr("src" , "{% static 'images/corner-top.png' %}")
+        }
+        
+        else { 
+            $(".corner-shelf").attr("src" , "{% static 'images/corner-shape.png' %}")                       
+        }
+    }
+});
+// });
+
+function sweetAlert(msg) {
+       Swal.fire({
+           text: msg,
+           customClass: {
+               confirmButton: 'btn btn-primary'
+           }
+       });
+   }
+deleteDoorItem=(url,pk)=>{
+   $.ajax({                       
+            url: url,                  
+            data: {"pk":pk
+                },
+            success: function (data) {
+               data=JSON.parse(data)
+                if(data['status']==204){
+               Swal.fire({
+                     title:    'Deleted!',
+                     text: 'Your data has been deleted.',
+                     icon:  'success',
+                     customClass: {
+                     confirmButton: 'btn btn-primary',            
+                      },
+                     });
+                  } 
+                  window.location.replace("{% url 'room_options:corner-shelf' room.id %}")
+            }   
+        });
+}
+
+$(document).on("click", ".del-data", function (e) {
+   pk= $(this).data('delete_id')
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,       
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+          },
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+         deleteDoorItem("{% url 'room_options:delete-corner-shelf' room.id  %}",pk)
+        }
+      })
+    e.preventDefault();
+});
+$("#clear_door").on("click",function(){
+          if(isUpdate()){
+             window.location.href=window.location.pathname
+          }
+       })
+
+</script>
+
+{% endblock %}

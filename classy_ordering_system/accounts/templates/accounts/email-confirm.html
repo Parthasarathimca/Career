@@ -1,0 +1,35 @@
+{% extends 'noauth_layout.html' %}
+{% load static  %}
+
+{% block content %}
+
+    <!--begin::Authentication - Sign-in -->
+    <div class="d-flex flex-column flex-column-fluid bgi-position-y-bottom position-x-center bgi-no-repeat bgi-size-contain bgi-attachment-fixed" style="background-size: 100% 50%; background-image: url({% static 'images/outdoor.png' %})">
+        <!--begin::Content-->
+        <div class="d-flex flex-center flex-column flex-column-fluid p-10 pb-lg-20">
+            <!--begin::Logo-->
+            <a href="{% url 'dashboard' %}" class="mb-12">
+                <h3 class="login-head">Classy Ordering System</h3>
+            </a>
+            <!--end::Logo-->
+            <!--begin::Wrapper-->
+            <div class="w-lg-500px bg-white rounded shadow-sm p-10 p-lg-15 mx-auto">
+                <!--begin::Form-->
+
+
+
+                    <!--begin::Heading-->
+                    <div class="text-center mb-10">
+                        <!--begin::Title-->
+                        <h2 class="text-dark mb-3">Check your inbox</h2>
+                        <div class="text-center">
+								<!--begin::Submit button-->
+
+  <p>We've emailed you instructions for setting your password. You should receive the email shortly!</p>
+
+							</div>
+                    </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

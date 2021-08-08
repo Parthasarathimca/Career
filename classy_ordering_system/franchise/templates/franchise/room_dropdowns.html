@@ -1,0 +1,8 @@
+<option value="">Select Category</option>
+ 
+{% for each_options in options.dropdown_options %}
+
+<option   value="{{each_options.id}}" data-value="{{each_options.picture}}">
+     {{each_options.color}} </option>
+     
+{% endfor %}

@@ -1,0 +1,498 @@
+{% extends 'room_options/base_room_option.html' %} {% load static custom_tag %}
+{% load room_extras %}
+{% block navbartitle %} Kd Shelves{% endblock %}
+{% block option_title %}Kd Shelves{% endblock %}
+{% block crumb %}Kd Shelves{% endblock %}
+
+{% block room_form %}
+
+<form method="POST" action="">
+    {% csrf_token %}
+    <div class="d-flex mb-8 pb-3 mt-8 justify-content-between align-items-center">
+        <h2 class="selected_room">Selected Room: {% if form.room.value %} {{form.room.value}} {% else %} {{selected_room.room_name}} {% endif %}</h2>
+        {% for room in rooms %}
+        <input type="hidden" name="room" data-url="{% url 'franchise:room-detail' room_id=room.id %}" value="{{room.id}}"  {% if form.room.value == room.id %} checked {% endif %} {% if selected_room.id == room.id %} checked {% endif %}/>
+        {% endfor %}
+        <div class="buttons-type-list">
+            <a class="btn btn-secondary me-2 text-center standard-btn active" href="{% url 'room_options:room-kd-shelf' room_id=room.id  %}?type=STANDARD">Standard</a>
+            <a class="btn btn-secondary me-2 text-center standard-btn " href="{% url 'room_options:room-kd-shelf' room_id=room.id %}?type=CUSTOM">Custom KD
+                Shelves</a>
+            <a class="btn btn-secondary me-2 text-center standard-btn " href="{% url 'room_options:room-kd-shelf' room_id=room.id %}?type=1_IN_KD">1 in KD Shelves</a>
+        </div>
+    </div>
+
+    <div class="row g-5 g-xxl-8">
+        <div class="col-xl-12">                                    
+            <div class="card mb-5 mb-xxl-8 standard_section">
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+                        Standard
+                    </h3>
+                </div>
+                <div class="card-body standard_block">
+                    <div class="col-xl-6 px-0">
+                        <div class="row dafault-shelve">
+                            <div class="col-md-6">
+                                <div class="mb-8">
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Depth</label>
+                                    <select class="form-select form-select-solid depth_select" data-control="select2" data-hide-search="true" data-placeholder="Select Depth" name="{{form.depth.name}}" required="true">
+                                    <option selected value="">Select Depth</option>
+                                    {% for value, text in form.depth.field.choices %}
+                                    <option value="{{value}}" {% if form.depth.value == value %} selected {% endif %} >{{text}}</option>
+                                    {% endfor %}
+                                </select>
+                                {{form.depth.errors.0}}
+                                </div>
+                                <div class="mb-8">
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Width</label>
+                                    <select class="form-select form-select-solid height_select" data-control="select2" data-hide-search="true" data-placeholder="Select Width" name="{{form.width.name}}" required="true">
+                                        <option selected value="">Select width</option>
+                                        {% for value, text in form.width.field.choices %}
+                                        <option value="{{value}}" {% if form.width.value == value %} selected {% endif %} >{{text}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {{form.room.errors.0}}
+                                </div>
+                               
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-8">
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Material</label>
+                                    <select class="form-select form-select-solid material_select" data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{form.mat_type.name}}" required="true">
+                                    <option selected value="">Select Material</option>
+                                    {% for value, text in form.mat_type.field.choices %}
+                                    <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
+                                    {% endfor %}
+                                </select>
+                                {{form.room.errors.0}}
+                                </div>
+
+                                <div class="mb-8">
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Qty</label>
+                                    <input type="text" class="form-control form-control-solid qty" placeholder="Qty" name="{{form.quantity.name}}" value="{% if form.quantity.value %} {{form.quantity.value}} {% endif %} " required="true"/>
+                                    {{form.quantity.errors.0}}
+                                </div>
+                            </div>
+
+                            <div class="notes">
+                                <label class="fs-6 fw-bold mb-2">Notes:</label>
+                                <textarea class="form-control form-control-solid standard_notes" name="{{form.notes.name}}" >{% if form.notes.value %} {{form.notes.value}} {% endif %}</textarea>
+                            </div>
+                            <input type="hidden" name="{{form.part_sub_category.name}}" value="STANDARD">
+                            <div class="d-flex justify-content-end pt-7">
+                                <button class="btn btn-secondary me-2 clear-btn ">Clear</button>
+                                <button class="btn btn-primary standard_submit" id="submit" type="submit"> Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-5 mb-xxl-8">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="card-body table-responsive 1-shelf">
+                                <div class="table-responsive card-body">
+                                    <table class="table align-middle table-row-dashed table-alternet fs-6 gy-5 table-alternet" id="kt_table_users">
+                                        <thead>
+                                            <tr class="text-start  fw-bolder fs-7 text-uppercase gs-0">
+                                                <th class="min-w-125px">Serial No.</th>
+                                                <th class="min-w-125px">Actions</th>                                                                        
+                                                <th class="min-w-125px">Room ID</th>
+                                                <th class="min-w-125px">Category</th>
+                                                <th class="min-w-125px">Description</th>
+                                                <th class="min-w-125px">Depth</th>
+                                                <th class="min-w-125px">Height</th>
+                                                <th class="min-w-125px">Material</th>
+                                                <th class="min-w-125px">Quantity</th>
+                                                <th class="min-w-125px">Notes</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody class="text-gray-600 fw-bold kd_table" id="data_table">
+                                            {% for shelf in kd_shelves_standard %}
+                                            <tr>
+                                                <td>{{forloop.counter}}</td>
+                                                <td>
+                                                    <a href="{% url 'room_options:update-room-kd-shelf' room_id=room.id id=shelf.id %}?id={{shelf.id}}&type={{shelf.part_sub_category}}"
+                                        class="btn btn-icon btn-active-light-primary w-30px h-30px me-3">
+                                        <span data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                            title="Edit">                                                                        
+                                            <span class="svg-icon svg-icon-3">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    width="24px" height="24px"
+                                                    viewBox="0 0 24 24" version="1.1">
+                                                    <path
+                                                        d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
+                                                        fill="#000000" fill-rule="nonzero"
+                                                        transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)" />
+                                                    <path
+                                                        d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
+                                                        fill="#000000" fill-rule="nonzero"
+                                                        opacity="0.3" />
+                                                </svg>
+                                            </span>                                                                        
+                                        </span>
+                                    </a>        
+
+                                    <a href="#"
+                                    class="btn btn-icon btn-active-light-primary w-30px h-30px del-data" title="Delete" data-url="{% url 'room_options:delete-room-option' pk=shelf.id %}"
+                                    data-bs-toggle="tooltip" title="Delete"
+                                    >                                                                 
+                                            <span class="svg-icon svg-icon-3 mt-n1">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                    version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                        fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path
+                                                            d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                                                            fill="#000000" fill-rule="nonzero" />
+                                                        <path
+                                                            d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                    </g>
+                                                </svg>
+                                            </span>                                                                    
+                                        </a></td>                                                                         
+                                                <td class="form_detail">{{shelf.room.room_name}}</td>                                                                       
+                                                <td>{{shelf.description}}</td>
+                                                <td>{{shelf.part_sub_category}}</td>
+                                                <td>{{shelf.width}}</td>
+                                                <td>{{shelf.depth}}</td>
+                                                <td>{{shelf.mat_type}}</td>
+                                                <td>{{shelf.quantity}}</td>
+                                                <td>{{shelf.notes}}</td>
+                                            </tr>
+                                            {% endfor %}    
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+
+{% endblock room_form %}
+
+{% block extra_scripts %}
+<script>
+
+    // $(".standard_btn").click(function(e) {
+    //     e.preventDefault();
+    //     $(".standard_section").removeClass("d-none");
+    //     $(".custom-kd-shelves-block").addClass("d-none");
+    //     $(".1kd-shelves-block").addClass("d-none");
+    // })
+
+    // $(".custom-kd-shelves").click(function(e) {
+    //     e.preventDefault();
+    //     $(".custom-kd-shelves-block").removeClass("d-none");
+    //     $(".standard_section").addClass("d-none");
+    //     $(".1kd-shelves-block").addClass("d-none");
+    // })
+
+    // $(".1kd-shelves").click(function(e) {
+    //     $(".1kd-shelves-block").removeClass("d-none");
+    //     $(".standard_section").addClass("d-none");
+    //     $(".custom-kd-shelves-block").addClass("d-none");
+    // })
+
+    //submit fun for standard
+    // $(".standard_submit").click(function(e) {
+    //     e.preventDefault();
+    //     var ele = $(this).parents(".standard_block");
+    //     var category = $(this).parents(".standard_block").siblings(".card-header").find("h3").text();
+    //     var depth = $(ele).find(".depth_select  option:selected").val();
+    //     var material = $(ele).find(".material_select  option:selected").val();
+    //     var height = $(ele).find(".height_select  option:selected").val();
+    //     var qty = $(ele).find(".qty").val();
+    //     var notes = $(ele).find(".standard_notes").val();
+
+    //     if (material == 0 && depth == 0 && height == 0 && qty == 0) {
+    //         sweetAlert('Please Fill all the Field');
+    //     } else if (material == undefined && depth == undefined && height == undefined && qty == "") {
+    //         sweetAlert('Please Fill all the Field');
+    //     } else if (material == 0 || material == undefined) {
+    //         sweetAlert('material Type is required.');
+
+    //     } else if (depth == 0 || depth == undefined) {
+    //         sweetAlert('depth is required.');
+
+    //     } else if (height == 0 || height == undefined) {
+    //         sweetAlert('height is required.');
+
+    //     } else if (qty == "") {
+    //         sweetAlert('Quantity is required.');
+    //     } else {
+    //         var html = `<tr>
+    //                      <td>${category}</td>
+    //                      <td>${depth}</td>
+    //                      <td>${height}</td>
+    //                      <td>${material}</td>
+    //                     <td>${qty}</td>
+    //                     <td>--</td>
+    //                     <td>--</td>
+    //                     <td>--</td>   
+    //                     <td>${notes}</td>
+    //                 </tr>`;
+
+
+    //         $(".kd_table").append(html);
+
+    //         clearData();
+    //     }
+
+    // })
+
+    //submit fun custom kd shelves
+    $(".add-kd-shelves").click(function(e) {
+        var ele = $(this).parents('.add-block');
+
+        var Category = $(this).parents(".custom_section").siblings(".card-header").find("h3").text();
+        var material_type = $(ele).find(".material_type  option:selected").val()
+        var Edge = $(ele).find(".edge option:selected").val()
+        var internal_kd = $(ele).find(".internal_kd option:selected").val()
+        var quantity = $(ele).find('.quantity').val();
+        var width = $(ele).find('.width').val();
+        var depth = $(ele).find('.depth').val();
+        var notes = $(ele).find(".custom_notes").val();
+
+        if (material_type == 0 && Edge == 0 && internal_kd == 0 && quantity == "" && width == "" && depth == "") {
+            sweetAlert('Please Fill all the Field');
+        } else if (material_type == undefined && Edge == undefined && internal_kd == undefined && quantity == "" && width == "" && depth == "") {
+            sweetAlert('Please Fill all the Field');
+        } else if (material_type == 0 || material_type == undefined) {
+            sweetAlert('material Type is required.');
+
+        } else if (Edge == 0 || Edge == undefined) {
+            sweetAlert('Edge is required.');
+        } else if (internal_kd == 0 || internal_kd == undefined) {
+            sweetAlert('Internal Kd with insertBacking required.');
+        } else if (quantity == "") {
+            sweetAlert('Quantity is required.');
+        } else {
+            var html = `<tr>
+                        <td>${Category}</td>
+                        <td>${depth}</td>
+                        <td>--</td>
+                        <td>${material_type}</td>
+                        <td>${quantity}</td>
+                        <td>${Edge}</td>
+                        <td>${internal_kd}</td>
+                        <td>${width}</td>
+                        <td>${notes}</td>
+    
+                        
+                    </tr>`;
+            $(".kd_table").append(html);
+            clearData();
+        }
+        e.preventDefault();
+
+    });
+
+
+    //submit fun for 1 in kd shelves
+    $(".add-data").click(function(e) {
+        var Category = $(this).parents('.1_shelf_section').siblings(".card-header").find("h3").text();
+        var Edge = $(this).parents(".second_section").find(".edge option:selected").val();
+        var notes = $(this).parents(".second_section").find(".1_shelf_notes").val();
+
+        var ele = $("input[name='Plytype']:checked").parents('.add-block');
+
+        if ($("input[name='Plytype']:checked").length > 0) {
+            var quantity = $(ele).find('.quantity').val();
+            var width = $(ele).find('.width').text();
+            var depth = $(ele).find('.depth').text();
+
+            console.log("width", width);
+            console.log("de", depth);
+
+            if (quantity == "") {
+                sweetAlert('Quantity is required.');
+            } else if (Edge == 0 || Edge == undefined) {
+                sweetAlert('Edge is required.');
+            }
+
+            else if (width == "") {
+                sweetAlert('Width is required.');
+            }
+            else if (depth == "") {
+                sweetAlert('Depth is required.');
+            }
+            else {
+                var html = `<tr>
+                            <td>${Category}</td>
+                            <td>${depth}</td>
+                            <td>--</td>
+                            <td>--</td>                                
+                            <td>${quantity}</td>
+                            <td>${Edge}</td>
+                            <td>--</td>
+                            <td>${width}</td>
+                            <td>${notes}</td>                               
+                        </tr>`;
+
+
+                $(".kd_table").append(html);
+
+                clearData();
+            }
+        } else {
+            // $(this).parents('.add-block').find('.display-msg').text("please select row");
+            sweetAlert("Please select row.")
+        }
+    });
+
+    // $(".cedar_backed_add").click(function (e) {
+    //     var ele = $(this).parents('.add-block');
+    //     var quantity = $(ele).find('.quantity').val();
+    //     var width = $(ele).find('.width option:selected').val();
+    //     var depth = $(ele).find('.depth option:selected').val();
+    //     if (depth == "") {
+    //         sweetAlert('Depth is required.');
+    //     }
+    //     else if (width == "") {
+    //         sweetAlert('Width is required.');
+    //     }
+    //     else if (quantity == "") {
+    //         sweetAlert('Quantity is required.');
+    //     }
+    //     else {
+    //         var html = `<tr>
+    //                         <td>${quantity}</td>
+    //                         <td>${width}</td>
+    //                         <td>${depth}</td>
+    //                     </tr>`;
+    //         $(".cedar_backed_table").append(html);
+    //         $(ele).find('.quantity').val("");
+    //     }
+
+    //     e.preventDefault();
+
+
+    // });
+    // $(".1kd-shelves").click(function (e) {
+    //     $(".custom-kd-shelves-block").addClass('d-none');
+    //     $(".1kd-shelves-block").toggleClass('d-none');
+    //     // $(".cedar_backed_block").addClass("d-none");
+    //     if ($(".1kd-shelves-block").hasClass("d-none")) {
+    //         $(".dafault-shelve").find("input").prop("disabled", false)
+    //         $(".dafault-shelve").find("button").prop("disabled", false)
+    //         $(".dafault-shelve").find("select").removeAttr("disabled", "enabled")
+    //     } else {
+    //         $(".dafault-shelve").find("input").prop("disabled", true)
+    //         $(".dafault-shelve").find("button").prop("disabled", true)
+    //         $(".dafault-shelve").find("select").attr("disabled", "disabled")
+    //     }
+    //     e.preventDefault();
+
+    // });
+
+
+    // $(".cedar_backed").click(function () {
+    //     $(".cedar_backed_block").removeClass("d-none");
+    //     $(".custom-kd-shelves-block").addClass('d-none');
+    //     $(".1kd-shelves-block").addClass('d-none');
+    // })
+
+    function sweetAlert(msg) {
+        Swal.fire({
+            text: msg,
+            customClass: {
+                confirmButton: 'btn btn-primary'
+            }
+        });
+    }
+
+    deleteDoorItem=(url,pk)=>{
+        $.ajax({                       
+            url: url,                  
+            data: {"pk":pk
+                },
+            success: function (data) {
+                data=JSON.parse(data)
+                    if(data['status']==200){
+                Swal.fire({
+                        title:    'Deleted!',
+                        text: 'Your data has been deleted.',
+                        icon:  'success',
+                        customClass: {
+                        confirmButton: 'btn btn-primary',            
+                        },
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        });
+                    } 
+                }   
+            });
+        }
+        $(document).on("click", ".del-data", function (e) {
+            pk= $(this).data('delete_id')
+            delete_url = $(this).data('url')
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,       
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-secondary'
+                },
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                deleteDoorItem(delete_url,pk)
+                }
+            })
+            e.preventDefault();
+        });
+
+    $('input[type=radio][name=room]').change(function() {
+        text = "Selected Room: "+ $(this).siblings('label').text()
+        $(".selected_room").text(text) 
+        url = $(this).attr('data-url')
+        value = $(this).siblings('label').text();
+        $("#data_table td.form_detail:contains('" + value + "')").parent().show();
+        $("#data_table td.form_detail:not(:contains('" + value + "'))").parent().hide();
+
+        $.ajax({
+            url: url,
+            method: "GET",
+            success: function (data) {
+                text_bd_color ="<em class='text-muted'>Board Color:</em> " + data['bd_color']
+                text_ed_profile ="<em class='text-muted'>Edge Profile:</em> " + data['ed_profile']
+                text_ed_color ="<em class='text-muted'>Edge Color:</em> " + data['ed_color']
+                text_dd_color ="<em class='text-muted'>Door 'n Drawer Color:</em> " + data['dd_color']
+                $(".bd_color_class").html(text_bd_color)
+                $(".ed_profile_class").html(text_ed_profile)
+                $(".ed_color_class").html(text_ed_color)
+                $(".dd_color_class").html(text_dd_color)
+            },
+            error: function (data) {}
+        })
+    })
+
+    $( document ).ready(function() {
+        value = $('input[type=radio][name=room]:checked').siblings('label').text();
+        $("#data_table td.form_detail:contains('" + value + "')").parent().show();
+        $("#data_table td.form_detail:not(:contains('" + value + "'))").parent().hide();
+    })
+
+</script>
+{% endblock extra_scripts %}
+
+
+

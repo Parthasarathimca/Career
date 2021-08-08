@@ -1,0 +1,273 @@
+{% extends 'app-layout.html' %}
+{% load static%}
+
+
+{% block breadcrumb %}
+
+    <div class="page-title d-lg-flex d-none  align-items-center flex-wrap me-3 mb-5 mb-lg-0 mx-3">
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'franchise:dashboard'%}"
+                    class="text-muted text-hover-primary">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+           
+            <li class="breadcrumb-item text-dark">{% block crumb %}  Create Order {% endblock %}</li>
+        </ul>
+        <!--end::Breadcrumb-->
+    </div>
+{% endblock %}
+
+{% block navbartitle %} Create Order {% endblock %}
+
+{% block content %}
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container">
+
+        <div class="row">
+            <div class="col-xl-6 mb-5">
+                <div class="card mb-xl-8">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">New Order</span>
+                            <span class="text-muted mt-1 fw-bold fs-7">Enter a job ID or, Enter the Client ID to see all the available job ID's for that Client ID</span>
+                        </h3>
+                    </div>
+                    <!--begin::Body-->
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="flex-grow-1 card-p pb-0">
+                            <!--begin::Form-->
+                            <form class="form" id="CreateJob_form" method="POST" action="">
+                                {% csrf_token %}
+                                <!--begin::Step 1-->
+                                <div class="current" data-kt-stepper-element="content">
+                                    <div class="w-100">
+                                        <div class="fv-row row">
+                                            <div class="mb-5 col-6">
+                                                <label class="d-flex align-items-center fs-5 fw-bold mb-2">
+                                    <span class="required">Job ID</span>
+                                </label>
+                                                <input type="text" class="form-control form-control-lg form-control-solid" id="jobId" name="{{form.job_id.name}}" placeholder="" value="{% if form.job_id.value %} {{form.job_id.value}} {% endif %}"/>
+                                                {{form.job_id.errors.0}}
+                                            </div>
+
+                                            <div class="col-6 mb-5">
+                                                <label class="d-flex align-items-center fs-5 fw-bold mb-2">
+                                    <span class="required">Client ID</span>
+                                </label>
+                                                <input type="text" class="form-control form-control-lg form-control-solid" id="clientID" name="{{form.client_id.name}}" placeholder="" value="{% if form.client_id.value %}{{form.client_id.value}} {% endif %}"/>
+                                                {{form.client_id.errors.0}}
+                                            </div>
+
+                                        </div>
+
+                                        <div class="fv-row mb-5">
+                                            <label class="d-flex align-items-center fs-5 fw-bold mb-2">
+                                <span class="">Adj. ID</span>
+                            </label>
+                                            <input type="text" class="form-control form-control-lg form-control-solid" name="name" placeholder="" value="" />
+                                        </div>
+                                        <!--end::Input group-->
+
+                                    </div>
+                                </div>
+                                <!--end::Step 1-->
+                                <!--begin::Actions-->
+                                <div class="d-flex flex-stack pt-10">
+                                    <button type="submit" class="btn btn-lg btn-primary form_submit" id="createJob">
+                        <span class="indicator-label">Submit
+                        <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
+                        <span class="svg-icon svg-icon-3 ms-2 me-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                    <rect fill="#000000" opacity="0.5" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                </g>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon--></span>
+
+                    </button>
+
+                    <a class="btn btn-lg btn-primary update_submit d-none" id="createJob">
+                        <span class="indicator-label">Submit
+                        <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
+                        <span class="svg-icon svg-icon-3 ms-2 me-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <polygon points="0 0 24 0 24 24 0 24" />
+                                    <rect fill="#000000" opacity="0.5" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
+                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                </g>
+                            </svg>
+                        </span>
+                        <!--end::Svg Icon--></span>
+
+                    </a>
+                                </div>
+                                <!--end::Actions-->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                    </div>
+                    <!--end::Body-->
+                </div>
+            </div>
+            <div class="col-xl-6">
+                <div class="card mb-5">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">Order in progress</span>
+                            <span class="text-muted mt-1 fw-bold fs-7">Select one of these Jobs that are	currently NOT Completed </span>
+                        </h3>
+                    </div>
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <!--begin::Table-->
+                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                            <thead>
+                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                                    <th class="w-10px pe-2"></th>
+                                    <th class="min-w-125px">Job ID</th>
+                                    <th class="min-w-125px">Client ID</th>
+                                </tr>
+                            </thead>
+                            <!--begin::Table body-->
+                            <tbody class="text-gray-600 fw-bold">
+                                <!--begin::Table row-->
+                                {% for job in jobs_in_progress %}
+
+                                <tr>
+                                    <!--begin::Checkbox-->
+                                    <td>
+                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                            <input class="form-check-input jId-select" type="radio" value="{{job.id}}"  name="job-client-ID" data-href="{% url 'franchise:job-detail' job_id=job.id %}"/>
+                                        </div>
+                                    </td>
+                                    <!--end::Checkbox-->
+                                    <td>
+                                        <span class="job-ID">{{job.job_id}}</span>
+                                    </td>
+                                    <td><span class="client-ID">{{job.client_id}}</span></td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                            <!--end::Table body-->
+                        </table>
+                        <!--end::Table-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+        </div>
+
+
+        <!-- Begin:: table  -->
+        <div class="card" id="clientJobs">
+            <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder fs-3 mb-1">Jobs for Client</span>
+                </h3>
+            </div>
+            <!--begin::Card body-->
+            <div class="card-body pt-0">
+                <!--begin::Table-->
+    <div class="table-responsive">
+                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+                    <thead>
+                        <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
+                            <th class="w-10px pe-2"></th>
+                            <th class="min-w-125px">Job ID</th>
+                            <th class="min-w-125px">Designer</th>
+                            <th class="min-w-125px">Install Date</th>
+                            <th class="min-w-125px">Ship Date</th>
+                        </tr>
+                    </thead>
+                    <!--begin::Table body-->
+                    <tbody class="text-gray-600 fw-bold job_detail_table">
+                        <!--begin::Table row-->
+                        <!-- <tr>
+                            <td>1</td>
+                            <td class="d-flex align-items-center">
+                                <a href="#!" class="text-gray-800 text-hover-primary mb-1">97280</a>
+                            </td>
+                            <td>Office</td>
+                            <td>2 March 2021</td>
+                            <td>2 March 2021</td>
+                        </tr> -->
+                    </tbody>
+                    <!--end::Table body-->
+                </table>
+</div>
+<div class="">
+    <a href="#!" class="btn btn-primary disabled">Initial Order</a>
+    <a href="#" class="btn btn-primary add_to_order">Add to Order</a>
+    <a href="#!" class="btn btn-primary replace_order">Replace Order</a>
+    <a href="#!" class="btn btn-primary adj_order">Adjustment</a>
+</div>
+                <!--end::Table-->
+            </div>
+            <!--end::Card body-->
+        </div>
+        <!--end::Card-->
+        <!-- End: table  -->
+    </div>
+    <!--end::Container-->
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // $("#createJob").click(function() {
+    //             if ($("#jobId").val() != "" && $("#clientID").val() != "") {
+    //                 $("#clientJobs").slideDown();
+    //             } else {
+    //                 Swal.fire({
+    //                             text: 'Fill required Field',                                    		
+    //                             customClass: {
+    //                                 confirmButton: 'btn btn-primary'                                							
+    //                     }
+    // 		});
+    // 	}
+      // });
+    
+      $(".jId-select").change(function(){
+        var jID = $(this).parents("tr").find(".job-ID").text();
+        var clientID = $(this).parents("tr").find(".client-ID").text();    
+        $("#jobId").val(jID);
+        $("#clientID").val(clientID);
+        $('.form_submit').hide()
+        $('.update_submit').removeClass('d-none')
+      });
+
+      $(".update_submit").click(function() {
+    $("#clientJobs").slideDown();
+})
+
+$(".update_submit").on('click', function(event){
+    job_id = $("input[name=job_id]").val()
+    var html = `<tr>
+                    <td></td>
+                    <td>${job_id}</td>
+                    <td>Office</td>
+                    <td>2 March 2021</td>
+                    <td>2 March 2021</td>
+                    </tr>`;
+    $('.job_detail_table').append(html)
+
+    edit_url = $('input[type=radio][name=job-client-ID]:checked').data('href')
+
+    $(".add_to_order").attr('href', edit_url)
+    $(".replace_order").attr('href', edit_url)
+    $(".adj_order").attr('href', edit_url)
+    $("#clientJobs").slideDown();
+})
+
+</script>
+{% endblock %}

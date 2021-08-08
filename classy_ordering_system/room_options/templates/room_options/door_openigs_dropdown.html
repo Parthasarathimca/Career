@@ -1,0 +1,7 @@
+<option value="">Select Category</option>
+ 
+{% for each_opening in options.openings %}
+
+<option  {% if options.order_items.id == each_opening.id %} selected {% endif %}   value="{{each_opening.id}}" data-value="{{each_opening.text}}">
+     {{each_opening.width}}x {{each_opening.height}} ({{each_opening.holes | stringformat:'d' }} Holes ) </option>
+{% endfor %}

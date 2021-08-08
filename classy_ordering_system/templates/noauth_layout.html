@@ -1,0 +1,52 @@
+{% load static  %}
+<!DOCTYPE html>
+<html lang="en">
+<!--begin::Head-->
+
+<head>
+    <base href="../">
+    <meta charset="utf-8" />
+    <title>Classy Ordering System</title>
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- <link rel="shortcut icon" href="assets/media/logos/favicon.ico" /> -->
+    <!--begin::Fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
+    <!--end::Fonts-->
+    <!--begin::Global Stylesheets Bundle(used by all pages)-->
+    <link href="{% static 'plugins/plugins.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/style.bundle.css' %}" rel="stylesheet" type="text/css" />
+    <link href="{% static 'css/partition.css' %}" rel="stylesheet" type="text/css" />
+    
+    <!--end::Global Stylesheets Bundle-->
+    <!-- Custom -->
+    <link href="{% static 'css/custom.css' %}" rel="stylesheet" type="text/css" />
+</head>
+<!--end::Head-->
+<!--begin::Body-->
+
+<body id="kt_body" data-kt-aside-minimize="on"
+    class="header-fixed header-tablet-and-mobile-fixed toolbar-enabled toolbar-fixed toolbar-tablet-and-mobile-fixed aside-enabled aside-fixed"
+    style="--kt-toolbar-height:55px;--kt-toolbar-height-tablet-and-mobile:55px">
+    <!--begin::Main-->
+    <!--begin::Root-->
+<div class="d-flex flex-column flex-root">
+    {% block content %} {% endblock %}
+</div>
+
+ <!-- Begin:: Feedback -->
+
+
+
+    <!--begin::Javascript-->
+    <!--begin::Global Javascript Bundle(used by all pages)-->
+    <script src="{% static 'plugins/plugins.bundle.js' %}"></script>
+    <script src="{% static 'js/scripts.bundle.js' %}"></script>
+    <script src="{% static 'js/jquery.validate.min.js' %}"></script>
+{% block extra_scripts %}
+{% endblock %}
+</body>
+<!--end::Body-->
+
+</html>

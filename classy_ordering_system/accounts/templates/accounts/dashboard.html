@@ -1,0 +1,503 @@
+{% extends 'app-layout.html' %}
+{% load static  custom_tag %}
+{% block navbartitle %} Dashboard {% endblock %}
+
+{% block content %}
+
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div class="container">
+        <div class="d-flex align-items-center py-1 justify-content-end  mb-8 ">
+            <a href="{% url 'franchise:create-job' %}" class="btn btn-sm btn-primary">Create New order</a>
+            <a href="#" class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button">Create new Inventory Order</a>
+        </div>
+        <!-- Begin:: top block -->
+        <div class="row gy-5 g-xl-8">
+            <div class="col-md-4 mb-4 ">
+                <div class="card order-card card1">
+                    <div class="card-body">
+                        <h5>Total orders</h5>
+                        <h2>1000</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card order-card card2">
+                    <div class="card-body">
+                        <h5>Total orders sent</h5>
+                        <h2>1000</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card order-card card3">
+                    <div class="card-body ">
+                        <h5>Total Progress Orders</h5>
+                        <h2>1000</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End:: top block -->
+
+        <!--begin::Row-->
+        <div class="row gy-5 g-xl-8">
+            <!--begin::Col-->
+            <div class="col-xl-4 col-md-12 mb-8">
+                <!--begin::Mixed Widget 2-->
+                <div class="card card-lg-stretch pb-4">
+                    <!--begin::Header-->
+                    <div class="card-header border-0 bg-danger py-5">
+                        <h3 class="card-title fw-bolder text-white">Order stats</h3>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body p-0 overflow-hidden1">
+                        <!--begin::Chart-->
+                        <div class="mixed-widget-2-chart card-rounded-bottom bg-danger" data-kt-color="danger" style="height: 200px; width: 100%;"></div>
+                        <!--end::Chart-->
+                        <!--begin::Stats-->
+                        <div class="card-p mt-n20 position-relative">
+                            <!--begin::Row-->
+                            <div class="row g-0">
+                                <!--begin::Col-->
+                                <div class="col bg-light-warning px-6 py-8 rounded-2 me-7 mb-7">
+                                    <h2 class="text-warning stat-count">
+                                        2
+                                    </h2>
+                                    <a href="#" class="text-warning fw-bold fs-6">Today </a>
+                                </div>
+                                <!--end::Col-->
+
+                                <!--begin::Col-->
+                                <div class="col bg-light-primary px-6 py-8 rounded-2 mb-7">
+                                    <h2 class="text-primary stat-count">3</h2>
+                                    <a href="#" class="text-primary fw-bold fs-6">Weekly</a>
+                                </div>
+                                <!--end::Col-->
+                            </div>
+                            <!--end::Row-->
+                            <!--begin::Row-->
+                            <div class="row g-0">
+                                <!--begin::Col-->
+                                <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
+                                    <h2 class="text-danger stat-count">
+                                        9
+                                    </h2>
+                                    <a href="#" class="text-danger fw-bold fs-6 mt-2">Monthly</a>
+                                </div>
+                                <!--end::Col-->
+                                <!--begin::Col-->
+                                <div class="col bg-light-success px-6 py-8 rounded-2">
+                                    <h2 class="text-success stat-count">
+                                        20
+                                    </h2>
+                                    <a href="#" class="text-success fw-bold fs-6 mt-2">Yearly</a>
+                                </div>
+                                <!--end::Col-->
+                            </div>
+                            <!--end::Row-->
+                        </div>
+                        <!--end::Stats-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Mixed Widget 2-->
+            </div>
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div class="col-xl-4 col-md-6 mb-8">
+                <!--begin::List Widget 5-->
+                <div class="card card-lg-stretch">
+                    <!--begin::Header-->
+                    <div class="card-header align-items-center border-0 mt-4">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="fw-bolder mb-2 text-dark">In progress Orders</span>
+                            <!-- <span class="text-muted fw-bold fs-7">890,344 Sales</span> -->
+                        </h3>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body pt-5">
+                        <!--begin::Timeline-->
+                        <div class="timeline-label">
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Jan</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-warning fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Feb</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-success fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Content-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Content-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Mar</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-danger fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Desc-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Apr</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-primary fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-danger fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Desc-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">12 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-primary fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-danger fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Desc-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-success fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                        </div>
+                        <!--end::Timeline-->
+                    </div>
+                    <!--end: Card Body-->
+                </div>
+                <!--end: List Widget 5-->
+            </div>
+            <!--end::Col-->
+            <!--begin::Col-->
+            <div class="col-xl-4 col-md-6 mb-8">
+                <!--begin::List Widget 5-->
+                <div class="card card-lg-stretch">
+                    <!--begin::Header-->
+                    <div class="card-header align-items-center border-0 mt-4">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="fw-bolder mb-2 text-dark">Sent Orders</span>
+                            <!-- <span class="text-muted fw-bold fs-7">890,344 Sales</span> -->
+                        </h3>
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body pt-5">
+                        <!--begin::Timeline-->
+                        <div class="timeline-label">
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Jan</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-warning fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Feb</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-success fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Content-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Content-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Mar</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-danger fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Desc-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Apr</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-primary fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-danger fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Desc-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">12 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-primary fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-danger fs-1"></i>
+                                </div>
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Desc-->
+                            </div>
+                            <!--end::Item-->
+                            <!--begin::Item-->
+                            <div class="timeline-item">
+                                <!--begin::Label-->
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <!--end::Label-->
+                                <!--begin::Badge-->
+                                <div class="timeline-badge">
+                                    <i class="fa fa-genderless text-success fs-1"></i>
+                                </div>
+                                <!--end::Badge-->
+                                <!--begin::Text-->
+                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <!--end::Text-->
+                            </div>
+                        </div>
+                    </div>
+                    <!--end: Card Body-->
+                </div>
+            </div>
+        </div>
+
+        <!--begin::Row-->
+        <div class="row g-5 gx-xl-8">
+            <!--begin::Col-->
+            <div class="col-lg-12">
+                <!--begin::Tables Widget 5-->
+                <div class="card card-xxl-stretch mb-5 mb-xxl-8">
+                    <!--begin::Body-->
+                    <div class="card-body ">
+                            <!--begin::Table container-->
+                            <div class="table-responsive">
+                                <!--begin::Table-->
+                                <table class="table  table-bordered  align-middle gs-0 gy-4 table-alternet">
+                                    <!--begin::Table head-->
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th class="">Date</th>
+                                            <th class=" ">Client</th>
+                                            <th class=" ">Order</th>
+                                            <th class=" ">Rooms</th>
+                                            <th class=" ">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <!--end::Table head-->
+                                    <!--begin::Table body-->
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="symbol symbol-45px me-2">
+                                                    13 jul
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
+                                            </td>
+                                            <td class="text-muted fw-bold">Classy Order</td>
+                                            <td class="">
+                                                2
+                                            </td>
+                                            <td class="">
+                                                <span class="badge badge-light-success">sent</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="symbol symbol-45px me-2">
+                                                    13 jul
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
+                                            </td>
+                                            <td class="text-muted fw-bold">Classy Order</td>
+                                            <td class="">
+                                                2
+                                            </td>
+                                            <td class="">
+                                                <span class="badge badge-light-warning">In progress</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="symbol symbol-45px me-2">
+                                                    13 jul
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
+                                            </td>
+                                            <td class="text-muted fw-bold">Classy Order</td>
+                                            <td class="">
+                                                2
+                                            </td>
+                                            <td class="">
+                                                <span class="badge badge-light-success">sent</span>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="symbol symbol-45px me-2">
+                                                    13 jul
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
+                                            </td>
+                                            <td class="text-muted fw-bold">Classy Order</td>
+                                            <td class="">
+                                                2
+                                            </td>
+                                            <td class="">
+                                                <span class="badge badge-light-warning">In progress</span>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                            </div>
+                            <!--end::Table-->
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Tables Widget 5-->
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,335 @@
+{% extends 'app-layout.html' %}
+{% load static%}
+
+
+{% block breadcrumb %}
+
+    <div class="page-title d-lg-flex d-none  align-items-center flex-wrap me-3 mb-5 mb-lg-0 mx-3">
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'franchise:dashboard'%}"
+                    class="text-muted text-hover-primary">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item text-muted"> <a
+                    href="{% url 'franchise:create-job' %}"
+                    class="text-muted text-hover-primary">Order</a></li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item text-muted"><a
+                    href="{% url 'franchise:job-detail' job_id=job.id %}"
+                    class="text-muted text-hover-primary">Order Items</a></li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item text-dark">{% block crumb %}  New Room   {% endblock %}</li>
+        </ul>
+        <!--end::Breadcrumb-->
+    </div>
+{% endblock %}
+{% block navbartitle %} Room Setting {% endblock %}
+{% block content %}
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container">
+        <!--begin::Card-->
+        <div class="card">
+            <!--begin::Card body-->
+            <div class="card-body p-0">
+                <!--begin::Heading-->
+                <div class="card-px py-10 mb-10">
+                    <h2 class="fs-2x fw-bolder mb-10">Job Information</h2>
+                    <div class="col-md-6 px-0">
+                        <!--begin:Form-->
+                        <form id="" class="form room-form" method="POST" action="">
+                            {% csrf_token %}
+                            <div class="row g-9 mb-8">
+                                <div class="col-md-6 fv-row mb-8">
+                                    <label class="required fs-6 fw-bold mb-2">Room Name</label>
+                                    <input name="{{form.room_name.name}}"  required="true" type="text" class="form-control form-control-lg form-control-solid">
+                                </div>
+                                <div class="col-md-6 fv-row mb-8">
+                                    <label class="required fs-6 fw-bold mb-2">Material Type</label>
+                                    <select id="mat_type" class="form-select form-select-solid" data-control="select2" required="true"  data-hide-search="true" data-placeholder="Select Material" name="{{form.mat_type.name}}">
+                                        <option value="">Select Material</option>
+                                        {% for value in form.mat_type.field.choices.queryset %}
+                                        <option value="{{value.id}}">{{value}}</option>
+                                        {% endfor %}
+                                        </select>
+                                </div>
+                                {{form.mat_type.error.0}}
+                                <!-- <div class="col-md-6 fv-row mb-8">
+                                    <label class="required fs-6 fw-bold mb-2 invisible">Material Type</label>
+                                    <select class="form-select form-select-solid disabled" disabled data-control="select2" data-hide-search="true" data-placeholder="3/4 PBI Mel 2 side" name="">
+                                            <option></option>																
+                                        </select>
+                                </div> -->
+                            </div>
+                            <input type="hidden" name="{{form.job.name}}" value="{{job.id}}">
+                            <div class="row g-9 mb-8">
+                                <div class="col-md-6 fv-row mb-8">
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                            <span class="required">Board color</span>																
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="You can select board color by click on color box"></i>
+                                        </label>                                                        
+                  <select class="form-select form-select-solid" required="true" data-control="select2" data-hide-search="true" id="board-col" data-placeholder="Select Color" name="{{form.bd_color.name}}">
+                    <!-- <option value="">Select Board Color</option>
+                    {% for value in form.bd_color.field.choices.queryset %}
+                    <option value="{{value.id}}" data-value="{{value.picture}}">{{value.color}}</option>
+                    
+                    {% endfor %}								 -->
+                </select>
+                {{form.bd_color.error.0}}
+                <div class="color-preview board-preview"></div>
+                                </div>
+                                <div class="col-md-6 fv-row mb-8">
+                                    <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                            <span class="required">Edge color</span>
+                                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="You can select Edge color by click on color box"></i>
+                                        </label>
+                                        <select class="form-select form-select-solid" required="true" data-control="select2" data-hide-search="true" id="edge-col" data-placeholder="Select Color" name="{{form.ed_color.name}}">
+                                            <option value="">Select Edge Color</option>
+                                            {% for value in form.ed_color.field.choices.queryset %}
+                                            <option value="{{value.id}}" data-value="{{value.picture}}">{{value.color}}</option>
+                                            {% endfor %}											
+                                        </select>
+                                        {{form.ed_color.error.0}}
+                                        <div class="color-preview edge-preview"></div>
+                                </div>
+                            </div>
+
+                            <!--begin::Input group-->
+                            <div class="row g-9 mb-8">
+                                <div class="col-md-6 fv-row mb-8">
+                                    <label class="required fs-6 fw-bold mb-2">Edge Type</label>
+                                    <select class="form-select form-select-solid" required="true" data-control="select2" data-hide-search="true" data-placeholder="Select Edge Type" name="{{form.ed_profile.name}}">
+                                        <option value="">Select Edge Type</option>
+                                        {% for value in form.ed_profile.field.choices.queryset %}
+                                        <option value="{{value.id}}">{{value.profile_text}}</option>
+                                        {% endfor %}	
+                                        </select>
+                                        {{form.ed_profile.error.0}}
+                                </div>
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="d-flex flex-row mb-8 flex-wrap">
+                                {% for value in form.ed_type.field.choices.queryset %}
+                                <div class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                                    <input class="form-check-input" type="radio" value="{{value.id}}" id="1mm" name="{{form.ed_type.name}}" />
+                                    <label class="form-check-label" for="1mm">
+                                            {{value.edge_type_text}}
+                                        </label>
+                                </div>
+                                {% endfor %}
+                                {{form.edge_type.error.0}}	
+                            </div>
+
+                            <!-- Begin::Preview -->
+                            <label class="fs-6 fw-bold mb-2">Preview</label>
+                            <div class="preview">
+                                <img src="{% static 'images/shape.png' %}" class="img-fluid" />
+                            </div>
+                            <!-- End::Preview -->
+
+                            <!--end::Input group-->
+
+                            <!--begin::Input group-->
+                            <div class="d-flex flex-stack mb-8">
+                                <!--begin::Label-->
+                                <div class="me-5">
+                                    <label class="fs-6 fw-bold">Is the door 'n Drawer  Material the same?</label>
+                                </div>
+                                <!--end::Label-->
+                                <!--begin::Switch-->
+                                <label class="form-check form-switch form-check-custom form-check-solid">
+                                        <span class="form-check-label fw-bold text-gray-400 me-2">No</span>
+                                        <input  name= "{{form.is_dd_same.name}}" class="form-check-input" id="material-same" type="checkbox" value="true" checked="checked" />
+                                        <span class="form-check-label fw-bold text-gray-400">yes</span>
+                                    </label>
+                                <!--end::Switch-->
+                            </div>
+            <div id="material_notSame_parent">
+                <div class="material-notSame">
+                    <div class="row g-9 mb-8">
+                        <div class="col-md-6 fv-row mb-8">
+                            <label class="required fs-6 fw-bold mb-2">Material Type</label>
+                            {{ form.dd_mat_type }}
+                            {{ form.dd_mat_type.errors.0 }}
+                        </div>
+                        </div>
+
+                    <div class="row g-9 mb-8">
+                        <div class="col-md-6 fv-row mb-8">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                                    <span class="required">Board color</span>																
+                                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="You can select board color by click on color box"></i>
+                                                </label>                                                        
+                            <select name="{{form.dd_color.name}}" class="form-select form-select-solid" data-control="select2" data-hide-search="true" id="dd_board-col" data-placeholder="Select Color" name="" required="true">
+                                <!-- <option value="">Select Board Color</option>
+                                {% for value in form.bd_color.field.choices.queryset %}
+                                <option value="{{value.id}}" data-value="{{value.picture}}">{{value.color}}</option>
+                                {% endfor %} -->
+                        </select>
+                        <div class="color-preview dd_board-preview"></div>
+                        </div>
+                        <div class="col-md-6 fv-row mb-8">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                                    <span class="required">Edge color</span>
+                                                    <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="You can select Edge color by click on color box"></i>
+                                                </label>
+                                                <select name="{{form.dd_ed_color.name}}" class="form-select form-select-solid" data-control="select2" data-hide-search="true" id="dd_edge-col" data-placeholder="Select Color" name="" required="true">  
+                                                    <option value="">Select Edge Color</option>
+                                                    {% for value in form.ed_color.field.choices.queryset %}
+                                                    <option value="{{value.id}}" data-value="{{value.picture}}">{{value.color}}</option>
+                                                    {% endfor %}									
+                                                </select>
+                                                <div class="color-preview dd_edge-preview"></div>
+                        </div>
+                    </div>
+
+                    <!--begin::Input group-->
+                    <div class="row g-9 mb-8">
+                        <div class="col-md-6 fv-row mb-8">
+                            <label class="required fs-6 fw-bold mb-2">Edge Type</label>
+                            {{form.dd_ed_profile}}
+                            {{form.dd_ed_profile.error.0}}
+                        </div>
+                    </div>
+                    <!--end::Input group-->
+                    <!--begin::Input group-->
+                    <div class="d-flex flex-row mb-8 flex-wrap">
+                        {% for value in form.dd_ed_type.field.choices.queryset %}
+                        <div class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                            <input class="form-check-input" type="radio" value="{{value.id}}" id="1mm" name="{{form.dd_ed_type.name}}" required="true" />
+                            <label class="form-check-label" for="1mm">
+                                    {{value.edge_type_text}}
+                                </label>
+                        </div>
+                        {% endfor %}
+                        {{form.dd_ed_type.error.0}}	
+                    </div>
+                    <!-- Begin::Preview -->
+                    <label class="fs-6 fw-bold mb-2">Preview</label>
+                    <div class="preview">
+                        <img src="{% static 'images/shape.png' %}" class="img-fluid" />
+                    </div>
+                    <!-- End::Preview -->
+
+                    <!--end::Input group-->	  
+                    
+                </div>
+           </div>
+
+                            <!--end::Input group-->
+                            <!--begin::Actions-->
+                            <div class="text-end mt-10">
+                                <button type="reset" id="room_create_cancel" class="btn btn-white me-3">Cancel</button>
+                                <!-- <button type="submit" class="btn btn-primary">
+                                        <span class="indicator-label">Countinue</span>															
+                                    </button> -->
+                                <button type="submit" class="btn btn-primary">
+                                        <span class="indicator-label">Continue</span>															
+                                    </button>
+                            </div>
+                            <!--end::Actions-->
+                        </form>
+                        <!--end:Form-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--end::Container-->
+</div>
+{% endblock %} 
+{% block extra_scripts %}
+<script>
+    var material_same;
+    $(document).ready(function(){
+        
+    material_same=$(".material-notSame").detach();
+    })
+
+    $(document).on("change", "#board-col", function(){
+        var getVal = $(this).find('option:selected').attr('data-value');
+        if(getVal){
+            $(".board-preview").html('<img  src="{% get_media_prefix %}'+getVal+'" class="h-50px w-50px" />')
+        }else{
+            $(".board-preview").html('<img  alt="No Image" class="h-50px w-50px" />')
+        }
+    });
+    $(document).on("change", "#dd_board-col", function(){
+        var getVal = $(this).find('option:selected').attr('data-value');
+        if(getVal){
+            $(".dd_board-preview").html('<img  src="{% get_media_prefix %}'+getVal+'" class="h-50px w-50px" />')
+        }else{
+            $(".dd_board-preview").html('<img  alt="No Image" lass="h-50px w-50px" />')
+        }
+    });
+    $(document).on("change", "#edge-col", function(){
+        var getVal =  $(this).find('option:selected').attr('data-value');;
+        //$(".edge-preview").css("background-color", getVal);		
+        if(getVal){
+            $(".edge-preview").html('<img  src="{% get_media_prefix %}'+getVal+'" class="h-50px w-50px" />')
+        }else{
+            $(".edge-preview").html('<img  alt="No Image" class="h-50px w-50px" />')
+        }
+    });
+    $(document).on("change", "#dd_edge-col", function(){
+        var getVal =  $(this).find('option:selected').attr('data-value');
+        if(getVal){
+            $(".dd_edge-preview").html('<img  src="{% get_media_prefix %}'+getVal+'" class="h-50px w-50px" />')
+        }
+        else{
+            $(".dd_edge-preview").html('<img  alt="No Image" class="h-50px w-50px" />')
+        }
+    });
+
+
+//     check material same or not
+$('#material-same').on('change', function() {
+    if($(this).is(":checked") ){
+        material_same=$(".material-notSame").detach();
+    }
+    else{
+      
+        $("#material_notSame_parent").append(material_same)
+        
+    }
+
+});
+loadDropdowns=(selectedValue,load_id)=>{
+
+const url ="/classy/franchise/room_dropdowns/"
+        
+        $.ajax({                       
+            url: url,                  
+            data: {
+                'selected_value': selectedValue
+            },
+            success: function (data) { 
+            $("#"+load_id).html(data).trigger("change"); 
+                
+            }
+        });
+    }
+
+$('#mat_type').on('change', function (e) {
+    let selectedValue = $(this).val();
+    loadDropdowns(selectedValue,'board-col')
+   });
+$('#dd_mat_type').on('change', function (e) {
+    
+    let selectedValue = $(this).val();
+    loadDropdowns(selectedValue,'dd_board-col')
+});
+$('#room_create_cancel').on('click',function(){
+    
+    window.location.href="{% url 'franchise:job-detail' job_id=job.id %}"
+});
+</script>
+{% endblock %}

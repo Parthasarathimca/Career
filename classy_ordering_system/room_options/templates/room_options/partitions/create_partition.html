@@ -1,0 +1,476 @@
+{% extends 'room_options/base_room_option.html' %} {% load static custom_tag %}
+
+{% block navbartitle %} Room Partition{% endblock %}
+{% block option_title %}Room Partition{% endblock %}
+{% block crumb %}Room Partition{% endblock %}
+
+{% block room_form %}
+
+<!--begin::Root-->
+        <form method="POST" action="" id="create-partition-form" name="partition">
+            {% csrf_token %}
+
+        <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
+            <h3 class="card-title selected_room">
+                Selected Room : {{ room }}
+            </h3>
+
+            <div class="buttons-type-list">
+                <a href="{% url 'room_options:room-partition' room_id=room.id  %}?type=STANDARD" class="btn btn-secondary me-2 text-center standard-btn active" id="standard_partition">Standard</a>
+                <a href="{% url 'room_options:room-partition' room_id=room.id %}?type=CUSTOM" class="btn btn-secondary me-2 text-center standard-btn" id="custom_partition">Custom Partion</a>
+            </div>
+        </div>
+
+        <!--Begin::  -->
+            <div class="room_section standard_partition-block">
+                <div class="card mb-5 mb-xxl-4">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+                            Standard
+                        </h3>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="row">
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-8">
+                                        <label class="fs-6 fw-bold required mb-2 mt-md-0 mt-3">Depth</label>
+                                        <select class="form-select form-select-solid depth_select partition-depth"
+                                                data-control="select2" data-hide-search="true"
+                                                data-placeholder="Select Depth" name="{{form.depth.name}}">
+                                            <option selected value="">Select Depth</option>
+                                            {% for value, text in form.depth.field.choices %}
+                                            <option value="{{value}}" {% if form.depth.value == value %} selected {% endif %} >{{text}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{form.drill_pattern_depth.errors.0}}
+                                    </div>
+
+                                    <div class="mb-8">
+                                        <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Height</label>
+                                        <select class="form-select form-select-solid height_select partition-height"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Select Height"
+                                                name="{{form.height.name}}">
+                                            <option selected value="">Select Height</option>
+                                            {% for value, text in form.height.field.choices %}
+
+                                            <option value="{{value}}" {% if form.height.value|slugify  == value|slugify  %} selected {% endif %} >{{text}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{form.drill_pattern_height.errors.0}}
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="mb-8">
+                                        <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Material</label>
+                                        <select class="form-select form-select-solid material_select"
+                                                data-control="select2" data-hide-search="true" data-placeholder="Select Material"
+                                                name="{{form.mat_type.name}}">
+                                            <option selected value="">Select Material</option>
+                                            {% for value, text in form.mat_type.field.choices %}
+                                            <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
+                                            {% endfor %}
+                                        </select>
+                                        {{form.mat_type.errors.0}}
+                                    </div>
+
+                                    <div class="mb-8">
+                                        <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Qty</label>
+                                        <input type="text" class="form-control form-control-solid qty required"  placeholder="Qty" name="{{form.quantity.name}}" value="{% if form.quantity.value %}{{form.quantity.value}}{% endif %}" />
+                                        {{form.quantity.errors.0}}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        <div class="row mb-8">
+                            <div class="col-md-6">
+                                <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Left
+                                    Side Drill
+                                    Pattern</label>
+                                <div class="leftDrillRdo">
+                                    <div class="d-flex">
+
+                                        <div class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                            <input class="form-check-input" type="radio" value="True" id="l-yes" name="{{form.drill_pattern_left.name}}"  />
+                                            <label class="form-check-label fs-6 fw-bold" for="l-yes">Yes</label>
+                                        </div>
+                                        <div class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                            <input class="form-check-input" type="radio" value="False" id="l-no"   name="{{form.drill_pattern_left.name}}" />
+                                            <label class="form-check-label fs-6 fw-bold" for="l-no">No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Right
+                                    Side Drill
+                                    Pattern</label>
+<div class="rightDrillRdo">
+                                <div class="d-flex">
+                                    <div class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input class="form-check-input" type="radio" value="True" id="r-yes"  name="{{form.drill_pattern_right.name}}" disabled />
+                                        <label class="form-check-label fs-6 fw-bold" for="r-yes">
+                                            Yes
+                                        </label>
+                                    </div>
+                                    <div class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                        <input class="form-check-input" type="radio" value="False" id="r-no"  name="{{form.drill_pattern_right.name}}" disabled />
+                                        <label class="form-check-label fs-6 fw-bold" for="r-no">
+                                            No
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+
+                            <div class="notes">
+                                <label class="fs-6 fw-bold mb-2">Notes:</label>
+                                <textarea class="form-control form-control-solid standard_notes" name="{{form.notes.name}}" >{% if form.notes.value %} {{form.notes.value}} {% endif %}</textarea>
+                            </div>
+                            <input type="hidden" name="{{form.part_sub_category.name}}" value="STANDARD">
+
+
+                            {% if room_partition %}
+                            <div class="d-flex justify-content-end pt-7">
+                                <a class="btn btn-secondary me-2" href="{% url 'room_options:room-partition' room_id=room.id  %}">Cancel</a>
+                                <button class="btn btn-primary submit-form" type="submit">Update</button>
+                            </div>
+                            {% else %}
+                            <div class="d-flex justify-content-end pt-7">
+                                <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                                <button class="btn btn-primary submit-form" type="submit">Submit</button>
+                            </div>
+                            {% endif %}
+                        </div>
+                        <div class="col-lg-6 text-center">
+                                <img src="{% static 'images/pattern.png' %}" class="img-fluid partition-standardImg" alt="Images" />
+
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        {% include 'room_options/partials/_partition_table.html' with partitions=partitions %}
+{% endblock %}
+<!--end::Root-->
+<!-- <script>
+    $("#custom_partition").click(function() {
+        $(".custom_partition_section").removeClass("d-none");
+        $(".standard_partition-block").addClass("d-none");
+    });
+    $("#standard_partition").click(function() {
+        $(".custom_partition_section").addClass("d-none");
+        $(".standard_partition-block").removeClass("d-none");
+    });
+</script> -->
+{% block extra_scripts %}
+
+<!-- Begin:: drill pattern -->
+<script>
+    // Left Drill pattern
+    var depth_html;
+    var height_html;
+
+    // Create element
+    $(document).ready(function(){
+        if($("#leftDrill-pattern").length == 0){
+            var leftDrillRdo = $("input[name='drill_pattern_left']").parents(".leftDrillRdo");
+            leftDrillRdo.append(`<div  class="side-drill" id="leftDrill-pattern"><div class="depth"></div>
+                                    <div class="height"></div>
+                                    <div class="hole3chk" id="hole3-left"></div>
+                                </div>`);
+            }
+
+            if($("#rightDrill-pattern").length == 0){
+            var leftDrillRdo = $("input[name='drill_pattern_right']").parents(".rightDrillRdo");
+            leftDrillRdo.append(`<div  class="side-drill" id="rightDrill-pattern"><div class="depth"></div>
+                                    <div class="height"></div>
+                                    <div class="hole3chk" id="hole3-right"></div></div>`);
+            }
+    });
+
+    // Get selected Depth
+    // $(".partition-depth").on("change", function() {
+        $(".partition-depth").on("select2:select select2:unselecting", function () {
+            var getVal = $(this).val();
+            var option = $(this).find("option");
+            var getIndex = $(this).prop('selectedIndex');
+            var option_html = "<option disabled selected value> -- Select Depth -- </option>";
+            var option_html = "";
+            // console.log(getVal = 12);
+            if(getVal != 12){
+                $(".hole3chk").show();
+            } else {
+                $(".hole3chk").hide();
+            }
+
+            option.each(function(i, v) {
+                if (i > 0) {
+                    if (getIndex >= i) {
+                        option_html += ` <option value="${$(this).val()}">${$(this).text()}</option>`;
+                    }
+                }
+        });
+        // apend left depth html 
+        left_depth_html = `<div class="mb-8 leftDepth">
+                        <label class="fs-6 fw-bold required mb-2 mt-md-0 mt-3">Depth</label>
+                        <select class="form-select form-select-solid depth" data-control="select2" id="lsdrill-depth"
+                                        data-hide-search="true" data-placeholder="Select Depth" name="left_side_drill_depth">
+                            ${option_html}
+                        </select>
+                    </div>`;
+        right_depth_html = `<div class="mb-8 leftDepth">
+                        <label class="fs-6 fw-bold required mb-2 mt-md-0 mt-3">Depth</label>
+                        <select class="form-select form-select-solid depth" data-control="select2" data-hide-search="true" id="rsdrill-depth"
+                                        data-placeholder="Select Depth" name="right_side_drill_depth">
+                            ${option_html}
+                        </select>
+                    </div>`;
+        $(".side-drill .leftDepth").remove();
+        // $(".side-drill > .depth").append(depth_html);
+
+        $("#leftDrill-pattern > .depth").append(left_depth_html);
+        $("#rightDrill-pattern > .depth").append(right_depth_html);
+        
+
+        $("select").select2({
+            minimumResultsForSearch: -1,
+        });
+        checkDrillPattern();
+    });
+
+    // get selected Height         
+    // $(".partition-height").on("change", function() {
+        $(".partition-height").on("select2:select select2:unselecting", function () {
+        var getVal = $(this).val();
+        var option = $(this).find("option");
+        var getIndex = $(this).prop('selectedIndex');
+        var option_html = "<option disabled selected value> -- Select height -- </option>";;
+        option.each(function(i, v) {
+            if (i > 0) {
+                if (getIndex >= i) {
+                    option_html += ` <option value="${$(this).val()}">${$(this).text()}</option>`;
+                }
+            }
+        });
+        left_height_html = `<div class="mb-8 leftHeight">
+                        <label class="fs-6 fw-bold required mb-2 mt-md-0 mt-3">Height</label>
+                        <select class="form-select form-select-solid depth" data-control="select2" id="lsdrill-height"
+                                        data-hide-search="true" data-placeholder="Select height" name="left_side_drill_height">
+                            ${option_html}
+                        </select>
+                    </div>`;
+
+        right_height_html = `<div class="mb-8 leftHeight">
+                        <label class="fs-6 fw-bold required mb-2 mt-md-0 mt-3">Height</label>
+                        <select class="form-select form-select-solid depth" data-control="select2" id="rsdrill-height"
+                                        data-hide-search="true" data-placeholder="Select height" name="right_side_drill_height">
+                            ${option_html}
+                        </select>
+                    </div>`;
+        right_hole = `<div class="form-check form-check-custom form-check-solid mx-3 mb-8 mt-2 rdhole">
+                            {{ form.right_3rd_line_hole }}
+                            <label class="form-check-label fs-6 fw-bold" for="3Hole_left">
+                                3rd Hole
+                            </label>
+                        </div>`;
+
+        left_hole = `<div class="form-check form-check-custom form-check-solid mx-3 mb-8 mt-2 rdhole">
+                            {{ form.left_3rd_line_hole }}
+                            <label class="form-check-label fs-6 fw-bold" for="3Hole_right">
+                                3rd Hole
+                            </label>
+                        </div>`;
+
+        $(".side-drill .leftHeight").remove();
+
+        // $(".side-drill > .height").append(height_html);
+        $("#leftDrill-pattern > .height").append(left_height_html);
+
+        $("#rightDrill-pattern > .height").append(right_height_html);
+
+        if ($(".rdhole").length == 0){
+            $("#leftDrill-pattern > #hole3-left").append(left_hole);
+            $("#rightDrill-pattern > #hole3-right").append(right_hole);
+        }
+
+        $("select").select2({
+            minimumResultsForSearch: -1,
+        });
+        checkDrillPattern();
+    });
+
+    function checkDrillPattern() {
+        $("input[name='drill_pattern_left']").prop("disabled", true);
+        $("input[name='drill_pattern_right']").prop("disabled", true);
+
+        if ($(".partition-depth").val() != 0 && $(".partition-height").val() != 0) {
+            $("input[name='drill_pattern_left']").prop("disabled", false);
+            $("input[name='drill_pattern_right']").prop("disabled", false);
+            }          
+       
+    }
+
+    $("input[name='drill_pattern_left']").change(function() {
+        var getVal = $(this).attr('id');
+        console.log(getVal)
+        if (getVal == "l-yes") {
+            $("#leftDrill-pattern").show();
+        } else {
+            $("#leftDrill-pattern").hide();
+        }
+    });
+
+    $("input[name='drill_pattern_right']").change(function() {
+        var getVal = $(this).attr('id');
+        console.log(getVal)
+        if (getVal == "r-yes") {
+            $("#rightDrill-pattern").show();
+        } else {
+            $("#rightDrill-pattern").hide();
+        }
+    });
+
+    $(".clear-data").click(function() {
+        $("input[name='drill_pattern_left'], input[name='drill_pattern_right']").prop("disabled", true);
+        $(".side-drill").hide();
+        $(".side-drill .depth").find("div").remove();            
+        $(".side-drill .height").find("div").remove();            
+    });
+</script>
+
+<script>
+deleteDoorItem=(url,pk)=>{
+    $.ajax({                       
+                url: url,                  
+                data: {"pk":pk
+                    },
+                success: function (data) {
+                data=JSON.parse(data)
+                    if(data['status']==200){
+                Swal.fire({
+                        title:    'Deleted!',
+                        text: 'Your data has been deleted.',
+                        icon:  'success',
+                        customClass: {
+                        confirmButton: 'btn btn-primary',            
+                        },
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.replace('{% url 'room_options:room-partition' room.id %}');
+                            }
+                        });
+                    } 
+                    
+                }   
+            });
+    }
+$(document).on("click", ".del-data", function (e) {
+    pk= $(this).data('delete_id')
+    delete_url = $(this).data('url')
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,       
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-secondary'
+            },
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            deleteDoorItem(delete_url,pk)
+            }
+        })
+        e.preventDefault();
+});
+
+
+</script>
+      {% if room_partition %}
+        <script>
+        $(document).ready(function() {
+            {% if room_partition.drill_pattern_left or room_partition.drill_pattern_right%}
+                // Trigger select
+                $('.partition-height').trigger('select2:select');
+                $('.partition-depth').trigger('select2:select');
+            {% endif %}
+            {% if room_partition.drill_pattern_left %}
+                $('#l-yes').trigger('click');
+            {% endif %}
+            {% if room_partition.drill_pattern_right %}
+                $('#r-yes').trigger('click');
+            {% endif %}
+            {% ifnotequal room_partition.left_side_drill_height None %}
+                $('#lsdrill-height').val("{{room_partition.left_side_drill_height}}").change();
+            {% endifnotequal %}
+            {% ifnotequal room_partition.left_side_drill_depth None %}
+                 var option = $('#lsdrill-depth').find("option");
+                    option.each(function(i, v) {
+                        console.log($(this).val() + ' ' + {{ room_partition.left_side_drill_depth }})
+                        if($(this).val() == {{ room_partition.left_side_drill_depth }}){
+                            $('#lsdrill-depth').val($(this).val()).change();
+                        }
+                    });
+            {% endifnotequal %}
+            {% ifnotequal room_partition.right_side_drill_height None %}
+
+                $('#rsdrill-height').val("{{room_partition.right_side_drill_height}}").change();
+            {% endifnotequal %}
+            {% ifnotequal room_partition.right_side_drill_depth None %}
+                 var option = $('#rsdrill-depth').find("option");
+                    option.each(function(i, v) {
+                        if($(this).val() == {{room_partition.right_side_drill_depth}}){
+                            $('#rsdrill-depth').val($(this).val()).change();
+                        }
+                    });
+            {% endifnotequal %}
+        });
+        </script>
+    {% endif %}
+    <script>
+    $(document).ready(function(){
+  // Initialize form validation on the registration form.
+  // It has the name attribute "registration"
+  $("#create-partition-form").validate({
+    // Specify validation rules
+    rules: {
+      // The key name on the left side is the name attribute
+      // of an input field. Validation rules are defined
+      // on the right side
+      quantity: { required:true, digits: true },
+        depth:{ required:true },
+        height:{ required:true },
+        mat_type:{ required:true }
+    },
+    // // Specify validation error messages
+      invalidHandler: function(form, validator) {
+        sweetAlert('Please fill all the mandatory fields before submitting');
+    $('html, body').animate({scrollTop: '0px'}, 300);
+  },
+    messages: {
+        quantity: {
+            required: "Enter the quantity",
+            digits: "Numbers Only"
+        }
+    },
+    // // Make sure the form is submitted to the destination defined
+    // // in the "action" attribute of the form when valid
+    submitHandler: function(form) {
+      form.submit();
+     }
+
+  });
+});
+
+    </script>
+{% endblock %}

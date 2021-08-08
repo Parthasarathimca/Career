@@ -1,0 +1,127 @@
+{% extends 'room_options/cleats/base.html' %}
+{% load static %}
+{% block form_type %}Custom Cleat{% endblock %}
+{% block cleat_form %}
+    <!-- Begin:: custom cleat form -->
+
+ <form method="POST" action="" id="create-cleat-form" name="cleat">
+            {% csrf_token %}
+     <div class="row align-items-center">
+        <div class="col-xl-6">
+            <div class="">
+                <div class="mb-8">
+                    <label
+                        class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Material</label>
+                    <select class="form-select form-select-solid material_select material custom-material"
+                    data-control="select2" data-hide-search="true" data-placeholder="Select Material"
+                    name="{{form.mat_type.name}}">
+                        <option selected value="">Select Material</option>
+                        {% for value, text in form.mat_type.field.choices %}
+                        <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="row justify-content-center align-items-center mb-6">
+                    <div class="col-md-4 fv-row">
+                        <label class="form-check-label fs-6 fw-bold mb-2  required"
+                            for="1mm">Qty</label>
+                       {{ form.quantity }}
+                    </div>
+                    <div class="col-md-1 fv-row mt-4">
+                        <label class="fs-6 fw-bold">@</label>
+                    </div>
+                    <div class="col-md-3 fv-row">
+                        <label class="form-check-label fs-6 fw-bold mb-2 required"
+                            for="1mm">Width</label>
+                        {{ form.width }}
+                    </div>
+                    <div class="col-md-1 fv-row mt-4">
+                        <span class="fs-6 fw-bold">X</span>
+                    </div>
+                    <div class="col-md-3 fv-row">
+                        <label class="form-check-label fs-6 fw-bold mb-2 required"
+                            for="1mm">Height</label>
+                        {{ form.height }}
+                        <div class="col-md-1 fv-row ms-12">
+                            <label class="fs-30 fw-bold text-center">{{ form.height.value }}</label>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Exposed
+                        Ends</label>
+                    <select class="form-select form-select-solid custom-exposed"
+                    data-control="select2" data-hide-search="true" data-placeholder="Select value"
+                    name="{{form.cleat_exposed_ends.name}}">
+                        <option selected value="0">Select Value</option>
+                        {% for value, text in form.cleat_exposed_ends.field.choices %}
+                        <option value="{{value}}" {% if form.cleat_exposed_ends.value == value %} selected {% endif %} >{{text}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+            </div>
+        <div class="notes mt-8">
+                            <label class="fs-6 fw-bold mb-2 form-control-solid">Notes:</label>
+                            <textarea class="form-control 1_shelf_notes form-control-solid"
+                                      name="{{form.notes.name}}">{% if form.notes.value %} {{form.notes.value}} {% endif %}</textarea>
+                        </div>
+             {% if cleat %}
+                <div class="d-flex justify-content-end pt-7">
+                    <a class="btn btn-secondary me-2" href="{% url 'room_options:cleat' room_id=room.id  %}">Cancel</a>
+                    <button class="btn btn-primary submit-form" type="submit">Update</button>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-end pt-7">
+                    <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                    <button class="btn btn-primary submit-form" id="cleat_submit" type="submit">Submit</button>
+                </div>
+                {% endif %}
+        </div>
+
+        <div class="col-lg-6">
+            <div class="px-md-5  mt-4 mt-xl-0">
+                <img src="{% static 'images/hamper-face.png' %}" class="img-fluid" alt="images" />
+            </div>
+        </div>
+
+    </div>
+</form>
+        <!-- End:: custom cleat form -->
+
+
+{% endblock %}
+{% block extra_scripts %}
+     {% include 'room_options/_delete_room_option.html' with obj_ref='room_options:cleat' room_id=room.id %}
+    <script>
+    $("#cleat_submit").on("click", function () {
+
+            if(($('.custom-material').val() == 0 || $('.custom-material').val() == null) && $('.custom-qty').val() == 0  && $('.custom-width').val() == "" && $('.custom-exposed').val() == 0){
+                sweetAlert("Please fill in all the required fields.");
+                return false;
+            }
+
+              else if($('.custom-material').val() == 0 || $('.custom-material').val() == null)
+                {
+                    sweetAlert("Please select material.");
+                    return false;
+                }
+               else if($('.custom-qty').is(':visible') && $('.custom-qty').val() == "")
+                {
+                    sweetAlert("Quantity is required.");
+                    return false;
+                }
+                else if($('.custom-width').is(':visible') && $('.custom-width').val() == "")
+                {
+                    sweetAlert("Width is required.");
+                    return false;
+                }
+                else if($('.custom-exposed').is(':visible') && $('.custom-exposed').val() == 0 || $('.custom-exposed').val() == null)
+                {
+                    sweetAlert("Please select exposed ends.");
+                    return false;
+                }
+
+    })
+    </script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends 'room_options/cleats/base.html' %}
+{% block cleat_form %}
+    <form method="POST" action="" id="create-cleat-form" name="cleat">
+    {% csrf_token %}
+
+                <div class="col-xl-6 px-0">
+                    <div class="row justify-content-center align-items-center mb-6">
+                        <div class="col-md-4 fv-row">
+                            <label class="form-check-label fs-6 fw-bold mb-2 required "
+                                for="1mm">Qty</label>
+                            {{ form.quantity }}
+                        </div>
+                        <div class="col-md-1 fv-row mt-4">
+                            <label class="fs-6 fw-bold">@</label>
+                        </div>
+                        <div class="col-md-3 fv-row text-center">
+                            <label class="form-check-label fs-6 fw-bold mb-2 required "
+                                for="1mm">Width</label>
+                            {{ form.width }}
+                                <div class="col-md-1 fv-row  ms-12">
+                                    <label class="fs-30 fw-bold text-center">{{ form.width.value }}</label>
+                                </div>
+                            <!-- <input type="text"
+                                class="form-control width form-control-solid numberWithFloat"
+                                placeholder="97" readonly> -->
+                        </div>
+                        <div class="col-md-1 fv-row mt-4">
+                            <span class="fs-6 fw-bold">X</span>
+                        </div>
+                        <div class="col-md-3 fv-row text-center">
+                            <label class="form-check-label fs-6 fw-bold mb-2 required"
+                                for="1mm">Height</label>
+                            {{ form.height }}
+                                <div class="col-md-1 fv-row ms-12">
+                                    <label class="fs-30 fw-bold text-center">{{ form.height.value }}</label>
+                                </div>
+                            <!-- <input type="text"
+                                class="form-control depth form-control-solid numberWithFloat"
+                                placeholder="3.68" readonly> -->
+                        </div>
+                    </div>
+
+                    <span class="text-danger">* This 3'4" material that is to be ripped in half. You should calculate your total based on this.</span>
+
+               <div class="notes mt-8">
+                    <label class="fs-6 fw-bold mb-2 form-control-solid">Notes:</label>
+                    <textarea class="form-control 1_shelf_notes form-control-solid"
+                              name="{{form.notes.name}}">{% if form.notes.value %} {{form.notes.value}} {% endif %}</textarea>
+                </div>
+             {% if cleat %}
+                <div class="d-flex justify-content-end pt-7">
+                    <a class="btn btn-secondary me-2" href="{% url 'room_options:cleat' room_id=room.id  %}">Cancel</a>
+                    <button class="btn btn-primary submit-form" type="submit">Update</button>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-end pt-7">
+                    <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                    <button class="btn btn-primary submit-form" id="cleat_submit" type="submit">Submit</button>
+                </div>
+                {% endif %}
+            </div>
+
+            </form>
+ {% endblock %}
+{% block extra_scripts %}
+     {% include 'room_options/_delete_room_option.html' with obj_ref='room_options:cleat' room_id=room.id %}
+    <script>
+    $("#cleat_submit").on("click", function () {
+
+
+
+ if($('#id_quantity').is(':visible') && $('#id_quantity').val() == "")
+                    {
+                        sweetAlert("Quantity is required.");
+                        return false;
+                    }
+    })
+    </script>
+{% endblock %}

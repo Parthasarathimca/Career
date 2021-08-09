@@ -23,7 +23,7 @@ load_dotenv(os.path.join(BASE_DIR, "COS", ".env"))
 SECRET_KEY = '9$qwhe@i6y*&1%ahwirb3(tt343)bx7w&!co1p0y44v*1@!@i='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ["*","sataware.dev","www.sataware.dev","testing.sataware.dev", "www.testing.sataware.dev"]
 

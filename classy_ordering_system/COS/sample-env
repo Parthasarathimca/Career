@@ -21,11 +21,11 @@ DEFAULT_FROM_EMAIL = EMAIL_DEFAULT
 CLASSY_URL="localhost:8000"
 
 
-TWILIO_EMAIL=classyorderingsys@gmail.com
-PASSWORD=classyorderings@123
+TWILIO_EMAIL=vparthasarathiv@gmail.com
+PASSWORD=vparthasarathiv@gmail.com
 
-TWILIO_ACCOUNT_SID=AC0fab2a9193a5581e971de7404d0421b5
-TWILIO_AUTH_TOKEN=6f706188c528f8073663132ee1d2af0c
+TWILIO_ACCOUNT_SID=vparthasarathiv@gmail.com
+TWILIO_AUTH_TOKEN=vparthasarathiv@gmail.com
 FROM=+13156653049
-SERVICE_ID=MG016fa34ce6c646a56c5ac6a83b3d9d1f
+SERVICE_ID=vparthasarathiv@gmail.com
 

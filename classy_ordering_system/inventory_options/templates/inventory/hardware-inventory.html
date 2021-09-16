@@ -1,0 +1,426 @@
+{% extends 'inventory/_base_inventory.html' %} {% load static custom_tag %}
+{% load room_extras %}
+{% block navbartitle %} Hardware Inventory {% endblock %}
+{% block option_title %}Hardware Inventory{% endblock %}
+{% block crumb %}Hardware Inventory{% endblock %}
+{% block extra_stylesheets %}
+<style>
+    input {
+    border-width: 0px;
+    border: none;
+    color: none;
+    }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container">
+            <!--  Form block -->
+            <div class="mb-5 mb-xxl-8">
+                <div class="card mb-xl-8 hardwraBlock ">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">Hardware Inventory Order </span>
+                        </h3>
+                    </div>
+                    <!--begin::Body-->
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="flex-grow-1 card-p pb-0">
+                            <!--begin::Form-->
+                            <form class="form" id="hardware_inventory_form" method="POST">{% csrf_token %}
+                                <div class="row">
+                                    <div class="col-lg-6">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="mb-8">
+                                                    <label
+                                                        class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Description</label>
+                                                    <select class="form-select form-select-solid defaultDesc hardware_inventory" data-control="select2" data-placeholder="Select" name="{{form.category_description.name}}" required>
+                                                    <option value="" selected >Select Item Description</option>
+                                                    {% for value, text in form.category_description.field.choices %}
+                                                    <option value="{{value}}" {% if hardware_data.description2 == text %} selected {% endif %} >{{text}}</option>
+                                                    {% endfor %}
+                                                    <!-- {% if hardware_data %}
+                                                        {% for value, text in form.desc_dropdown.field.choices %}
+                                                        <option value="{{value}}" {% if hardware.inventory.descriptions == value %} selected {% endif %} >{{text}}</option>
+                                                        {% endfor %}
+                                                    {% endif %} -->
+                                                    
+                                                </select>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 ">
+                                                <div class="mb-8 d-none" id="Item-desc">
+                                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Item
+                                                        Description</label>
+                                                    <select
+                                                        class="form-select form-select-solid material_select item_description top-shelf-exposed"
+                                                        data-control="select2" data-hide-search="true"
+                                                        data-placeholder="Select" name="{{form.description2.name}}" id="description2" required>
+                                                        {% if hardware_data %}
+                                                            <option value="{{hardware_data.inventory.hd_desciption.id}}" {% if hardware_data.inventory.hd_desciption.description %}selected {% endif %} >{{hardware_data.inventory.hd_desciption.description}}</option>
+                                                        {% endif %}
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="inventory-row mb-8 d-none" id="hardware-inve">
+                                            <div class="col-md-3">
+                                                <label class="form-check-label fs-6 fw-bold mb-2">Qty per Order</label>
+                                                <input type="text" class="hidden-text qtyPerOrder" readonly
+                                                    placeholder="Qty" value="1" name="{{form.order_multiple.name}}" id="order_multiple">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label
+                                                    class="form-check-label fs-6 fw-bold mb-2 required">Order&nbsp;Amount</label>
+                                                <input type="text" onkeypress="return event.charCode >= 48"  
+                                                    class="form-control quantity form-control-solid numberWithFloat orderAmt"
+                                                    placeholder="" value="{% if hardware_data %}{{hardware_data.quantity}}{% endif %}" required>
+                                            </div>
+                                            <input type="hidden" value="" id="min_order" name="min_order">
+                                            <div class="">
+                                                <label class="form-check-label fs-6 fw-bold mb-2 invisible"
+                                                    for="">=</label>
+                                                <h2 class="my-0 fw-bold">=</h2>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-check-label fs-6 fw-bold mb-2">Total pieces</label>
+                                                <input type="text" class="hidden-text TotalPieces" id="quantity" value="{% if hardware_data %}{{hardware_data.quantity}}{% endif %}" placeholder="" name="{{form.quantity.name}}">
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-check-label fs-6 fw-bold mb-2 ">Total Price</label>
+                                                <input type="text" class="hidden-text totalPrice" placeholder="" name="{{form.total_price.name}}">
+                                            </div>
+                                        </div>
+                                        <div class="notes">
+                                            <label class="fs-6 fw-bold mb-2">Notes:</label>
+                                            <input class="form-control form-control-solid standard_notes" value="{% if form.notes.value %}{{form.notes.value}}{% endif %}" name="{{form.notes.name}}">
+                                        </input>
+                                        </div>
+                                        <input type="hidden" value="HARDWARE_INVENTORY" id="yes" name="{{form.description.name}}"/>
+                                        {% if hardware_data %}
+                                        <div class="d-flex justify-content-end pt-7">
+                                            <button type="button"
+                                                class="btn btn-secondary me-2 clear-btn ">Clear</button>
+                                            <button type="button" class="btn btn-primary standard_submit" id="submit-data">Update</button>
+                                        </div>
+                                        {% else %}
+                                        <div class="d-flex justify-content-end pt-7">
+                                            <button type="button"
+                                                class="btn btn-secondary me-2 clear-btn ">Clear</button>
+                                            <button type="button" class="btn btn-primary standard_submit" id="submit-data">Submit</button>
+                                        </div>
+                                        {% endif %}
+
+                                    </div>
+                                    <div class="col-lg-6">
+                                        <div class="p-md-10 p-4 mt-4 text-center"  >
+                                            <img src="{% static 'images/no-image.png' %}"style="height: 100px;"
+                                                class="img-fluid inventory-img" alt="No image" />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="inventory-calender"> -->
+                                    <!-- <p id="result-13">&nbsp;</p> -->
+                                    <!-- <input type="text" id="inventory-date" class="form-control form-control-sm"
+                                        style="display: none;" />
+                                </div> -->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                    </div>
+                    <!--end::Body-->
+                </div>
+            </div>
+            <div class="mb-5 mb-xxl-4 px-0 inventory-Table ">
+            <div class="card partition_table">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table partition_tbl table-alternet table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>SERIAL NO.</th>
+                                    <th>ACTIONS</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>CATEGORY</th>
+                                    <th>ITEM DESCRIPTION</th>
+                                    <th>QTY PER ORDER</th>
+                                    <th>NOTES</th>
+                                </tr>
+                            </thead>
+                            <tbody class="inventory-tbody">
+                                {% for inventory in hardware %}
+                                <tr>
+                                    <td>{{forloop.counter}}</td>
+                                    <td>
+                                        <a href="{% url 'inventory_options:edit-hardware-inventory' pk=inventory.id %}"
+                                            class="btn btn-icon btn-active-light-primary w-30px h-30px me-3"
+                                            >
+                                            <span data-bs-toggle="tooltip" data-bs-trigger="hover"
+                                                title="Edit">
+                                                <span class="svg-icon svg-icon-3">
+                                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                                        width="24px" height="24px"
+                                                        viewBox="0 0 24 24" version="1.1">
+                                                        <path
+                                                            d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
+                                                            fill="#000000" fill-rule="nonzero"
+                                                            transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)" />
+                                                        <path
+                                                            d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
+                                                            fill="#000000" fill-rule="nonzero"
+                                                            opacity="0.3" />
+                                                    </svg>
+                                                </span>
+                                            </span>
+                                        </a>
+                                        <a href="#"
+                                            class="btn btn-icon btn-active-light-primary w-30px h-30px del-data" title="Delete" data-url="{% url 'inventory_options:delete-hardware-inventory' pk=inventory.id %}"
+                                            data-bs-toggle="tooltip" title="Delete" data-delete_id="{{inventory.id}}"
+                                            >
+                                            <span class="svg-icon svg-icon-3 mt-n1">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                    version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                        fill-rule="evenodd">
+                                                        <rect x="0" y="0" width="24" height="24" />
+                                                        <path
+                                                            d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
+                                                            fill="#000000" fill-rule="nonzero" />
+                                                        <path
+                                                            d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
+                                                            fill="#000000" opacity="0.3" />
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </a>
+                                    </td>
+                                    <td>{{inventory.description.title}}</td>
+                                    <td>{{inventory.description2}}</td>
+                                    <td>{{inventory.inventory.hd_desciption}}</td>
+                                    <td>{{inventory.quantity|default_if_none:"-"}}</td>
+                                    <td>{{inventory.notes|default_if_none:"-"}}</td>
+                                </tr>
+                                {% endfor %}
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        <!--end::Container-->
+        <!-- End:: content -->
+    </div>
+
+    {% endblock %}
+    {% block extra_scripts %}
+    <script>
+        var inv = "{{hardware_data.description}}"
+        if(inv){
+            $("#Item-desc").removeClass("d-none");
+            $("#hardware-inve").removeClass("d-none");
+        }
+        console.log(inv,'===')
+        $(".orderAmt").keyup(function () {
+            var amt = Math.round($(this).val());
+            if (amt != "") {
+                var qty = $(".qtyPerOrder").val();
+                var pieces = $(".TotalPieces");
+                var price = $(".totalPrice");
+                // calculate  pices
+                var TotalPieces = qty * amt;
+
+                pieces.val(TotalPieces);
+                price.val("$" + TotalPieces);
+            }
+        });
+
+        $("#createJob").click(function () {
+            $(".hardwraBlock").removeClass("d-none");
+            $(".calender-block").addClass("d-none");
+            $(".inventory-Table").removeClass("d-none");
+        });
+
+        $(".defaultDesc").on("select2:select select2:unselecting", function () {
+            $("#Item-desc").removeClass("d-none");
+        });
+        $("#Item-desc").on("select2:select select2:unselecting", function () {
+            $("#hardware-inve").removeClass("d-none");
+        });
+
+        $(".clear-btn").click(function () {
+            $(".TotalPieces").val("");
+            $(".totalPrice").val("");
+            $("#hardware-inve").addClass("d-none");
+            $("#Item-desc").addClass("d-none");
+        });
+
+        $(".standard_submit").click(function () {
+            if ($('.item_description').val() == 0 && $('.orderAmt').val() == "" && $('defaultDesc').val() == 0 ) {
+                sweetAlert("Please fill in all the required fields.");
+                return false;
+            } else if ($('.defaultDesc').val() == 0) {
+                sweetAlert("Select Description");
+                return false;
+            } else if ($('.item_description').is(':visible') && $('.item_description').val() == 0) {
+                sweetAlert("Please select item description.");
+                return false;
+            } else if ($('.orderAmt').val() == "") {
+                sweetAlert("Amount is required.");
+                return false;
+            } else if (parseInt($('#min_order').val()) > parseInt($('.TotalPieces').val())) {
+                sweetAlert("Total Pieces must be greater than "+ $('#min_order').val());
+                return false;
+            } else {
+                $('#submit-data').attr('disabled', true);
+                $('#hardware_inventory_form').submit();
+                clearData();
+                e.preventDefault();
+            }
+            // else if ($('input[name="edge_type"]:checked').length == 0) {
+            //     sweetAlert("Please select left edge type.");
+            //     return false;
+            // } 
+            // var html = "";
+            // html += `
+            //     <tr>
+            //         <td>1</td>
+            //         ${actions}                            
+            //         <td>Slides</td>
+            //         <td>4H Drawer Side(1/2 G2S White Only)</td>
+            //         <td>2</td>
+            //         <td>4</td>                            
+            //         <td>8</td>
+            //         <td>$8</td>                                                                            
+            //         <td><p class="tbl-note">This is dummy data.</p></td>
+            //     </tr>
+            // `;
+            // $(".inventory-tbody").append(html);
+            // clearData();
+            // $(".TotalPieces").val("");
+            // $(".totalPrice").val("");
+            // $("#hardware-inve").addClass("d-none");
+            // $("#Item-desc").addClass("d-none");
+        });
+
+
+
+
+
+        deleteDoorItem=(url,pk)=>{
+        console.log(url, pk, "irl--------------------------")
+        $.ajax({                       
+            url: url,                  
+            data: {"pk":pk
+                },
+            success: function (data) {
+            data=JSON.parse(data)
+                if(data['status']==200){
+                Swal.fire({
+                    title:    'Deleted!',
+                    text: 'Your data has been deleted.',
+                    icon:  'success',
+                    customClass: {
+                    confirmButton: 'btn btn-primary',            
+                    },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                } 
+            }   
+        });
+    }
+
+    $(document).on("click", ".del-data", function (e) {
+        pk= $(this).data('delete_id')
+        delete_url = $(this).data('url')
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,       
+                customClass: {
+                    confirmButton: 'btn btn-primary',
+                    cancelButton: 'btn btn-secondary'
+                },
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                deleteDoorItem(delete_url,pk)
+                }
+            })
+            e.preventDefault();
+    });
+
+
+
+
+
+    //     $(".standard_submit").click(function(e) {
+        
+            
+    //         $('#CreateJob_form').submit();
+    //         $('#submit-data').attr('disabled', true);
+
+        
+        
+    //         clearData();
+    //         e.preventDefault();
+
+    // });
+
+
+    $('.hardware_inventory').change(function () {
+       var value = this.value;
+       var name = this.name
+       
+       $.ajax({
+           url:"{% url 'inventory_options:wood-item-description-ajax' %}" ,
+           type: "GET",
+           data : {
+               value : value,
+               name : name
+           },
+           success: function(result){
+                if(name == "category_description"){
+                    $('#description2').empty();
+                    $('#min_order').empty();
+                    $('#description2').append("<option value='' selected>Choose Item Description</option>");
+                    for (const key in result) {
+                        // $('#description2').append("<option value='"+key+"'>"+result[key]+"</option>");
+                        if(key == 'desc') {
+                            for (i in result[key]) {
+                                $('#description2').append("<option value='"+i+"'>"+result[key][i]+"</option>");
+                            }
+                        } else if (key == 'min_order'){
+                            for (j in result[key]) {
+                                $('#min_order').attr('value', result[key][j])
+                            }
+                        } else {
+                            console.log("not found")
+                        }
+                    }
+                     
+                }
+           }
+        });
+    });
+    </script>
+    {% endblock %}

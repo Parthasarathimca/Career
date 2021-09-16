@@ -13,29 +13,34 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from room_options.views.LTI_doors import LTIDoorsView,load_lti_dopdowns
 from django.contrib import admin
 from django.urls import path, re_path
-from room_options.views import RoomPartitionView, RoomKDShelfView, DeleteRoomOptionView, RoomADJShelfView, \
-    RoomPartitionEditView
+from room_options.views import RoomPartitionView, RoomKdShelfView, DeleteRoomOptionView, RoomADJShelfView, \
+    RoomPartitionEditView, RoomAdjShelfEditView, RoomKdShelfEditView, DrillPatternMapView
 from room_options.views.cleat_views import CleatView, CleatEditView
+from room_options.views.custom_views import CustomView, CustomEditView
 from room_options.views.pair_door_views import  PairDoorsView,DoorsDeleteView,room_opening_data
 from room_options.views.single_door_views import SingleDoorView,room_single_opening_data
 from room_options.views.l_shelf import LShelfView,LShelfDeleteView
 from room_options.views.corner_shelf_views import CornerShelfView,CornorShelfDeleteView
-from room_options.views.toe_kick_views import ToeKickView, ToeKickEditView
+from room_options.views.toe_kick_views import ToeKickView, ToeKickEditView, ToeKickDeleteView
 from room_options.views.top_shelf_views import TopShelfView,TopShelfDeleteView
 from room_options.views.drawer_faces import DwawerFacesView,DwawerFacesDeleteView
 from room_options.views.drawer_box_views import *
+from room_options.views.deco_door_views import *
 
 urlpatterns = [
 
     path('room_partition/<int:room_id>', RoomPartitionView.as_view(), name='room-partition'),
     path('room_partition/<int:room_id>/edit/<pk>', RoomPartitionEditView.as_view(), name='edit-room-partition'),
+    path('room_partition/drillmap', DrillPatternMapView.as_view(), name='drill-map'),
 
-    path('room_kd_shelf/<int:room_id>', RoomKDShelfView.as_view(), name='room-kd-shelf'),
-    path('room_update_kd_shelf/job/<int:room_id>/option/<int:id>', RoomKDShelfView.as_view(), name='update-room-kd-shelf'),
+
+    path('room_kd_shelf/<int:room_id>', RoomKdShelfView.as_view(), name='room-kd-shelf'),
+    path('room_kd_shelf/<int:room_id>/edit/<pk>', RoomKdShelfEditView.as_view(), name='update-room-kd-shelf'),
     path('room_adj_shelf/<int:room_id>', RoomADJShelfView.as_view(), name='room-adj-shelf'),
-    path('room_update_adj_shelf/job/<int:room_id>/option/<int:id>', RoomADJShelfView.as_view(), name='update-room-adj-shelf'),
+    path('room_adj_shelf/<int:room_id>/edit/<pk>', RoomAdjShelfEditView.as_view(), name='update-room-adj-shelf'),
     path('delete/room_option/<int:pk>', DeleteRoomOptionView.as_view(), name='delete-room-option'),
 
     path('delete/doors/<int:pk>', DoorsDeleteView.as_view(), name='delete-doors'),
@@ -65,6 +70,17 @@ urlpatterns = [
 
     path('toe-kicks/<int:room_id>', ToeKickView.as_view(), name='toe-kick'),
     path('toe-kicks/<int:room_id>/edit/<pk>', ToeKickEditView.as_view(), name='edit-toe-kick'),
+    path('toe-kick/<int:room_id>/delete/<pk>', ToeKickDeleteView.as_view(), name='delete-toe-kick'),
+
+    path('custom/<int:room_id>', CustomView.as_view(), name='custom'),
+    path('custom/<int:room_id>/edit/<pk>', CustomEditView.as_view(), name='edit-custom'),
+    
+    path('lti-doors/<int:room_id>',LTIDoorsView.as_view(), name='LTI-doors'),
+    path('load-lti-dropdowns/', load_lti_dopdowns, name='load-lti-dropdowns'),    
+    path('wood-doors/<int:room_id>', DecoDoorView.as_view(), name='wood-doors'),
+    path('wood-door-ajax', WoodDoorItemDescriptionsAjaxView.as_view(), name='wood-door-ajax'),
+    path('wood-doors/<int:room_id>/edit/<int:pk>', DecoDoorEditView.as_view(), name='update-deco-doors'),
+    path('wood-delete/room_option/<int:pk>', DeleteWoodDoorRoomOptionView.as_view(), name='wood-delete-room-option'),
 
 ]
 

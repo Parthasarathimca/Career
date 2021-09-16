@@ -3,8 +3,10 @@ __pycache__/
 *public/
 *color_pics/
 # *fixtures/
-#COS/settings.py
+COS/settings.py
 .env
 *.env
 *.idea/
-#COS/.env
+COS/.env
+migrations/
+!migrations/__init__.py

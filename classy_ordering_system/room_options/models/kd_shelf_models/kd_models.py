@@ -1,5 +1,5 @@
 from django.db import models
-from COS.core.utils import TimestampedModel,IsActiveManager
+from COS.core.utils import TimestampedModel,IsActiveManager,SortingModel
 from franchise.models import RoomModel
 
 # Create your models here.
@@ -8,7 +8,7 @@ from franchise.models import RoomModel
 KD SHELF MAP TABLE STARTS HERE
 '''
 
-class KdDepth(TimestampedModel):
+class KdDepth(TimestampedModel,SortingModel):
     kd_depth = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     kd_depth_text = models.CharField(max_length=255)
     is_active=models.BooleanField(default=True)
@@ -24,7 +24,7 @@ class KdDepth(TimestampedModel):
         verbose_name_plural = "Kd Depth"
 
 
-class KdWidth(TimestampedModel):
+class KdWidth(TimestampedModel,SortingModel):
     kd_width = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     kd_width_text = models.CharField(max_length=255)
     is_active=models.BooleanField(default=True)
@@ -39,7 +39,7 @@ class KdWidth(TimestampedModel):
         verbose_name_plural = "Kd Width"
 
 
-class KdMaterial(TimestampedModel):
+class KdMaterial(TimestampedModel,SortingModel):
     kd_material = models.BigIntegerField()
     kd_material_text = models.CharField(max_length=255)
     is_active=models.BooleanField(default=True)
@@ -54,7 +54,7 @@ class KdMaterial(TimestampedModel):
         verbose_name_plural = "Kd Material"
 
 
-class KdEdge(TimestampedModel):
+class KdEdge(TimestampedModel,SortingModel):
     kd_edge = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     kd_edge_text = models.CharField(max_length=255)
     is_active=models.BooleanField(default=True)
@@ -69,7 +69,7 @@ class KdEdge(TimestampedModel):
         verbose_name_plural = "Kd Edge"
 
 
-class KdInsertBacking(TimestampedModel):
+class KdInsertBacking(TimestampedModel,SortingModel):
     kd_backing_size = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     kd_backing_text = models.CharField(max_length=255)
     is_active=models.BooleanField(default=True)

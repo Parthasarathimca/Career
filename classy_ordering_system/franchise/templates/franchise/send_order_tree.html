@@ -1,0 +1,265 @@
+{% load static%}
+{% block content %}
+        <div id="kt_content_container" class="container">
+                    <!--begin::Charts Widget 1-->
+                    <div class="card mb-5 mb-xxl-8" >
+                        <div class="row border grouping-box d-none" id="send_order_div">
+                        <div class="col-xl-6" >
+                                <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3">Select Production Center</label>
+                                
+                                <select class="form-select form-select-solid drill-option" name=""
+                                   data-control="select2" data-hide-search="true" required="true"
+                                   data-placeholder="Select Option" id="production_center">
+                                   <option value="">Select </option>
+                                   {% for  eanch_center in production_center %}
+                                   <option  {% if default_pc.0.production_center.id == eanch_center.id %} selected {% endif %}  value="{{eanch_center.id}}" data-value="{{eanch_center.id}}">{{eanch_center.name}}</option>
+                                   {% endfor %}
+                                </select>
+                            
+                        </div>
+                        <div class="col-xl-6">
+                            <br>
+                        <button  type="button" class="btn btn-primary" id="send_order" >
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                                 <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"></path>
+                            </svg>&nbsp;&nbsp; Send Order
+                          </button>
+                        </div>
+                    </div>  
+                        <!--begin::Header-->
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-3 mb-1">Job Id: {{job.job_id}}</span>
+                            </h3>
+                        </div>
+                        <!--end::Header-->
+                        <!--begin::Body-->
+
+                        <div class="card-body tree-scroll" style="width:95%">
+                            {% if rooms|length == 0 %}
+                            <p>No Room is available</p>
+                            {% else %}
+                            <div  class='' id="tree"></div>
+                            {% endif %}
+                        </div>
+                        <!--end::Body-->
+                    </div>
+                    <!--end::Charts Widget 1-->
+
+
+                
+                <!--end::Col-->
+            
+            <!--end::Row-->
+        </div>
+        <!--end::Container-->
+   
+    <!--end::Post-->
+
+<div class="d-none" id='all_room_names'>
+    {% for room  in  job.job_room.all %}
+    <input type="hidden" value="{{room.room_name}}">
+    {% endfor %}
+</div>
+<div class="d-block" id='disabled_nodes'>
+    {% for each_node  in  disabled_nodes %}
+    <input type="hidden" value="{{each_node}}">
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+{% block extra_scripts %}
+
+<script>
+    // ------Vertical-tree-view
+    $(document).ready(function () {
+        var tree_job_status="{{tree_job_stauts}}"
+        
+           
+        $.ajax({                       
+            url:'{% url "franchise:job-detail-tree-data" job_id=job.id %}',                  
+            data:{},
+        }).done(function(data){
+                var tree = $('#tree').tree({
+                    primaryKey: 'id',
+                    uiLibrary: 'bootstrap4',
+                    dataSource: data,
+                    checkboxes: true,
+                    border: true,
+                    selectionType: 'single',
+                    imageHtmlField:'delete_url',
+                    select: function (e, node, id) {
+                    if(id !== 'undefined' && typeof id != Number){
+                        window.location.href=id;
+                    }
+                    
+                },
+                });
+                getCheckedNodesCustom=()=>{
+               
+               var a = [],
+                   b = tree.find('li [data-role="checkbox"] input[type="checkbox"]');
+              
+                   $.each(b, function () {
+                       var b = $(this);
+                       if( b.checkbox("state")==="checked" ){
+                       a.push(b.closest("li").find('button').data("delete_id"));
+                       a.push(b.closest("li").find('button').data("model"));
+                       a.push(b.closest("li").find('button').data("description"));
+                       }
+                   })
+                   
+              return a
+           }  
+ 
+            node = tree.getNodeByText('Job Id- {{job.job_id}}'); 
+            tree.expand(node);
+            
+            $('#all_room_names input').each(function () {
+                node = tree.getNodeByText(this.value) 
+                tree.expand(node);
+             });      
+             
+            // tree.expandAll()
+            // for disable 
+            $('#disabled_nodes input').each(function () {
+                nodeSelected = tree.getNodeById(this.value)  !== undefined ?tree.getNodeById(this.value) :tree.getNodeByText(this.value)
+                //  console.log('selected ===>',nodeSelected)
+                tree.disable(nodeSelected,false);
+                tree.expand(nodeSelected);  
+                
+                tree.check(nodeSelected);                  
+             });
+             /*tree.on('checkboxChange', function (e, $node, record, state) {
+                    //alert('The new state of record ' + record.text + ' is ' + state);   
+                    $('#send_order_div').removeClass("d-none")
+                });
+            */
+                if(tree_job_status=='INPROGRESS')  {
+                    $('#send_order_div').removeClass("d-none")
+                }
+            $('#production_center').each(function() {
+                $(this).data('lastValue', $(this).val());
+            });
+
+            $("#production_center").on("change",function(){
+                var lastVal = $(this).data('lastValue');
+                
+                Swal.fire({
+                     title:    'Are you sure ?',
+                     text: 'want to change the production center?  ',
+                     icon: 'warning',
+                     showCancelButton: true,
+                     customClass: {
+                            confirmButton: 'btn btn-primary',
+                            cancelButton: 'btn btn-secondary'
+                        },
+                        cancelButtonText:"No",
+                        confirmButtonText: 'Yes'
+                     }).then(function(result){
+                        if (! result.isConfirmed) {
+                            
+                            $("#production_center").val(lastVal)  
+                        }
+                    });
+            })
+            $('#send_order').on("click",function(){
+                production_center=$('#production_center').val();
+                if (production_center){
+                    var result = getCheckedNodesCustom();
+                    sendOrder("{% url 'franchise:job-detail-send-order' job.id %}",result,production_center)
+                }else{
+                    sweetAlert("Please Select Production Center.");
+                    
+                }
+            })
+
+
+
+            });//done
+               
+    
+        function sendOrder(url,result,production_center){
+            $('.loading').show();
+            $.ajax({                       
+            url: url,                  
+            data: {"send_order_list":JSON.stringify(result),'production_center':production_center
+                },
+            success: function (data) {
+                $('.loading').hide();
+               data=JSON.parse(data)
+                if(data['status']==200){
+               Swal.fire({
+                     title:    'Order Sent',
+                     text: 'Your order has been sent Successfully ',
+                     icon:  'success',
+                     closeOnConfirm: false,
+                     customClass: {
+                     confirmButton: 'btn btn-primary',            
+                      },
+                     }).then(function(){
+                         
+                       window.location.reload();
+                         
+                    
+                });
+                  } 
+            //window.location.reload();
+            }   
+        });
+
+        }  
+        // unchecked the selected room
+        if ($("input[type=radio]").is(':checked')){
+            $("input[type=radio]").prop('checked', false);
+        }
+    });
+    
+ deleteRoomItem=(url,pk,model,description)=>{
+   $.ajax({                       
+            url: url,                  
+            data: {"pk":pk,'model':model,'description':description
+                },
+            success: function (data) {
+               data=JSON.parse(data)
+                if(data['status']==204){
+               Swal.fire({
+                     title:    'Deleted!',
+                     text: 'Your data has been deleted.',
+                     icon:  'success',
+                     customClass: {
+                     confirmButton: 'btn btn-primary',            
+                      },
+                     });
+                  } 
+                window.location.replace("{% url 'franchise:job-detail' job.id %}")
+            }   
+        });
+}
+
+    $(document).on("click", ".del-data", function (e) {
+      pk= $(this).data('delete_id')
+      model=$(this).data('model')
+      description=$(this).data('description')
+    
+    Swal.fire({
+        title: 'Are you sure? <br> All of the following related items will be deleted: <b>Room,</b> <br><b>Room Options Master</b>',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,       
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+          },
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+         deleteRoomItem("{% url 'franchise:delete-room' %}",pk,model,description)
+        }
+      })
+    e.preventDefault();
+});
+
+</script>
+{% endblock %}

@@ -24,6 +24,7 @@
             </h4>
             <form method="POST" id ="feedback_form"   enctype="multipart/form-data">
                 {% csrf_token %}
+                    <input name='url' type="hidden" value="{{ request.build_absolute_uri }} "/>
                   <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3">Please Leave your feedback here:</label>
                   <textarea  name="feedback" class="form-control form-control-solid mb-8" rows="7" placeholder="Write here..."></textarea>
   

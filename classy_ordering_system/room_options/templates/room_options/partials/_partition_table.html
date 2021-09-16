@@ -5,31 +5,28 @@
                         <table class="table partition_tbl table-alternet table-bordered">
                             <thead>
                                 <tr>
-                                    <th class="min-w-125px">Serial No.</th>
-                                    <th>Actions</th>
-                                    <th class="min-w-125px">Room ID</th>
-                                    <th>Category</th>
-                                    <th>Description</th>
-                                    <th>Material</th>
-                                    <th>Quantity</th>
-                                    <th>Depth</th>
-                                    <th>Height</th>
-                                    <th>Left Side Drill</th>
-                                    <th>Left Side Drill Depth</th>
-                                    <th>Left Side Drill Height</th>
-                                    <th>Left Side Drill 3rd Hole</th>
-                                    <th>Right Side Drill</th>
-                                    <th>Right Side Drill Depth</th>
-                                    <th>Right Side Drill Height</th>
-                                    <th>Right Side Drill 3rd Hole</th>
-                                    <th>Dog Eared</th>
-                                    <!-- <th>Edge Profile</th> -->
-                                    <!-- <th>Dog Eared</th>
-                                    <th>Left Side Drill Pattern</th>
-                                    <th>Left 3rd line Hole</th>
-                                    <th>Right Side Drill Pattern</th>
-                                    <th>Right 3rd line Hole</th> -->
-                                    <th>Notes</th>
+                                    <th class="min-w-125px">SERIAL NO.</th>
+                                    <th>ACTIONS</th>
+                                    <th class="min-w-125px">ROOM ID</th>
+                                    <th>CATEGORY</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>MATERIAL</th>
+                                    <th>QUANTITY</th>
+                                    <th>WIDTH</th>
+                                    <th>DEPTH</th>
+                                    <th>HEIGHT</th>
+                                    <th>LEFT SIDE DRILL</th>
+                                    <th>LEFT SIDE DRILL DEPTH</th>
+                                    <th>LEFT SIDE DRILL HEIGHT</th>
+                                    <th>LEFT SIDE DRILL CODE</th>
+                                    <th>LEFT SIDE DRILL 3RD HOLE</th>
+                                    <th>RIGHT SIDE DRILL</th>
+                                    <th>RIGHT SIDE DRILL DEPTH</th>
+                                    <th>RIGHT SIDE DRILL HEIGHT</th>
+                                    <th>RIGHT SIDE DRILL CODE</th>
+                                    <th>RIGHT SIDE DRILL 3RD HOLE</th>
+                                    <th>DOG EARED</th>
+                                    <th>NOTES</th>
                                 </tr>
                             </thead>
                             <tbody class="partition_tbody" id="data_table">
@@ -37,7 +34,7 @@
                                 <tr>
                                     <td>{{forloop.counter}}</td>
                                     <td>
-                                        <a href="{% url 'room_options:edit-room-partition' room_id=room.id pk=shelf.id %}"
+                                        <a href="{% url 'room_options:edit-room-partition' room_id=room.id pk=shelf.id %}?type={{shelf.part_sub_category}}"
                             class="btn btn-icon btn-active-light-primary w-30px h-30px me-3">
                             <span data-bs-toggle="tooltip" data-bs-trigger="hover"
                                 title="Edit">
@@ -85,16 +82,29 @@
                                 <td>{{shelf.description}}</td>
                                 <td>{{shelf.get_mat_type_display}}</td>
                                 <td>{{shelf.quantity|default_if_none:"-"}}</td>
-
+                                <td>{{shelf.width|default_if_none:"-"}}</td>
                                 <td>{{shelf.depth|default_if_none:"-"}}</td>
                                 <td>{{shelf.height|default_if_none:"-"}}</td>
-                                <td>{{shelf.drill_pattern_left|yesno:"Yes,No"}}</td>
+                                    {% if shelf.part_sub_category == 'STANDARD' %}
+                                        <td>{{shelf.drill_pattern_left|yesno:"Yes,No"}}</td>
+                                    {% else %}
+                                        <td>{{shelf.get_custom_drill_pattern_left_display}}</td>
+                                    {% endif %}
+
+
                                 <td>{{shelf.left_side_drill_depth|default_if_none:"-"}}</td>
                                  <td>{{shelf.left_side_drill_height|default_if_none:"-"}}</td>
+                                 <td>{{shelf.custom_drill_code_lft.drillcode|default_if_none:"-"}}</td>
                                  <td>{{shelf.left_3rd_line_hole|yesno:"Yes,No"}}</td>
-                                    <td>{{shelf.drill_pattern_right|yesno:"Yes,No"}}</td>
+                                     {% if shelf.part_sub_category == 'STANDARD' %}
+                                        <td>{{shelf.drill_pattern_right|yesno:"Yes,No"}}</td>
+                                    {% else %}
+                                        <td>{{shelf.get_custom_drill_pattern_right_display}}</td>
+                                    {% endif %}
+
                                     <td>{{shelf.right_side_drill_depth|default_if_none:"-" }}</td>
                                  <td>{{shelf.right_side_drill_height|default_if_none:"-"}}</td>
+                                 <td>{{shelf.custom_drill_code_rgt.drillcode|default_if_none:"-"}}</td>
                                  <td>{{shelf.right_3rd_line_hole|yesno:"Yes,No"}}</td>
                                  <td>{{shelf.get_dog_eared_display|default_if_none:"-"}}</td>
                                 <td>{{shelf.notes|default_if_none:"-"}}</td>

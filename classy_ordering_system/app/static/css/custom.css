@@ -247,7 +247,7 @@ a.disabled {
 .color-preview {
   width: 50px;
   height: 50px;
-  border: 1px solid #ddd;
+  /* border: 1px solid #ddd; */
   padding: 4px;
   margin-top: 15px;
   border-radius: 5px;
@@ -525,8 +525,8 @@ table tbody td {
 .select2-container--bootstrap5 .select2-dropdown .select2-results__option.select2-results__option--highlighted {
   background-color: #fdecf1;
   color: #770d29;
-  -webkit-transition: color .2s ease,background-color .2s ease;
-  transition: color .2s ease,background-color .2s ease;
+  -webkit-transition: color .2s ease, background-color .2s ease;
+  transition: color .2s ease, background-color .2s ease;
 }
 
 .grouping-box {
@@ -565,11 +565,420 @@ table tbody td {
 }
 /*# sourceMappingURL=custom.css.map */
 
-.buttons-type-list a.active {
-    background-color: #770d29 !important;
-    color: #ffffff !important;
+.topshelf-dime {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 .errorlist li, .alert-error li{
   color: #ff0000;
   list-style: none;
+}
+.tree-scroll {
+  margin:4px, 4px;
+  padding:4px;
+  width: 500px;
+  height: 600px;  
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align:justify;
+}
+.timeline-label .timeline-label{
+  width:29%;
+}
+
+.timeline-label:before {
+  left: 100px;
+}
+
+.topshelf-dime * {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.topshelf-dime .quantity {
+  width: 60px;
+}
+
+.topshelf-dime label {
+  width: 70px;
+}
+.topShelfBlock-row {
+  margin-left: -5px;
+  margin-left: -5px;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+}
+
+.topShelfBlock-row > div {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+.btn-outline-danger:hover {
+  background-color: #f1bcc9;
+}
+
+
+.inventory-calender {
+  text-align: center;
+}
+
+.inventory-calender.cal-disabled {
+  position: relative;
+  cursor: no-drop;
+}
+
+.inventory-calender.cal-disabled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.5);
+  width: 100%;
+  z-index: 99;
+  height: 100%;
+}
+
+.inventory-calender .lightpick {
+  z-index: 9;
+}
+
+@media screen and (min-width: 992px) {
+  .inventory-calender .lightpick--inlined {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+.inventory-calender .lightpick--inlined .lightpick__month {
+  width: 100%;
+}
+
+.inventory-calender .lightpick__month-title-bar {
+  background-color: #770d29;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+}
+
+.inventory-calender .lightpick__month-title > .lightpick__select-months, .inventory-calender .lightpick__month-title > .lightpick__select {
+  color: #ffffff;
+  background-color: #770d29;
+  padding: 0 10px;
+}
+
+@media screen and (min-width: 767px) {
+  .inventory-calender .lightpick__day-of-the-week {
+    font-size: 20px;
+    margin-bottom: 20px;
+  }
+}
+
+@media screen and (min-width: 767px) {
+  .inventory-calender .lightpick__day {
+    font-size: 16px;
+    height: 50px;
+  }
+}
+
+.inventory-calender .lightpick__day.is-today, .inventory-calender .lightpick__day:not(.is-disabled):hover {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle fill='%23FDECF1' cx='16' cy='16' r='16'/%3E%3C/svg%3E");
+  background-size: auto;
+  color: #770d29;
+}
+
+.inventory-calender .lightpick__day.is-start-date, .inventory-calender .lightpick__day.is-end-date, .inventory-calender .lightpick__day.is-start-date:hover, .inventory-calender .lightpick__day.is-end-date:hover {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle fill='%23770d29' cx='16' cy='16' r='16'/%3E%3C/svg%3E");
+  color: #ffffff;
+}
+
+.inventory-row {
+  /* display: -webkit-box; */
+  /* display: -ms-flexbox; */
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-left: -5px;
+  margin-right: -5px;
+  /* -ms-flex-wrap: wrap; */
+      /* flex-wrap: wrap; */
+}
+
+.inventory-row > div {
+  padding: 5px;
+}
+
+.buttons-type-list a.active {
+  background-color: #770d29 !important;
+  color: #ffffff !important;
+}
+.tbl-white tbody tr:nth-of-type(odd) td {
+  background-color: #ffffff !important;
+}
+
+.inprogress-job-scroll {
+  margin:4px, 4px;
+  padding:4px;
+  height: 600px;  
+  overflow-x: hidden;
+  overflow-y: auto;
+  text-align:justify;
+}
+
+.table-alternet-red > tbody > tr:nth-of-type(even) td {
+  background-color: #E1D3D4 !important;
+}
+
+.custom-door label {
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  min-width: 50px;
+  text-align: center;
+  display: block;
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  z-index: 1;
+}
+.custom-door input:checked + label {
+  background-color: #770d29;
+  color: #ffffff;
+}
+
+.custom-door {
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.custom-door input {
+  opacity: 0;
+  position: absolute;
+}
+.label-look {
+  border: 0;
+  text-align: center !important;
+}
+
+.glass-opt {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.glass-opt label {
+  border: 2px solid #ddd;
+  border-radius: 3px;
+  padding: 15px;
+  background: #ffffff;
+  text-align: center;
+  display: block;
+}
+
+.glass-opt input {
+  position: absolute;
+  opacity: 0;
+}
+
+.glass-opt input:checked + label {
+  border-color: #770d29;
+  color: #770d29;
+}
+
+.glass-opt h3 {
+  margin-top: 20px;
+  margin-bottom: 0;
+}
+
+.glass-opt img {
+  height: 250px;
+}
+
+@media screen and (max-width: 1200px) {
+  .glass-opt img {
+    height: 200px;
+  }
+}
+
+.disable-div {
+  pointer-events: none;
+}
+
+.custom-door input:checked + label {
+  background-color: #770d29;
+  color: #ffffff;
+}
+
+.custom-door label {
+  border: 1px solid #ddd;
+  padding: 4px 10px;
+  min-width: 50px;
+  text-align: center;
+  display: block;
+  border-radius: 5px;
+  background-color: #ffffff;
+  cursor: pointer;
+  z-index: 1;
+}
+.odd-table-row{
+  background-color: #E1D3D4 ;
+}
+.table-managed tr td {
+  border: 1px solid rgba(122, 111, 102, 0.5) !important;
+}
+.send_job_status_INPROGRESS {
+ background-color: #64f795 ;;
+}
+.status_shown  tr td{
+  border: 1px solid rgba(122, 111, 102, 0.5) !important;
+  border: 1px solid rgba(122, 111, 102, 0.5) !important;
+}
+
+
+
+
+
+/*loader */
+/* Absolute Center Spinner */
+.loading {
+  position: fixed;
+  z-index: 999;
+  height: 2em;
+  width: 2em;
+  overflow: show;
+  margin: auto;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+/* Transparent Overlay */
+.loading:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+    background: radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0, .8));
+
+  background: -webkit-radial-gradient(rgba(20, 20, 20,.8), rgba(0, 0, 0,.8));
+}
+
+/* :not(:required) hides these rules from IE9 and below */
+.loading:not(:required) {
+  /* hide "loading..." text */
+  font: 0/0 a;
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+}
+
+.loading:not(:required):after {
+  content: '';
+  display: block;
+  font-size: 10px;
+  width: 1em;
+  height: 1em;
+  margin-top: -0.5em;
+  -webkit-animation: spinner 150ms infinite linear;
+  -moz-animation: spinner 150ms infinite linear;
+  -ms-animation: spinner 150ms infinite linear;
+  -o-animation: spinner 150ms infinite linear;
+  animation: spinner 150ms infinite linear;
+  border-radius: 0.5em;
+  -webkit-box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+box-shadow: rgba(255,255,255, 0.75) 1.5em 0 0 0, rgba(255,255,255, 0.75) 1.1em 1.1em 0 0, rgba(255,255,255, 0.75) 0 1.5em 0 0, rgba(255,255,255, 0.75) -1.1em 1.1em 0 0, rgba(255,255,255, 0.75) -1.5em 0 0 0, rgba(255,255,255, 0.75) -1.1em -1.1em 0 0, rgba(255,255,255, 0.75) 0 -1.5em 0 0, rgba(255,255,255, 0.75) 1.1em -1.1em 0 0;
+}
+
+/* Animation */
+
+@-webkit-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-moz-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@keyframes spinner {
+  0% {
+    -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
+    -o-transform: rotate(0deg);
+    transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+    -moz-transform: rotate(360deg);
+    -ms-transform: rotate(360deg);
+    -o-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+.table-responsive::-webkit-scrollbar {
+  width: 18px;
+  background-color: #770d29;
+}
+
+.table-responsive::-webkit-scrollbar-track {
+  background: #770d29;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: #fff;
+  border-radius: 1px;
 }

@@ -1,4 +1,9 @@
+from datetime import datetime, timedelta
+from random import randint
+
+from django.core.serializers.json import DjangoJSONEncoder
 from django.http import request,Http404,HttpResponse,JsonResponse
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.views.generic import FormView, TemplateView, RedirectView
 from django.urls import reverse, reverse_lazy
@@ -9,12 +14,17 @@ from django.contrib.auth import login as auth_login
 from django.shortcuts import redirect
 from django.contrib.auth import logout
 from franchise.models import JobModel, RoomModel
-from accounts.forms import ResetPasswordForm, LoginForm, ForgotPasswordRequestForm
-from accounts.models import UserSecurityToken,Feedbacks
-from COS.core.decorators import anonymous_view
+from accounts.forms import ResetPasswordForm, LoginForm, ForgotPasswordRequestForm, TwoFactorForm,EmployeeCreateForm
+from accounts.models import User, UserSecurityToken,Feedbacks
+from COS.core.decorators import anonymous_view, is_classy_user, is_classy_user_view
 from app.strings import Hash
-from COS.core.decorators import logged_user_view
+from app.email import Email
+from COS.core.decorators import logged_user_view,can_accounts_view
 import json
+from accounts.conf import UserRole
+import os
+from twilio.rest import Client
+
 
 class ResetPasswordView(FormView):
 
@@ -85,35 +95,105 @@ class ResetPasswordSuccessView(TemplateView):
 @anonymous_view()
 class LoginView(FormView):
     '''Login view '''
-    
+
     form_class = LoginForm
 
     def get_success_url(self):
-        return reverse_lazy('dashboard')
+        if self.request.session.get('two_factor_auth') == None:
+            return reverse_lazy('dashboard')
+        else:     
+            return reverse_lazy('accounts:two-factor') 
+
+
 
     def get_template_names(self):
+        # if self.request.path == '/classy/classy_admin/login/':
+        #     return 'admin/login.html'
+        # else:
         return 'accounts/login.html'
 
     def get_context_data(self, **kwargs):
         context = super(LoginView, self).get_context_data(**kwargs)
+       
         return context
 
     def form_valid(self, form):
         user = form.get_user()
-        if form.is_valid:
+        token = randint(10000, 99999)
+        print(token)
+        if user.two_factor_auth:
             try:
-                auth_login(self.request, user,backend='django.contrib.auth.backends.ModelBackend')
-                response = super(LoginView, self).form_valid(form)
-                return response
+                account_sid = os.environ.get('TWILIO_ACCOUNT_SID')
+                auth_token = os.environ.get('TWILIO_AUTH_TOKEN')
+                client = Client(account_sid, auth_token)
+                if user.phone_number:
+                    message = client.messages.create(
+                            messaging_service_sid=os.environ.get('SERVICE_ID'), 
+                            body=f'Your Classy web app verification code is {token}',
+                            to = user.phone_number,
+                            from_=os.environ.get('FROM')
+                        )
+
+                    two_factor_sms = json.dumps({
+                        'token': token,
+                        'user_id': user.id,
+                        'expires': datetime.now() + timedelta(seconds=20 * 60)
+                    }, cls=DjangoJSONEncoder)
+                    self.request.session['two_factor_sms'] = two_factor_sms
             except Exception as e:
                 pass
 
+            two_factor_auth = json.dumps({
+                'token': token,
+                'user_id': user.id,
+                'expires': datetime.now() + timedelta(seconds=20 * 60)
+            }, cls=DjangoJSONEncoder)
+            self.request.session['two_factor_auth'] = two_factor_auth
+            Email(user.email,
+                "2-Factor Authentication OTP"
+                ).message_from_template('accounts/email/two_factor_otp.html',
+                                        {'token': token},
+                                        self.request
+                                        ).send()
+        else:
+            try:
+                user_model = get_user_model()
+                auth_user = user_model.objects.get(pk=user.id)
+                auth_login(self.request, auth_user, backend='django.contrib.auth.backends.ModelBackend')
+            except Exception as e:
+                raise str(e)
+        return super(LoginView, self).form_valid(form)
+
+
+@anonymous_view()
+class TwoFactorAuthView(FormView):
+    form_class = TwoFactorForm
+    template_name = "accounts/two_factor.html"
+
+    def get_success_url(self):
+        if self.request.user.is_superuser:
+            return reverse_lazy('admin:index')
+        elif self.request.user.user_role == UserRole.PRODUCTION_CENTER:  
+            return reverse_lazy('production_center:production-dashboard')
+        else:
+            return reverse_lazy('dashboard')
+
+    def get_form_kwargs(self):
+        data = super(TwoFactorAuthView, self).get_form_kwargs()
+        data.update({'request': self.request})
+        return data
+
+    def form_valid(self, form):
+        return super(TwoFactorAuthView, self).form_valid(form)
+
+
 @logged_user_view
+@is_classy_user_view
 class DashboardView(TemplateView):
     '''
         Dashboard View
     '''
-    template_name = "accounts/dashboard.html"
+    template_name =  "accounts/dashboard.html"
 
     def get_context_data(self, **kwargs):
         context = super(DashboardView, self).get_context_data(**kwargs)
@@ -160,17 +240,73 @@ class ForgotPasswordRequestView(FormView):
         return redirect(reverse('accounts:sent-forgot-password-email'))
 
 @logged_user_view()
+@can_accounts_view()
+class EmployeeView(FormView):
+    ''' 
+     Add Employee Request View 
+    '''
+    form_class = EmployeeCreateForm
+    template_name = 'accounts/employee.html'
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeView, self).get_context_data(**kwargs)
+        if  self.request.user.user_role==UserRole.EMPLOYEE:
+            return context
+
+        context['user_role'] =UserRole.EMPLOYEE
+        context['users']=User.objects.filter(tenent_id=self.request.user.tenent_id).exclude(is_employee=0)
+        if self.request.GET.get('user_item'):
+            self.user_item_id=self.request.GET.get('user_item')
+            context['user_item']=User.objects.get(id=self.user_item_id)
+        return context
+
+    def get(self, request, *args, **kwargs):
+        '''
+        get request
+        '''      
+        return super(EmployeeView, self).get(request, *args, **kwargs)
+
+    def get_form_kwargs(self):
+        ''' get form kwargs '''
+        data = super(EmployeeView, self).get_form_kwargs()
+        data.update({'request': self.request})
+        return data
+
+    def form_valid(self, form):
+        '''form valid'''
+        _ = self.__class__
+        form.save() 
+        return redirect(reverse('accounts:employee'))
+    def form_invalid(self, form):
+        print("Error",form.errors)
+        return super().form_invalid(form)
+
+@logged_user_view()
+class EmployeeDeleteView(RedirectView):
+
+    def get(self, *args, **kwargs):
+        self.pk=self.request.GET.get('pk')
+        User.objects.get(id=self.pk).delete()
+        return HttpResponse(JsonResponse({'status': 204}))
+
+
+
+@logged_user_view()
 class FeedbackView(RedirectView):
-        
+
    def post(self, *args, **kwargs):
-        
+
         try:
             data=self.request.POST
             data=dict(data)
             data.pop('csrfmiddlewaretoken')  
             results={val :data[val][0] for val in data}
             results['user']=self.request.user
+            results['email'] = self.request.user.email
+            results['username'] = self.request.user.name
             Feedbacks.objects.create(**results)
         except:
-             raise Http404
+            raise Http404
         return HttpResponse(JsonResponse({'status':201}))
+
+
+

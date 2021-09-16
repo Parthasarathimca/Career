@@ -1,0 +1,264 @@
+{% extends 'production-app-layout.html' %}
+{% load static%}
+{% block option_title %} Production Center Dashboard
+ {% endblock %}
+{% block navbartitle %} Production Center Dashboard
+{% endblock %}
+
+{% block extra_stylesheets %} 
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/bs5/dt-1.11.0/r-2.2.9/datatables.min.css" />
+{% endblock %}
+{% block content %}
+<div class="content d-flex flex-column flex-column-fluid" id="kt_content">
+    <!--begin::Post-->
+
+    <!--Begin::Breadcrumb-->
+    <div class="page-title d-block d-lg-none mb-5 mb-lg-0 mx-3">
+        <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Job Item</h1>
+    </div>
+    <!--end::Breadcrumb-->
+
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+
+        <div class="container">
+            
+            <div class="row" >
+                <div class="col-xl-6">
+                <div class="row bordergrouping-box " id="send_order_div">
+                    <div class="col-xl-7" >
+                        <input id='complete_order' name='order_status' class="form-check-input custom_door"
+                        type="radio" value="COMPLETED" style="height: 2rem;" {% if overall_status == "COMPLETED" %} checked    {% endif %}/>
+                        <label class="fs-6 fw-bold">Order Completed</label>  
+                        &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; 
+                        <input id='inprogress_order' name='order_status' class="form-check-input custom_door"{% if overall_status == "INPROGRESS" %} checked    {% endif %}
+                        type="radio" value="INPROGRESS"  style="height: 2rem;" />
+                        <label class="fs-6 fw-bold">Order Inprogress</label>           
+                    </div>
+                    <div class="col-xl-5">
+                        
+                    <button  type="button" class="btn btn-primary" id="order_completed" >
+                        Submit
+                      </button>
+                    </div>
+                </div>  
+            </div>
+            <div class="col-xl-6">
+            <div class="mb-4 text-end">
+                <!-- text-end  -->
+                <a href="{% url 'production_center:production-dashboard' %}" class="btn btn-primary ms-2">Exit</a>
+            </div>
+        </div>
+        </div><!-- end  row -->
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card mb-6">
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-3 mb-1">Job Item</span>
+                            </h3>
+                        </div>
+                        <!--begin::Card body-->
+                        <div class="card-body pt-0">
+                            <!-- <div class="mt-4 mb-4  d-flex justify-content-end">
+                                <button class="btn btn-secondary">Excel</button>
+                                <button class="btn btn-secondary mx-3">CSV</button>
+                                <button class="btn btn-secondary">PDF</button>
+                            </div> -->
+                            <!--begin::Table-->
+                            <div class="table-responsive ">
+                                <table class="table align-middle table-bordered table-alternet tbl-white fs-6 gy-5 " id="db_jobTable">
+                                    <thead>
+                                        <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                            <!-- <th class="w-10px pe-2"></th> -->
+                                            {% for col in job_item_columns %} 
+                                            <th class="min-w-125px">{{col}}</th>
+                                            {% endfor %}
+                                            
+                                        </tr>
+                                    </thead>
+                                    <!--begin::Table body-->
+                                    <tbody class="text-gray-600 fw-bold">
+                                        <!--begin::Table row-->
+                                        
+                                            
+                                            {% for val in job_item_values %} 
+                                            <tr>
+                                                <!-- <td>   </td>     -->
+                                            {% for each_val in val %} 
+                                            <td>{{each_val}}</td>
+                                            {% endfor   %}
+                                        </tr>
+                                            {% endfor %}
+                                        
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                            </div>
+                            <!--end::Table-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                    <!--end::Card-->
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col-xl-12">
+                    <div class="card mb-6">
+                        <div class="card-header border-0 pt-5">
+                            <h3 class="card-title align-items-start flex-column">
+                                <span class="card-label fw-bolder fs-3 mb-1">Job Item Details</span>
+                            </h3>
+                        </div>
+                        <!--begin::Card body-->
+                        <div class="card-body pt-0">
+                            <!-- <div class="mt-4 mb-4  d-flex justify-content-end">
+                              <button class="btn btn-secondary">Excel</button>
+                              <button class="btn btn-secondary mx-3">CSV</button>
+                              <button class="btn btn-secondary">PDF</button>
+                          </div> -->
+                            <!--begin::Table-->
+                            <div class="table-responsive ">
+                                <table class="table align-middle table-bordered table-alternet tbl-white fs-6 gy-5" id="db_jobDetail">
+                                    <thead>
+                                        <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                            <!-- <th class="w-10px pe-2"></th> -->
+                                            {% for col in job_details_columns %} 
+                                            <th class="min-w-75px">{{col}}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    </thead>
+                                    <!--begin::Table body-->
+                                    <tbody class="text-gray-600 fw-bold">
+                                        <!--begin::Table row-->
+                                          
+                                        {% for val in job_details_values %} 
+                                        <tr>
+                                            <!-- <td>   </td>     -->
+                                        {% for each_val in val %} 
+                                        <td>{{each_val}}</td>
+                                        {% endfor   %}
+                                    </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                    <!--end::Table body-->
+                                </table>
+                            </div>
+                            <!--end::Table-->
+                        </div>
+                        <!--end::Card body-->
+                    </div>
+                    <!--end::Card-->
+                </div>
+
+            </div>
+            
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{% static 'plugins/plugins.bundle.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables-bs4/js/dataTables.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables-responsive/js/dataTables.responsive.min.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables-responsive/js/responsive.bootstrap4.min.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables-buttons/js/dataTables.buttons.min.js' %}"></script>
+    
+    <script src="{% static 'plugins/datatable/datatables-buttons/js/buttons.html5.min.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables-buttons/js/buttons.print.min.js' %}"></script>
+    <script src="{% static 'plugins/datatable/datatables-buttons/js/buttons.colVis.min.js' %}"></script>
+    <script src="{% static 'js/scripts.bundle.js' %}"></script>
+    <script src="{% static 'plugins/datatables-buttons/js/buttons.bootstrap4.min.js' %}"></script>
+    <script>
+        $("#db_jobDetail").DataTable({
+            "responsive": false,
+            "scrollX": true,
+            "lengthChange": false,
+            "autoWidth": false,
+            "buttons": ["csv", "excel", "pdf"]
+        }).buttons().container().appendTo("#db_jobDetail_wrapper .col-md-6:eq(0)");
+      
+        $("#db_jobTable").DataTable({
+            "responsive": false,
+            "scrollX": true,
+            "lengthChange": false,
+            "autoWidth": false,
+             "scrollCollapse": true,
+            "buttons": ["csv", "excel", "pdf"]
+        }).buttons().container().appendTo("#db_jobTable_wrapper .col-md-6:eq(0)");
+    function completeOrder(url,job_id,job_sub_ids,status){
+        
+            $.ajax({                       
+            url: url,                  
+            data: {"job_id":job_id,"job_sub_ids":job_sub_ids,'status':status
+                },
+            success: function (data) {
+                $('.loading').hide();
+               data=JSON.parse(data)
+                if(data['status']==200){
+               Swal.fire({
+                     title:    'Order Status Updated',
+                     text: 'Your order Status updated Successfully ',
+                     icon:  'success',
+                     closeOnConfirm: false,
+                     customClass: {
+                     confirmButton: 'btn btn-primary',            
+                      },
+                    }).then(function(){
+                         
+                         window.location.reload();
+                           
+                      
+                  });
+                  } 
+           
+            }   
+        });
+        }
+        function _mapUrlParams(queryString) {
+            return queryString    
+                .split('&') 
+                .map(function(keyValueString) { return keyValueString.split('=') })
+                .reduce(function(urlParams, [key, value]) {
+                if (Number.isInteger(parseInt(value)) && parseInt(value) == value) {
+                    urlParams[key] = parseInt(value);
+                } else {
+                    urlParams[key] = decodeURI(value);
+                }
+                return urlParams;
+                }, {});
+                }
+        function getUrlParams(urlOrQueryString) {
+            if ((i = urlOrQueryString.indexOf('?')) >= 0) {
+                const queryString = urlOrQueryString.substring(i+1);
+                if (queryString) {
+                return _mapUrlParams(queryString);
+                } 
+            }
+        return {};
+        }
+
+
+        $("#order_completed").on("click",function(){
+            let urlParams = getUrlParams(location.search); 
+            if (urlParams.hasOwnProperty('job_sub_ids')) { 
+                job_sub_ids=urlParams.job_sub_ids
+                }
+            order_status=$("input[name='order_status']:checked").val()
+            if (order_status){
+                url="{% url 'production_center:order-complete'%}"
+               completeOrder(url,"{{job_id}}",job_sub_ids,order_status) 
+            }
+            
+        })
+
+
+    </script>
+
+
+{% endblock %}

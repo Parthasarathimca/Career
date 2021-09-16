@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+{% load jobline_extras %}
+<Batch xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://www.cadcode.com/wsxml.xsd">
+  <Job ID="IDJ-0">
+    <Name>{{ job.job_id }}</Name>
+    <Source>SNaP</Source>
+    <Unit>
+      <Name>dimension</Name>
+      <Measure>inch</Measure>
+    </Unit>
+    {% for room in job.job_room.all %}
+        <Item ID="IDI-{{ forloop.counter0 }}">
+            <Name>000.0001.0{{ forloop.counter }}</Name>
+            <Description>{{ room.room_name }}</Description>
+            <Note>Hello</Note>
+            {% for jobline in room.joblines %}
+                <Part ID="IDP-{{ forloop.counter0 }}" LabelID="IDL-{{ forloop.counter0 }}" MatID="IDM-{% get_material_id material_list jobline.materialtypecode %}" OpID="IDOP-0">
+                <Name>{{ jobline.description }}</Name>
+                <Quantity>{{ jobline.quantity }}</Quantity>
+                <Width>{{ jobline.widthinches }}</Width>
+                <FinishedWidth>{{ jobline.widthinches }}</FinishedWidth>
+                <Length>{{ jobline.heightinches }}</Length>
+                <FinishedLength>{{ jobline.heightinches }}</FinishedLength>
+                <Thickness>{{ jobline.depthinches }}</Thickness>
+                <FinishedThickness>{{ jobline.depthinches }}</FinishedThickness>
+                <Routing>SK1</Routing>
+                <Class>make</Class>
+                <Type>panel</Type>
+                <Unit>
+                  <Name>dimension</Name>
+                  <Measure>inch</Measure>
+                  <RoundFactor>0</RoundFactor>
+                </Unit>
+              </Part>
+            {% endfor %}
+
+        </Item>
+
+    {% endfor %}
+  {% for material in material_list %}
+  <Material ID="IDM-{{ forloop.counter0 }}">
+      <Name>{{ material.mat_description }}</Name>
+      <Type>sheet</Type>
+      <SKU>PM-{{ material.mat_code }}</SKU>
+    </Material>
+  {% endfor %}
+  </Job>
+</Batch>

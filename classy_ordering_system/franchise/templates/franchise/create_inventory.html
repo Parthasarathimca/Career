@@ -1,0 +1,132 @@
+{% extends 'app-layout.html' %}
+{% load static%}
+{% block breadcrumb %}
+<div class="page-title d-lg-flex d-none  align-items-center flex-wrap me-3 mb-5 mb-lg-0 mx-3">
+    <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+        <li class="breadcrumb-item text-muted">
+            <a href="{% url 'dashboard' %}" class="text-muted text-hover-primary">Home</a>
+        </li>
+        <li class="breadcrumb-item">
+            <span class="bullet bg-gray-200 w-5px h-2px"></span>
+        </li>
+        <li class="breadcrumb-item text-dark">{% block crumb %} Inventory {% endblock %}</li>
+    </ul>
+</div>
+{% endblock %}
+{% block navbartitle %} Create Inventory Order {% endblock %}
+{% block content %}
+<!--begin::Post-->
+<div class="post d-flex flex-column-fluid" id="kt_post">
+    <!--begin::Container-->
+    <div id="kt_content_container" class="container">
+        <div class="row g-5 g-xxl-8">
+            <div class="col-xl-4">
+                <div class="card mb-5 mb-xxl-8">
+                    <div class="card-header border-0 pt-5">
+                        <!--begin::Title-->
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">Inventory Type</span>
+                        </h3>
+                        <!--end::Title-->
+                    </div>
+                    <div class="card-body">
+                        <!-- Begin:: Button list -->
+                        <div class="">
+                            <a href="#"
+                                class="btn btn-secondary mb-2 mx-1 confirm-opn wood-inventory" data-href="{% url 'inventory_options:wood-inventory' %}">Wood
+                            Inventory</a>
+                            <a href="#"
+                                class="btn btn-secondary mb-2 mx-1 confirm-opn hardware-inventory" data-href="{% url 'inventory_options:hardware-inventory' %}">Hardware
+                            Inventory</a>
+                            <a href="#"
+                                class="btn btn-secondary mb-2 mx-1 confirm-opn marketing-inventory" data-href="{% url 'inventory_options:marketing-material-inventory' %}">Marketing
+                            Material Inventory</a>
+                        </div>
+                        <!-- End:: Button list -->
+                    </div>
+                </div>
+            </div>
+            <!--begin::Col-->
+            <div class="col-xl-8">
+                <!--begin::Charts Widget 1-->
+                <div class="card mb-5 mb-xxl-8">
+                    <!--begin::Header-->
+                    <div class="card-header border-0 pt-5">
+                        <!--begin::Title-->
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">Inventory Desired Delivery
+                            Date</span>
+                        </h3>
+                        <!--end::Title-->
+                    </div>
+                    <!--end::Header-->
+                    <!--begin::Body-->
+                    <div class="card-body d-flex flex-column p-0">
+                        <div class="flex-grow-1 card-p pb-0">
+                            <!--begin::Form-->
+                            <form class="form" id="CreateJob_form">
+                                <div class="inventory-calender cal-disabled">
+                                    <!-- <p id="result-13">&nbsp;</p> -->
+                                    <input type="text" id="inventory-date"
+                                        class="form-control form-control-sm" style="display: none;"
+                                        disabled />
+                                </div>
+                                <!--begin::Actions-->
+                                <div class="d-flex flex-stack pt-10 justify-content-end">
+                                    <button type="button" class="btn btn-lg btn-primary" id="createJob"
+                                        disabled>
+                                        <span class="indicator-label">
+                                            Continue
+                                            <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
+                                            <span class="svg-icon svg-icon-3 ms-2 me-0">
+                                                <svg xmlns="http://www.w3.org/2000/svg"
+                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
+                                                    width="24px" height="24px" viewBox="0 0 24 24"
+                                                    version="1.1">
+                                                    <g stroke="none" stroke-width="1" fill="none"
+                                                        fill-rule="evenodd">
+                                                        <polygon points="0 0 24 0 24 24 0 24" />
+                                                        <rect fill="#000000" opacity="0.5"
+                                                            transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)"
+                                                            x="7.5" y="7.5" width="2" height="9"
+                                                            rx="1" />
+                                                        <path
+                                                            d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z"
+                                                            fill="#000000" fill-rule="nonzero"
+                                                            transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                            <!--end::Svg Icon-->
+                                        </span>
+                                    </button>
+                                </div>
+                                <!--end::Actions-->
+                            </form>
+                            <!--end::Form-->
+                        </div>
+                    </div>
+                    <!--end::Body-->
+                </div>
+                <!--end::Charts Widget 1-->
+            </div>
+            <!--end::Col-->
+        </div>
+        <!--end::Row-->
+    </div>
+    <!--end::Container-->
+</div>
+<!--end::Post-->
+{% endblock %}
+{% block extra_scripts %}
+<script>
+    // ------Vertical-tree-view
+    $(document).ready(function () {
+        var hashes = atob(window.location.href.slice(window.location.href.indexOf('?') + 1));
+        $('.'+hashes).removeClass("btn-secondary").addClass("btn-primary continue");
+        $('#CreateJob_form .inventory-calender').removeClass("cal-disabled");    
+    
+    });
+    
+</script>
+{% endblock %}

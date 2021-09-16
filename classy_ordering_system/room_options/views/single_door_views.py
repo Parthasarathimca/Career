@@ -10,19 +10,23 @@ from django.contrib.auth.decorators import login_required
 
 
 from room_options.forms import SingleDoorForm
-from COS.core.decorators import logged_user_view
+from COS.core.decorators import logged_user_view,is_classy_user_view
 from franchise.models import RoomModel
 from room_options.models import RoomOptionsMasterModel,DoorSingleOpeningheightWidthMapModel
 from room_options.conf import Description
 
-
+@is_classy_user_view()
 @logged_user_view()
 class SingleDoorView(FormView):
     
     form_class = SingleDoorForm
     
     def get_template_names(self):
-        template_name = 'room_options/single_door.html'  
+        type= self.request.GET.get('type')
+        if type == 'CUSTOM':
+            template_name = 'room_options/doors/single_door_custom.html'  
+        else:template_name = 'room_options/doors/single_door.html'  
+        
         return template_name
 
     def dispatch(self, request, *args, **kwargs):
@@ -30,9 +34,16 @@ class SingleDoorView(FormView):
         return super(SingleDoorView, self).dispatch(request, *args, **kwargs)
 
     def get_success_url(self, *args, **kwargs):
-        return reverse_lazy('room_options:single-door',
+        type = self.request.GET.get('type')
+        if type:
+            return reverse_lazy('room_options:single-door',
+                                    kwargs={'room_id': self.room.id})+ '?type=' + type 
+                            
+        else:
+            return reverse_lazy('room_options:single-door',
                                                   kwargs={'room_id': self.room.id}
                                                 )
+                            
 
     def get_context_data(self, **kwargs):
         
@@ -82,5 +93,5 @@ def room_single_opening_data(request):
       context['order_items']=DoorSingleOpeningheightWidthMapModel.objects.filter(height=room_option_master.height,width=room_option_master.width).first()
     
     context['openings'] = DoorSingleOpeningheightWidthMapModel.objects.filter(opening_size_id=id)
-    return  render(request,'room_options/door_single_openings_dropdown.html',{"options": context})
+    return  render(request,'room_options/doors/door_single_openings_dropdown.html',{"options": context})
                                          

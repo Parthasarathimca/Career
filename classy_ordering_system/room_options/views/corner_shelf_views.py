@@ -2,13 +2,13 @@ from django.http import JsonResponse, HttpResponse
 from django.views.generic import FormView, RedirectView
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
-from COS.core.decorators import logged_user_view
+from COS.core.decorators import logged_user_view,is_classy_user_view
 from room_options.conf import Description
 from room_options.models import RoomOptionsMasterModel
 from room_options.forms import CornerSelfForm
 from room_options.utils import RoomViewMixin
 
-
+@is_classy_user_view()
 @logged_user_view()
 class CornerShelfView(FormView, RoomViewMixin):
 
@@ -55,7 +55,7 @@ class CornerShelfView(FormView, RoomViewMixin):
         form.save()
         return super(CornerShelfView, self).form_valid(form)
 
-
+@is_classy_user_view()
 @logged_user_view()
 class CornorShelfDeleteView(RedirectView, RoomViewMixin):
 

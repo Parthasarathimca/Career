@@ -1,18 +1,18 @@
 {% extends 'room_options/base_room_option.html' %} {% load static custom_tag %}
 
-{% block navbartitle %} Cleats{% endblock %}
-{% block option_title %}Cleats{% endblock %}
-{% block crumb %}Cleats{% endblock %}
+{% block navbartitle %} Cleat{% endblock %}
+{% block option_title %}Cleat{% endblock %}
+{% block crumb %}Cleat{% endblock %}
 
 {% block room_form %}
     <div class="d-lg-flex mb-8 pb-3 mt-8 justify-content-between align-items-center">
-        <h2>Selected Room : {{ room }}</h2>
+        <h2>Selected Room : {{ room|title }}</h2>
         <div class="buttons-type-list">
             <a href="{% url 'room_options:cleat' room_id=room.id %}"
                 class="btn btn-secondary me-2 text-center standard-btn {% if form_type == "STANDARD" %}active{% endif %}">Standard</a>
             <a href="{% url 'room_options:cleat' room_id=room.id %}?type=CUSTOM"
                class="btn btn-secondary me-2 text-center custom_cleat-btn {% if form_type == "CUSTOM" %}active{% endif %}">Custom
-                Cleats</a>
+                Cleat</a>
             <a href="{% url 'room_options:cleat' room_id=room.id %}?type=COVER"
                class="btn btn-secondary me-2 cover_cleat-btn {% if form_type == "COVER" %}active{% endif %}">Cover
                 Cleat</a>

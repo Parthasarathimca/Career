@@ -51,7 +51,7 @@
                     <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Exposed
                         Ends</label>
                     <select class="form-select form-select-solid custom-exposed"
-                    data-control="select2" data-hide-search="true" data-placeholder="Select value"
+                    data-control="select2" data-placeholder="Select value"
                     name="{{form.cleat_exposed_ends.name}}">
                         <option selected value="0">Select Value</option>
                         {% for value, text in form.cleat_exposed_ends.field.choices %}
@@ -74,7 +74,7 @@
                 {% else %}
                 <div class="d-flex justify-content-end pt-7">
                     <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
-                    <button class="btn btn-primary submit-form" id="cleat_submit" type="submit">Submit</button>
+                    <button class="btn btn-primary submit-form" id="cleat_submit" type="button">Submit</button>
                 </div>
                 {% endif %}
         </div>
@@ -120,6 +120,9 @@
                 {
                     sweetAlert("Please select exposed ends.");
                     return false;
+                } else{
+                    $('#cleat_submit').attr('disabled', true);
+                    $('#create-cleat-form').submit();
                 }
 
     })

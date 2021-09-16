@@ -1,9 +1,10 @@
 {% extends 'room_options/cleats/base.html' %}
+{% load static %}
 {% block cleat_form %}
     <form method="POST" action="" id="create-cleat-form" name="cleat">
     {% csrf_token %}
-
-                <div class="col-xl-6 px-0">
+    <div class="row align-items-center">
+                <div class="col-xl-6">
                     <div class="row justify-content-center align-items-center mb-6">
                         <div class="col-md-4 fv-row">
                             <label class="form-check-label fs-6 fw-bold mb-2 required "
@@ -55,25 +56,31 @@
                 {% else %}
                 <div class="d-flex justify-content-end pt-7">
                     <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
-                    <button class="btn btn-primary submit-form" id="cleat_submit" type="submit">Submit</button>
+                    <button class="btn btn-primary submit-form" id="cleat_submit" type="button">Submit</button>
                 </div>
                 {% endif %}
+                 
             </div>
-
+            
+            <div class="col-lg-6">
+                <div class="px-md-5  mt-4 mt-xl-0">
+                    <img src="{% static 'images/cover-cleat.png' %}" class="img-fluid" alt="images" />
+                </div>
+            </div>  
+    </div> 
             </form>
  {% endblock %}
 {% block extra_scripts %}
      {% include 'room_options/_delete_room_option.html' with obj_ref='room_options:cleat' room_id=room.id %}
     <script>
     $("#cleat_submit").on("click", function () {
-
-
-
- if($('#id_quantity').is(':visible') && $('#id_quantity').val() == "")
-                    {
-                        sweetAlert("Quantity is required.");
-                        return false;
-                    }
-    })
+        if($('#id_quantity').is(':visible') && $('#id_quantity').val() == "") {
+            sweetAlert("Quantity is required.");
+            return false;
+        } else {
+            $('#cleat_submit').attr('disabled', true);
+            $('#create-cleat-form').submit()
+        }
+        })
     </script>
 {% endblock %}

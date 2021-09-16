@@ -2,25 +2,25 @@
 {% load room_extras %}
 {% load static %}
 
-{% block navbartitle %} Drawer Faces{% endblock %}
-{% block option_title %}Drawer Faces {% endblock %}
-{% block crumb %}Drawer Faces{% endblock %}
+{% block navbartitle %} Drawer Face{% endblock %}
+{% block option_title %}Drawer Face {% endblock %}
+{% block crumb %}Drawer Face{% endblock %}
 
 {% block room_form %}
 <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
     <h3 class="card-title ">
-        Selected Room : {{ room }}
+        Selected Room : {{ room|title }}
     </h3>
     <div class="buttons-type-list">
         <a href="{% url 'room_options:drawer-faces' room_id=room.id  %}?type=STANDARD" class="btn btn-secondary standard_btn me-4 " id="standard-btn">Standard</a>
-        <a href="{% url 'room_options:drawer-faces' room_id=room.id  %}?type=HAMPER_FACES" class="btn btn-secondary custom me-4 custom_top_shelf  " id="hamper-btn">Hamper Faces</a>
+        <a href="{% url 'room_options:drawer-faces' room_id=room.id  %}?type=HAMPER_FACES" class="btn btn-secondary custom me-4 custom_top_shelf  " id="hamper-btn">Hamper Face</a>
         <a href="{% url 'room_options:drawer-faces' room_id=room.id  %}?type=CUSTOM"  class="btn btn-secondary counter_btn active" id="custom-btn">Custom</a>
         
     </div>
 </div>
 <div class="card-header border-0 pt-5 d-block">
     <h3 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
-       Standard    </h3>                                 
+       Custom    </h3>                                 
                                 
 <div class="card-body">
     <form method="POST" id='drawer_faces'>
@@ -33,7 +33,7 @@
             <div class="col-md-4 col-3 fv-row">
                 <label class="form-check-label fs-6 fw-bold mb-2 required"
                     for="1mm">Qty</label>
-                    <input  name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %} type="text" class="custom-qty form-control form-control-solid qty onlyNumber" />
+                    <input  name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %} type="number" min="0" oninput="this.value = Math.abs(this.value)" class="custom-qty form-control form-control-solid qty onlyNumber" />
             </div>
             <div class="col-md-1 col-1 fv-row mt-4 text-center">
                 <label class="fs-6 fw-bold">@</label>
@@ -66,7 +66,7 @@
             <!--begin::Switch-->
             
             <label class="form-check form-switch form-check-custom form-check-solid">
-                <input class="form-check-input" id="" type="checkbox"  name="{{form.drawer_faces_hamper_faces.name}}"  {% if order_items.drawer_faces_hamper_faces %} checked  {% endif %} 
+                <input class="form-check-input" id="{{form.drawer_faces_hamper_faces.name}}" type="checkbox"  name="{{form.drawer_faces_hamper_faces.name}}"  {% if order_items.drawer_faces_hamper_faces %} checked  {% endif %} 
                  value="true" />                                                    
                 </label>
             <!--end::Switch-->
@@ -75,7 +75,7 @@
              
             <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Drill Sub
                 Front</label>
-                <select name="{{form.drawer_faces_drill_Sub_front.name}}" class=" custom-drill form-select form-select-solid drill-sub-front " data-control="select2" data-hide-search="true" data-placeholder="Select" name="">
+                <select name="{{form.drawer_faces_drill_Sub_front.name}}" class=" custom-drill form-select form-select-solid drill-sub-front " data-control="select2" data-placeholder="Select" name="">
                     <option value="0">Select Drill Sub
                         Front</option>
                     {% for value, text in form.drawer_faces_drill_Sub_front.field.choices %}
@@ -93,7 +93,7 @@
             <input type="hidden" name="{{form.part_sub_category.name}}" value="CUSTOM">
             <div class="d-flex justify-content-end pt-7">
                 <button class="btn btn-secondary me-2 clear-btn" id="clear_button" type="button">Clear</button>
-                <button class="btn btn-primary submit" id="submit_button" type="submit">Submit</button>
+                <button class="btn btn-primary submit_button" id="submit_button" type="button">Submit</button>
             </div>
         </div>
         <div class="col-lg-6">
@@ -120,18 +120,18 @@
             <table class="table door_tbl table-bordered table-alternet">
                 <thead>
                     <tr>
-                        <th>S.No</th>
-                        <th>Action</th>
-                        <th>Room</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Qty</th>
-                        <th>Hole</th>
-                        <th>Height</th>                                                                
-                        <th>Width</th>                                                                                                                                
-                        <th>Drill Sub Front</th>
-                        <th>Hamper Faces</th>
-                        <th>Notes</th>
+                        <th>SERIAL NO.</th>
+                        <th>ACTIONS</th>
+                        <th>ROOM</th>
+                        <th>CATEGORY</th>
+                        <th>DESCRIPTION</th>
+                        <th>QTY</th>
+                        <th>HOLE</th>
+                        <th>HEIGHT</th>                                                                
+                        <th>WIDTH</th>  
+                        <th>DEPTH</th>                                                                                                                                
+                        <th>DRILL SUB FRONT</th>
+                        <th>NOTES</th>
                     </tr>
                 </thead>
                 <tbody class="l_shelf_tbody">
@@ -186,13 +186,13 @@
                             <td>{{ each_part.room }}</td>
                             <td>{{ each_part.part_sub_category }}</td>
                             <td>{{each_part.description}}</td>
-                            <td>{{ each_part.quantity }}</td>    
-                            <td>{{each_part.get_drawer_faces_holes_display}}   </td>
-                            <td>{{ each_part.height}}</td>
-                            <td>{{ each_part.width }}</td>
-                            <td>{{ each_part.get_drawer_faces_drill_Sub_front_display }}</td>
-                            <td>{{ each_part.drawer_faces_hamper_type }}</td>
-                            <td>{{ each_part.notes }}</td>
+                            <td>{{ each_part.quantity|default_if_none:"-" }}</td>    
+                            <td>{{each_part.get_drawer_faces_holes_display|default_if_none:"-"}}   </td>
+                            <td>{{ each_part.height|default_if_none:"-"}}</td>
+                            <td>{{ each_part.width|default_if_none:"-" }}</td>
+                            <td>{{ each_part.depth|default_if_none:"-" }}</td>
+                            <td>{{ each_part.get_drawer_faces_drill_Sub_front_display|default_if_none:"-" }}</td>
+                            <td>{{ each_part.notes|default_if_none:"-" }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -235,57 +235,7 @@ $("input[name='hamperFace']").change(function(){
                 $(".custom-note").addClass("d-none");
             });
             //$(".submit").click(function(e) {
-                $('#drawer_faces').on('submit', function(e){         
-                if($('#standard-btn').hasClass('active')) 
-                {
-                        if(($('.standard-hole').val() == 0 || $('.standard-hole').val() == null) &&  $('.hole-size').val() == ""  && $('.qty').val() == "" && $('.drill-sub-front').val() == 0) {
-                            sweetAlert("Please fill in all the required fields.");
-                            return false;
-                        }
-                        else if($('.standard-hole').val() == 0 || $('.standard-hole').val() == null)
-                        {
-                            sweetAlert("Please select hole.");
-                            return false;
-                        }
-                        else if($('.hole-size').val() == "")
-                        {
-                            sweetAlert("Width is required");
-                            return false;
-                        }
-                        else if($('.qty').val() == "")
-                        {
-                            sweetAlert("Quantity is required");
-                            return false;
-                        }
-                        else if($('.drill-sub-front').val() == 0 || $('.drill-sub-front').val() == null ){
-                            sweetAlert("Choose drill sub front");
-                            return false;
-                        }
-                }
-                else if($('#hamper-btn').hasClass('active')) {
-
-                    if($("input[name='hamperFace']:checked").length == 0 &&  $('.hamper18_size').val() == 0  && $('.hamper18_qty').val() == "" ) {
-                        sweetAlert("Please fill in all the required fields.");
-                        return false;
-                    }
-                    else if ($("input[name='hamperFace']:checked").length == 0)
-                     {
-                        sweetAlert("Select hamper faces.");
-                        return false;
-                     }
-                   else if($('.hamper18_size').val() == 0 || $('.hamper18_size').val() == null)
-                    {
-                        sweetAlert("Width is required.");
-                        return false;
-                    }
-                    else if($('.hamper18_qty').val() == "")
-                    {
-                        sweetAlert("Quantity is required");
-                        return false;
-                    }
-                }
-                else if($('#custom-btn').hasClass('active')) {
-
+                $('.submit_button').on('click', function(e){     
                     if( $('.custom-qty').val() == ""  && $('.custom-width').val() == "" && $('.custom-height').val() == "" && $('.custom-drill').val() == 0) {
                         sweetAlert("Please fill in all the required fields.");
                         return false;
@@ -308,10 +258,10 @@ $("input[name='hamperFace']").change(function(){
                     else if($('.custom-drill').val() == 0 || $('.custom-drill').val() == null ){
                         sweetAlert("Choose drill sub front");
                         return false;
+                    } else {
+                        $('#submit_button').attr('disabled', true)
+                        $('#drawer_faces').submit();
                     }
-                }
-
-
             });
    
 deleteDoorItem=(url,pk)=>{

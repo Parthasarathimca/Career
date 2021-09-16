@@ -75,6 +75,36 @@ table tr td .svg-icon svg [fill]:not(.permanent):not(g)  {
 form .error {
   color: #ff0000;
 }
+#custom-form .grouping-box{
+    background-color: #dff1dc;
+}
+.block-disabled .grouping-box{
+    background-color: #f5e1e8 !important;
+    opacity: 1
+}
+.show-disable{
+    display: inline-block;
+}
+.show-disable{
+    display: none;
+}
+.block-disabled .show-disable{
+    display: inline-block;
+}
+.block-disabled .show-enabled{
+    display: none;
+}
 
+.height-font {
+    font-size: 22px;
+}
 
-
+.dr-option{
+    position: relative;
+}
+.loading{
+    position: absolute;
+    z-index: 10;
+    right: 20px;
+    top: 10px;
+}

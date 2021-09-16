@@ -5,3 +5,6 @@ mysqlclient==2.0.3
 Pillow==8.3.1
 python-dotenv==0.18.0
 gunicorn
+requests==2.26.0
+django-modeladmin-reorder==0.3.1
+twilio==6.63.2

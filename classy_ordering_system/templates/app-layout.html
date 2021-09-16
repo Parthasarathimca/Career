@@ -22,6 +22,7 @@
     <!-- Custom -->
     <link  href="{% static 'css/custom.css' %}"  rel="stylesheet" type="text/css" />
     <link  href="{% static 'css/partition.css' %}"  rel="stylesheet"  type="text/css"  />
+    <link  href="{% static 'css/lightpick.css' %}"  rel="stylesheet"  type="text/css"  />
     {% endblock %} {% block extra_stylesheets %} {% endblock %}
   </head>
   <!--end::Head-->
@@ -96,9 +97,12 @@
     <script src="{% static 'js/widgets.js' %}"></script>
     <script src="{% static 'js/create-app.js' %}"></script>
     <script src="{% static 'js/upgrade-plan.js' %}"></script>
+    <script src="{% static 'js/lightpick.js' %}"></script>
     <script src="{% static 'js/custom.js' %}"></script>
 
     <!--end::Javascript-->
     {% endblock %} {% block extra_scripts %} {% endblock %}
+  <script> var logout_uri = '{% url "accounts:logout" %}'; </script>
+  <script src="{% static 'js/inactivity.js' %}"></script>
   </body>
 </html>

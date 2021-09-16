@@ -16,15 +16,21 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, re_path
 
-from franchise.views import FranchiseDashboardView, CreateJobView, CreateRoomView, JobDetailView, RoomDetailView,room_dropdowns,JobDetailTreeDataView
+from franchise.views import FranchiseDashboardView, CreateJobView, CreateRoomView, JobDetailSendOrder, JobDetailView, RoomDetailView, SendOrder,room_dropdowns,JobDetailTreeDataView,DeleteRoomView, InvertoryOrder,JobListView\
+    ,JobDetailSendOrder,SendOrderTreeView
 
 urlpatterns = [
-    path('dashboard/', FranchiseDashboardView.as_view(), name='dashboard'),
     path('create_job/', CreateJobView.as_view(), name='create-job'),
     path('job_detail/<int:job_id>', JobDetailView.as_view(), name='job-detail'),
+    path('job_list/', JobListView.as_view(), name='job-list'),
     path('create_room/job/<int:job_id>', CreateRoomView.as_view(), name='create-room'),
     path('room_detail/<int:room_id>', RoomDetailView.as_view(), name='room-detail'),
     path('room_dropdowns/', room_dropdowns, name='room-dropdown'),
     path('job-details/tree-data/<int:job_id>', JobDetailTreeDataView.as_view(), name='job-detail-tree-data'),
-
+    path('room/delete/', DeleteRoomView.as_view(), name='delete-room'),
+    path('create_inventory/', InvertoryOrder.as_view(), name='create-inventory'),
+    path('job-detail/send-order/<int:job_id>', JobDetailSendOrder.as_view(), name='job-detail-send-order'),
+    path('send-order/', SendOrder.as_view(), name='send_order_page'),
+    path('send-order/tree-view/<int:job_id>', SendOrderTreeView.as_view(), name='send_order_tree_view'),
+   
 ]

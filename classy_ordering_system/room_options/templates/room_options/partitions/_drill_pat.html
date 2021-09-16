@@ -1,0 +1,34 @@
+{% load static %}
+<div class="mt-4 dr-option d-none">
+    <div class="loading d-none">
+        <img src="{% static 'images/ajax-loader.gif' %}">
+    </div>
+    <select class="form-select form-select-solid drillcode"
+            data-control="select2" data-hide-search="true"
+            data-placeholder="Select Drill Type"
+            name="{{ele.name}}">
+
+    </select>
+    <div class="mt-4">
+        <label class="fs-6 fw-bold required mb-2 mt-md-0 mt-3">{{ name|capfirst }}
+            22 mm
+        </label>
+        <div class="d-flex border radio_sec pb-0">
+            <div class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                <input class="form-check-input rd-22mm" type="radio" value="True"
+                       id="{{ name }}22mm-yes" name="{{ name }}-22mm" />
+                <label class="form-check-label" for="{{ name }}22mm-yes">
+                    Yes
+                </label>
+            </div>
+            <div class="form-check form-check-custom form-check-solid mx-3 mb-3">
+                <input class="form-check-input rd-22mm" type="radio" value="False"
+                       id="{{ name }}22mm-no" name="{{ name }}-22mm" checked />
+                <label class="form-check-label" for="{{ name }}22mm-no">
+                    No
+                </label>
+            </div>
+
+        </div>
+    </div>
+</div>

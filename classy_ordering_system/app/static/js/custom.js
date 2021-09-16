@@ -75,13 +75,69 @@ $('body').on('click',"#sendFeedback",function(event) {
                   });
 
             }
+        clearData();
+        e.preventDefault();
             
         },
         error:function(data){
             //do something on error
+            clearData();
+            e.preventDefault();
         }
       });
      
+});
+$(".buttons-type-list button").click(function (e) {
+    e.preventDefault();
+    $(".buttons-type-list button").removeClass("active");
+    $(this).addClass("active");   
+})
+
+$(".confirm-opn").click(function(e){
+    $('.confirm-opn').addClass("btn-secondary");
+    e.preventDefault();
+    var getHref = $(this).attr("href");
+    Swal.fire({           
+        text: 'Are you sure you wish to Create a New inventory order?',         
+        showCancelButton: true,       
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+        },
+        confirmButtonText: 'YES',
+        cancelButtonText: 'NO',
+    }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).removeClass("btn-secondary");
+                $(this).addClass("btn-primary continue");
+                $('#CreateJob_form .inventory-calender').removeClass("cal-disabled");
+                // window.location = getHref
+            }
+          })
+});
+
+try{
+// Inventory Datepicker
+new Lightpick({
+    field: document.getElementById('inventory-date'),
+    inline: true,
+    minDate: moment().startOf('today'),
+    // disableDates:[moment().startOf(''), ['2018-06-23', '2018-06-30']],
+    onSelect: function(date){
+      //   document.getElementById('result-13').innerHTML = date.format('Do MMMM YYYY');
+      $("#createJob").removeAttr("disabled");
+    }
+});
+}
+catch(err) {
+    console.log(err)
+}
+
+
+
+$('#createJob').click(function(){
+    var gethref = $('.continue').data("href");
+    window.location.href = gethref;
 });
     
 

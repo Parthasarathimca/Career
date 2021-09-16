@@ -1,0 +1,768 @@
+{% extends 'room_options/base_room_option.html' %} {% load static custom_tag %}
+{% load room_extras %}
+{% block navbartitle %} Wood Door {% endblock %}
+{% block option_title %}Wood Door{% endblock %}
+{% block crumb %}Wood Door{% endblock %}
+{% block room_form %}
+<div class="d-lg-flex mb-8 pb-3 mt-8 justify-content-between align-items-center">
+    <h2 class="selected_room">Selected Room: {{ room|title }}</h2>
+    {% for room in rooms %}
+    <input type="hidden" name="room" data-url="{% url 'franchise:room-detail' room_id=room.id %}" value="{{room.id}}"  {% if form.room.value == room.id %} checked {% endif %} {% if selected_room.id == room.id %} checked {% endif %}/>
+    {% endfor %}
+    <div class="buttons-type-list">
+        <a class="btn btn-secondary me-2 text-center standard-btn active" href="{% url 'room_options:wood-doors' room_id=room.id  %}?type=DOOR">Door</a>
+        <a class="btn btn-secondary me-2 text-center standard-btn" href="{% url 'room_options:wood-doors' room_id=room.id %}?type=DRAWER">Drawer</a>
+    </div>
+</div>
+<div class="card mb-5 mb-xxl-8" id="standard">
+    <div class="card-header border-0 pt-5">
+        <h2 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+            Door
+        </h2>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-lg-7">
+                <form method="POST" action="" id="deco-doors-form">{% csrf_token %}
+                    <div class="row">
+                        <div class="col-xl-12 mb-8">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required invisible">Qty</label>
+                            <div class="d-flex">
+                                <div class="form-check form-check-custom form-check-solid mr-3 mb-3 mt-2">
+                                    <input class="form-check-input material-type" type="radio" value="foil" id="foil" name="{{form.wood_door_material_type.name}}" 
+                                    {% if form.wood_door_material_type.value == 'foil' %} checked {% endif %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="foil">
+                                    Foil
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                    <input class="form-check-input material-type" type="radio" value="wood" id="wood" name="{{form.wood_door_material_type.name}}" 
+                                    {% if form.wood_door_material_type.value == 'wood' %} checked {% endif %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="wood">
+                                    Wood
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid ml-3 mb-3 mt-2">
+                                    <input class="form-check-input material-type" type="radio" value="moderno" id="moderno" name="{{form.wood_door_material_type.name}}" 
+                                    {% if form.wood_door_material_type.value == 'moderno' %} checked {% endif %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="moderno">
+                                    Moderno
+                                    </label>
+                                </div> &nbsp;
+                                
+                            </div>
+                        </div>
+                        <div class="col-xl-6 mb-8">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Panel Type</label>
+                            <div class="d-flex grouping-box border">
+                                {% for value, text in form.wood_panel_type.field.choices %}
+                                    {% if value %}
+                                    <div class="form-check form-check-custom form-check-solid mr-3">
+                                        <input class="form-check-input panelType" type="radio" value="{{value}}" id="{{value}}" name="{{form.wood_panel_type.name}}"
+                                        {% if text == "French Lites" %} onclick="Panel_type()" {% endif %}
+                                        {% if form.wood_panel_type.value == value %} checked {% endif %}
+                                        />
+                                        <label class="form-check-label fs-6 fw-bold" for="{{value}}">
+                                        {{text}}
+                                        </label>
+                                    </div>
+                                    {% endif %}
+                                {% endfor %}
+                                
+                            </div>
+                            <div id="wood_door_french_lite" class="form-check form-check-custom form-check-solid ml-3 mb-3 mt-2">
+                                <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Lites</label>
+                                <select class="form-select form-select-solid dropdown_class material style-name" data-control="select2" data-hide-search="true" data-placeholder="Select" name="{{form.wood_door_french_lite.name}}">
+                                    <option selected value="">Select</option>
+                                    {% for value , text in form.wood_door_french_lite.field.choices %}
+                                    {% if value %}
+                                        <option value="{{value}}" {% if form.wood_door_french_lite.value == value %} selected {% endif %}>{{text}}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="mb-8 col-md-4 ">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Door Style</label>
+                            <select class="form-select form-select-solid dropdown_class door-style material style-name" data-control="select2" data-hide-search="false" data-placeholder="Select" name="{{form.wood_door_style.name}}">
+                                <option selected value="">Select</option>
+                                {% for value , text in form.wood_door_style.field.choices %}
+                                {% if value %}
+                                    <option value="{{value}}" {% if form.wood_door_style.value == value %} selected {% endif %}>{{text}}</option>
+                                {% endif %}
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-8 col-md-4 material-description">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Wood Species</label>
+                            <select class="form-select form-select-solid wood-material dropdown_class material material-description" data-control="select2" data-hide-search="false" data-placeholder="Select" id="wood_species" name="{{form.wood_species.name}}">
+                                <option selected value="">Select Wood Species</option>
+                                {% for value , text in form.wood_species.field.choices %}
+                                {% if value %}
+                                    <option value="{{value}}" {% if form.wood_species.value == value %} selected {% endif %}>{{text}}</option>
+                                {% endif %}
+                                {% endfor %}
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-4 mb-8 board-description">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Select Color</label>
+                            <select id="wood_stain_color" class="form-select form-select-solid material dropdown_class board-description" data-control="select2" data-hide-search="false" data-placeholder="Select Color" name="{{form.wood_stain_color.name}}">
+                                <option selected value="">Select Color</option>
+                                {% for value , text in form.wood_stain_color.field.choices %}
+                                {% if value %}
+                                    <option value="{{value}}" {% if form.wood_stain_color.value == value %} selected {% endif %}>{{text}}</option>
+                                {% endif %}
+                                {% endfor %}
+                               
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="mb-8 col-md-6 panel-door depth"  id="depth-door">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 ">Depth</label>
+                            <div class="d-flex grouping-box">
+                                <div class="form-check form-check-custom form-check-solid mr-3">
+                                    <input class="form-check-input deco-depth" type="radio" checked value="0.75" id="depth1" name="{{form.depth.name}}"  />
+                                    <label class="form-check-label fs-6 fw-bold" for="depth1">
+                                    3/4
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mx-3">
+                                    <input class="form-check-input deco-depth" type="radio" value="0.875" id="depth2" name="{{form.depth.name}}" disabled/>
+                                    <label class="form-check-label fs-6 fw-bold" for="depth2">
+                                    7/8
+                                    </label>
+                                    <div class="form-check form-check-custom form-check-solid mx-3  ">
+                                        <input class="form-check-input deco-depth" type="radio" value="1.0" id="depth3" name="{{form.depth.name}}" disabled/>
+                                        <label class="form-check-label fs-6 fw-bold" for="depth3">1</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mb-8 col-xl-7  col-md-7">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 required">Glazing</label>
+                            <div class="d-flex grouping-box">
+                                <div class="form-check form-check-custom form-check-solid mr-3">
+                                    <input class="form-check-input" type="radio" value="True" id="yes" name="{{form.glazing.name}}" 
+                                    {% if form.glazing.value == True %} checked {% endif %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="yes">
+                                    Yes
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mx-3 ">
+                                    <input class="form-check-input" type="radio" value="False" id="no" name="{{form.glazing.name}}" 
+                                    {% if form.glazing.value == False %} checked {% endif %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="no">
+                                    No
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row stdsize d-none">
+                        <div class="mb-8 col-md-4 sHeight d-none">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required ">Height</label>
+                            <input class="form-control form-control-solid numberWithFloat door-height" type="text" name="{{form.height.name}}" />
+                        </div>
+                        <div class="col-md-4 col-4 mb-8">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Size</label>
+                            <select class="form-select predefine_door_size form-select-solid dropdown_class door-size" data-control="select2" data-hide-search="false" data-placeholder="Select" name="{{form.wood_door_size.name}}">
+                                <option selected value="" hidden>Select</option>
+                                {% for value , text in form.wood_door_size.field.choices %}
+                                {% if value %}
+                                    <option value="{{value}}" {% if form.wood_door_size.value == value %}selected{% endif %}>{{text}}</option>
+                                {% endif %}
+                                {% endfor %}                                
+                            </select>
+
+                            <select class="form-select custom_door_size form-select-solid dropdown_class door-size" data-control="select2" data-hide-search="true" data-placeholder="Select" name="{{form.wood_door_custom_size.name}}">
+                               
+                                
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-4 mb-8">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required d-block invisible">Size</label>
+                            <!-- <a href="#_" class="btn btn-primary" id="size-std">Standard</a>
+                                <a href="#_" class="btn btn-primary d-none" id="size-all">All</a> -->
+                            <div class="d-flex mt-4">
+                                <div class="form-check form-check-custom form-check-solid mr-3">
+                                    <input class="form-check-input select-size" type="radio" value="Standard" id="standard_size" name="size-select" checked/>
+                                    <label class="form-check-label fs-6 fw-bold" for="standard">
+                                    Standard
+                                    </label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mx-3 ">
+                                    <input class="form-check-input select-size" type="radio" value="All" id="All" name="size-select" />
+                                    <label class="form-check-label fs-6 fw-bold" for="all">
+                                    All
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <div class="col-md-4 mb-8 opnWidth opening-width d-none">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required ">Opening width</label>
+                            <input type="text" name="{{form.width.name}}" class="form-control form-control-solid numberWithFloat openingWidth" 
+                            value="{% if form.width.value %}{{form.width.value}}{% endif %}"
+                            />
+                            <i class="">Note:: Opening width Must be greater than 6 in.</i>
+                        </div>
+                        <div class="col-md-5 mb-8 door-type d-none">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Door type</label>
+                            <div class="d-flex grouping-box">
+                                {% for key, value in form.lti_door_type.field.choices %}
+                                {% if key %}
+                                
+                                <div class="form-check form-check-custom form-check-solid mx-3">
+                                    <input class="form-check-input" type="radio" value="{{key}}" id="single" name="{{form.lti_door_type.name}}" checked />
+                                    <label class="form-check-label fs-6 fw-bold" for="single">
+                                {{value}}
+                                </label>
+                                </div>
+                              
+                                {% endif %}
+                                {% endfor %}
+                                
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-8 openings d-none">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required"># Of Openings</label>
+                            <input type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid onlyNumber width-opening" name="{{form.quantity.name}}" 
+                            value="{% if form.quantity.value %}{{form.quantity.value}}{% endif %}"
+                            />
+                        </div>
+                    </div>
+                    <div class="grouping-box bg-white border p-5 overlayOpt d-none">
+                        <div class="row">
+                            <div class="col-md-12 mb-8">
+                                <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 d-block">Overlay options</label>
+                                <div class="d-flex mt-4 grouping-box">
+                                    {% for value, text in form.overlay_options.field.choices %}
+                                    {% if value %}
+                                    <div class="form-check form-check-custom form-check-solid mr-3">
+                                        <input class="form-check-input select-size" type="radio" value="{{value}}" id="{{value}}" name="{{form.overlay_options.name}}" checked/>
+                                        <label class="form-check-label fs-6 fw-bold" for="{{value}}">{{text}}</label>
+                                    </div>
+                                    {% endif %}
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-4 mb-8">
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="False Panel" id="falsePanel" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'False Panel' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="falsePanel">False panel</label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="Sink Drill" id="sinkDrill" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'Sink Drill' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="sinkDrill">Sink Drill</label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="Lazy Susan" id="LazySusan" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'Lazy Susan' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="LazySusan">Lazy Susan</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-8">
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="90 Edge" id="90Edge" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == '90 Edge' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="90Edge">90 Edge</label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="Speaker Cloth" id="speakerCloth" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'Speaker Cloth' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="speakerCloth">Speaker Cloth</label>
+                                </div>
+                            </div>
+                            <div class="col-md-4 mb-8">
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="Corner Cab" id="cornerCab" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'Corner Cab' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="cornerCab">Corner Cab</label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="Finger Pull" id="fingerPull" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'Finger Pull' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="fingerPull">Finger Pull</label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="Hamper" id="Hamper" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'Hamper' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="Hamper">Hamper</label>
+                                </div>
+                                <div class="form-check form-check-custom form-check-solid mb-3 overlay-options">
+                                    <input class="form-check-input " type="checkbox" value="No Drilling" id="NoDrilling" name="overlay-chk" 
+                                    {% for details in description_details %} {% if details == 'No Drilling' %} checked {% endif %} {% endfor %}
+                                    />
+                                    <label class="form-check-label fs-6 fw-bold" for="NoDrilling">No Drilling</label>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    <input class="form-check-input " type="hidden" value="DOOR" id="NoDrilling" name="{{form.part_sub_category.name}}" />
+                    <div class="notes mt-8">
+                        <label class="fs-6 fw-bold mb-2">Notes:</label>
+                        <textarea class="form-control 1_door_notes form-control-solid" name="{{form.notes.name}}">{% if form.notes.value %} {{form.notes.value}} {% endif %}</textarea>
+                    </div>
+                    {% if deco_door %}
+                    <div class="d-flex justify-content-end pt-7">
+                        <button class="btn btn-secondary me-2 clear-btn" type="button">Clear</button>
+                        <button class="btn btn-primary standard_submit" type="button" id="submit-data">Update</button>
+                    </div>
+                    {% else %}
+                    <div class="d-flex justify-content-end pt-7">
+                        <button class="btn btn-secondary me-2 clear-btn" type="button">Clear</button>
+                        <button class="btn btn-primary standard_submit" type="button" id="submit-data">Submit</button>
+                    </div>
+                    {% endif %}
+                </form>
+            </div>
+            <div class="col-lg-5">
+                <div class="p-md-5 deco-door d-none">
+                    <img src="{% static 'images/deco-door.png' %}" class="img-fluid" alt="deco door" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% include 'room_options/partials/_deco_doors_table.html' with wood_doors=wood_doors %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    $(".standard-btn").click(function() {
+        $("#standard").removeClass("d-none");
+        $("#custom").addClass("d-none");
+    });
+    
+    $(".custom-btn").click(function() {
+        $("#standard").addClass("d-none");
+        $("#custom").removeClass("d-none");
+    });
+    
+    
+    $(".style-name").change(function(e) {
+        e.preventDefault();
+        // console.log("here",$(this).val());
+        if ($(this).val() != 0)
+            $('.deco-door').removeClass("d-none");
+        else
+            $('.deco-door').addClass("d-none");
+    });
+    
+    
+    $("input[name='size-select']").change(function() {
+        var getVal = $(this).val();
+        var sizeOpt = "";
+    
+        $(".door-size").empty();
+        if (getVal == "All") {
+            $(".predefine_door_size").attr("disabled", true);
+            $(".predefine_door_size").addClass("d-none");
+            $(".custom_door_size").show();
+
+            
+            
+            
+            sizeOpt += `<option  value="0">Select</option> <option value="Custom" >CUSTOM</option><option value="2H">2H</option>
+                        <option value="3H">3H</option><option value="4H">4H</option><option value="5H">5H</option><option value="6H">6H</option><option value="7H">7H</option><option value="8H">8H</option><option value="10H">10H</option><option value="11H">11H</option><option value="12H">12H</option><option value="13H">13H</option><option value="14H">14H</option><option value="15H">15H</option><option value="16H">16H</option><option value="17H">17H</option><option value="18H">18H</option><option value="19H">19H</option><option value="20H">20H</option><option value="21H">21H</option><option value="22H">22H</option><option value="23H">23H</option><option value="24H">24H</option><option value="25H">25H</option><option value="26H">26H</option><option value="27H">27H</option><option value="28H">28H</option><option value="29H">29H</option><option value="30H">30H</option><option value="31H">31H</option><option value="32H">32H</option><option value="33H">33H</option><option value="34H">34H</option><option value="35H">35H</option><option value="36H">36H</option><option value="37H">37H</option><option value="38H">38H</option><option value="39H">39H</option><option value="40H">40H</option><option value="41H">41H</option><option value="42H">42H</option><option value="43H">43H</option><option value="44H">44H</option><option value="45H">45H</option><option value="46H">46H</option><option value="47H">47H</option><option value="48H">48H</option><option value="49H">49H</option><option value="50H">50H</option><option value="51H">51H</option><option value="52H">52H</option><option value="53H">53H</option><option value="54H">54H</option><option value="55H">55H</option><option value="56H">56H</option><option value="57H">57H</option><option value="58H">58H</option><option value="59H">59H</option><option value="60H">60H</option><option value="61H">61H</option><option value="62H">62H</option><option value="63H">63H</option><option value="64H">64H</option><option value="65H">65H</option><option value="66H">66H</option><option value="67H">67H</option><option value="68H">68H</option><option value="69H">69H</option><option value="70H">70H</option><option value="71H">71H</option><option value="72H">72H</option><option value="73H">73H</option><option value="74H">74H</option><option value="75H">75H</option><option value="76H">76H</option>`;
+        } else {
+    
+            sizeOpt += `<option selected value="0">Select</option>
+                        <option value="18H">18H</option>
+                        <option value="20H">20H</option>
+                        <option value="24H">24H</option>
+                        <option value="28H">28H</option>
+                        <option value="32H">32H</option>
+                        <option value="43H">43H</option>
+                        <option value="47H">47H</option>
+                        <option value="61H">61H</option>
+                        <option value="62H">62H</option>
+                        <option value="63H">63H</option>
+                        <option value="71H">71H</option>`;
+    
+        }
+        $('.door-size').append(sizeOpt);
+        $('.door-size').select2({
+            minimumResultsForSearch: -1,
+        });
+    
+    });
+    
+    $(".board-description").change(function(e) {
+        e.preventDefault();
+        var checked_depth = "3/4";
+        $('#depth-door').show();
+        if ($(this).val() != 0) {
+            // $('.panel-door').removeClass("d-none");
+            $('.stdsize').removeClass("d-none");
+            $("input[name=Depth][value='" + checked_depth + "']").attr('checked', 'checked');
+        } else {
+            // $('.panel-door').addClass("d-none");
+            // $('.stdsize').addClass("d-none");
+        }
+    });
+    
+    $('.door-size').change(function(e) {
+        e.preventDefault();
+        if ($(this).val() == "Custom") {
+            $('.sHeight').removeClass("d-none");
+        } else {
+            $('.opening-width').removeClass("d-none");
+        }
+    
+    });
+    
+    $('.openingWidth').focusout(function(e) {
+        var width = $(this).val();
+        if (width < 6) {
+            sweetAlert("Opening width MUST be greater than 6 in.");
+            return false;
+        } else {
+            $('.door-type').removeClass("d-none");
+            $('.openings').removeClass("d-none");
+        }
+    });
+    
+    $("input[name='doorType']").change(function() {
+        var getVal = $(this).val();
+        if (getVal != "") {
+            $('.openings').removeClass("d-none");
+        }
+    });
+    
+    $('.width-opening').keyup(function(e) {
+        if ($(this).val() != "") {
+            $('.overlayOpt').removeClass("d-none");
+        }
+    });
+    
+    // open custom-doors_container
+    // $("input[name='solidRouted']").change(function() {
+    //     var getVal = $(this).val();
+    //     if (getVal === "solid") {
+    //         $(".solid-rdo").removeClass("d-none");
+    //     } else {
+    //         $(".solid-rdo").addClass("d-none");
+    //     }
+    //     $(".custom-doors_container").removeClass("d-none");
+    
+    // });
+    $("input[name='customType']").change(function() {
+        var getVal = $(this).val();
+        if (getVal === "solid" || getVal === "routed") {
+            $(".solid-rdo").removeClass("d-none");
+        } else {
+            $(".solid-rdo").addClass("d-none");
+        }
+        $('.custom-drawer').removeClass("d-none"); 
+    });
+    
+    // $("#standard_submit").on("click", function() {
+    
+    //     $('#standard_submit').attr('disabled', true);
+    //     $('#deco-doors-form').submit();
+    //     clearData();
+              
+    // });
+    
+    // $("#custom_submit").on("click", function() {
+    
+    //     if ($('.custom-type').is(':visible') && $("input[name='customType']:checked").length == 0) {
+    //         sweetAlert("Field is required.");
+    //         return false;
+    //     }else if($("input[name='customDoor-lbl']:checked").length == 0){
+    //         sweetAlert("Please select width");
+    //         return false;
+    //     } else if ($('.custom-height').is(':visible') && $(".custom-height").val() == "") {
+    //         sweetAlert("Height is required.");
+    //         return false;
+    //     } else if ($('.custom-opening-width').is(':visible') && $(".custom-opening-width").val() == "") {
+    //         sweetAlert("Width is required.");
+    //         return false;
+    //     } else if ($('.custom-qty').is(':visible') && $(".custom-qty").val() == "") {
+    //         sweetAlert("Quantity is required.");
+    //         return false;
+    //     }
+    //     append_table();
+    
+    // });
+    
+    
+    
+    // customDoor-lbl
+    $("input[name='customDoor-lbl']").change(function() {
+        $(".LTI-calculation").removeClass("d-none");
+        $('.custom-overlayOpt').removeClass("d-none");
+        var getVal = $(this).attr("data-label");
+    
+        if (getVal == "custom") {
+            $("#label-val").removeClass("label-look");
+            $("#label-val").val("");
+            $("#label-val").addClass("form-control-solid");
+            $("#label-val").prop("readonly", false);
+            $(".optLabel").removeClass("invisible");
+    
+        } else {
+            $("#label-val").addClass("label-look");
+            $("#label-val").removeClass("form-control-solid");
+            $("#label-val").prop("readonly", true);
+            $(".optLabel").addClass("invisible");
+            $('#label-val').val(getVal);
+        }
+    });
+    
+    function append_table(){
+        var html = `<tr>
+                        <td>1</td>
+                        ${actions}
+                        <td>Room</td>
+                        <td>Standard</td>
+                        <td>Description</td>
+                        <td>Wood</td>
+                        <td>Glass</td>
+                        <td>Colonial</td>
+                        <td>Cherry Select</td>
+                        <td>Board Colors/Stain Color</td>
+                        <td>yes</td>
+                        <td>3/4</td>
+                        <td>18H</td>
+                        <td></td>
+                        <td>6</td>
+                        <td>single</td>
+                        <td>2</td>
+                        <td>Half Overlay</td>
+                        <td>Routed</td>
+                        <td>7H </td>
+                        <td>8.66</td>
+                        <td>5</td>
+                        <td>5</td>
+    
+                        <td><p class="tbl-note">notes</p></td>
+                    </tr>`;
+        $(".doors_tbody").append(html);
+    
+        clearData();
+        $(".clear-btn").click();
+    }
+    
+    $(".clear-btn").click(function() {
+        console.log("here");
+        $(".side-drill").hide();
+        $(".side-drill .depth").find("div").remove();
+        $(".side-drill .height").find("div").remove();
+        $('.overlayOpt,.custom-overlayOpt,.LTI-calculation,.openings,.door-type ,.opening-width ,.custom-drawer').addClass("d-none");
+        $("#standard_size").prop('checked',true);
+        $("#single").prop('checked',true);
+        
+    });
+
+    $('.dropdown_class').on('change', function () {
+        var value = this.value;
+        var name = this.name
+        $.ajax({
+            url:"{% url 'room_options:wood-door-ajax' %}" ,
+            type: "GET",
+            data : {
+               value : value,
+               name : name
+            },
+            success: function(result){
+                console.log(result, "result")
+
+                if(name == "wood_door_style"){
+                    $('#wood_species').empty();                   
+                    $('#wood_species').append("<option value='' selected>Choose Wood Species</option>");
+                    for (const key in result){
+                       $('#wood_species').append("<option value='"+key+"'>"+result[key]+"</option>");
+                    }  
+                } else if (name == "wood_species") {
+                    for (const key in result){
+                        $('#wood_stain_color').append("<option value='"+key+"'>"+result[key]+"</option>");
+                    }
+                }
+            }
+        });
+    });
+
+    $('#wood_stain_color').on('change', function(){
+        $('#depth-door').show();
+        
+        $('.stdsize').removeClass("d-none");
+
+        
+
+    })
+    
+    // $(".material-type").on('change', function() {
+    //     if ($(this).val() == 'foil'){
+    //         $(".flites").hide();
+    //     } else if ($(this).val() == 'wood') {
+    //         $(".flites").hide();
+    //         $(".material-description").show();
+    //         $(".board-description").attr('disabled', false);
+    //     } 
+    // })
+    
+    // $(".panelType").on('change', function() {
+    //     console.log($(".material-type").val(), "===========matreial tyep==========")
+    //     if ($(this).val() == 'solid' && $(".material-type").val() == 'foil'){
+    //         $(".material-description").hide();
+    //         $(".board-description").attr('disabled', true);
+    //     } else {
+    //         $(".material-description").show();
+    //         $(".board-description").attr('disabled', false);
+    //     }
+    // })
+    $(document).ready(function() {
+        $('#depth-door').hide();
+        $('#wood_door_french_lite').hide();
+        $('.custom_door_size').hide();
+
+        var deco_door = '{{deco_door}}'
+        if (deco_door){
+            $('#depth-door').show();
+            $('.stdsize').removeClass("d-none");
+            $('.openingWidth').show();
+            $('.door-type').removeClass("d-none");
+            $('.opnWidth').removeClass("d-none");
+            $('.openings').removeClass("d-none");
+            $('.overlayOpt').removeClass("d-none");
+            
+        }
+    })
+
+
+    deleteDoorItem=(url,pk)=>{
+        $.ajax({                       
+            url: url,                  
+            data: {"pk":pk
+                },
+            success: function (data) {
+                data=JSON.parse(data)
+                    if(data['status']==200){
+                Swal.fire({
+                    title:    'Deleted!',
+                    text: 'Your data has been deleted.',
+                    icon:  'success',
+                    customClass: {
+                    confirmButton: 'btn btn-primary',            
+                    },
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+                        }
+                    });
+                } 
+            }   
+        });
+    }
+
+    $(document).on("click", ".del-data", function (e) {
+        pk= $(this).data('delete_id')
+        delete_url = $(this).data('url')
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,       
+            customClass: {
+                confirmButton: 'btn btn-primary',
+                cancelButton: 'btn btn-secondary'
+            },
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+            deleteDoorItem(delete_url,pk)
+            }
+        })
+        e.preventDefault();
+    });
+
+    function Panel_type(){
+        $('#wood_door_french_lite').show();
+    }
+
+    $(".standard_submit").on("click", function() {
+        var ele = $(this).parents('.add-block');
+        // var door_style = $(ele).find(".style-name  option:selected").val()
+        var door_style = $('.door-style').val()
+        
+        // var material_description = $(ele).find(".material-description  option:selected").val()
+        var material_description = $('.wood-material').val()
+        // var board_description = $(ele).find(".board-description  option:selected").val()
+        var board_description = $('.board-description').val()
+        var openingWidth = $('.openingWidth').val()
+    
+    if (($("input[name='wood_door_material_type']:checked").length == 0 && $("input[name='wood_panel_type']:checked").length == 0) && door_style == 0 && material_description == 0 && board_description == 0 && $("input[name='glazing']:checked").length == 0) {
+        sweetAlert("Please fill in all the required fields.");
+        return false;
+    } else if ($("input[name='wood_door_material_type']:checked").length == 0) {
+        sweetAlert("Please select door material.");
+        return false;
+    } else if ($("input[name='wood_panel_type']:checked").length == 0) {
+        sweetAlert("Please select panel type.");
+        return false;
+    } else if (door_style == 0 || door_style == undefined) {
+        sweetAlert("Please select style name");
+        return false;
+    } else if (material_description == 0 || material_description == undefined) {
+        sweetAlert("Please select material description");
+        return false;
+    
+    } else if ($("input[name='glazing']:checked").length == 0) {
+        sweetAlert("Please select glazing");
+        return false;
+    } else if ($('.door-size').is(':visible') && $(".door-size").val() == 0) {
+        sweetAlert("Please select size");
+        return false;
+    } else if ($('.sHeight').is(':visible') && $(".door-height").val() == "") {
+        sweetAlert("Height is required");
+        return false;
+    } else if (openingWidth == 0 || openingWidth == undefined) {
+        sweetAlert("Please opening width");
+        return false;
+    } else if ($('.openings').is(':visible') && $(".width-opening").val() == "") {
+        sweetAlert("Please enter opening");
+        return false;
+    } else if ($('.openings').is(':visible') && $(".width-opening").val() == "") {
+        sweetAlert("Please enter opening");
+        return false;
+    }
+    //  else if ($("input[name='doorType']:checked").length == 0) {
+    //     sweetAlert("Please select door type");
+    //     return false;
+    // }
+    else {
+        $('#submit-data').attr('disabled', true);
+        $('#deco-doors-form').submit();
+    }
+    append_table();
+});
+
+    
+    
+</script>
+{% endblock %}

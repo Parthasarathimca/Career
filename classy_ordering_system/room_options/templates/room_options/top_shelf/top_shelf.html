@@ -2,98 +2,363 @@
 {% load room_extras %}
 {% load static %}
 
-{% block navbartitle %} Top-Shelf {% endblock %}
-{% block option_title %}Top-Shelf{% endblock %}
-{% block crumb %}Top-Shelf{% endblock %}
+{% block navbartitle %} Top Shelf {% endblock %}
+{% block option_title %}Top Shelf{% endblock %}
+{% block crumb %}Top Shelf{% endblock %}
 
 
 {% block room_form %}
 <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
     <h3 class="card-title ">
-        Selected Room : {{ room }}
+        Selected Room : {{ room|title }}
     </h3>
     <div class="buttons-type-list">
         <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=STANDARD" class="btn btn-secondary standard_btn me-4 active" id="standard_shelf">Standard</a>
-        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM" class="btn btn-secondary custom me-4 custom_top_shelf " id="custom_shelf">Custom top Shelf</a>
-        <a  class="btn btn-secondary counter_btn">Counter top</a>
-        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM_COUNTER_TOP"  class="btn btn-secondary custom_counter_top">Custom counter top</a>
+        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM" class="btn btn-secondary custom me-4 custom_top_shelf " id="custom_shelf">Custom Top Shelf</a>
+        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=COUNTER_TOP"  class="btn btn-secondary counter_btn">Counter Top</a>
+        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM_COUNTER_TOP"  class="btn btn-secondary custom_counter_top">Custom Counter Top</a>
     </div>
 </div>
-<div class="card-header border-0 pt-5 d-block">
-    <h3 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
-       Standard    </h3>                                 
-                                
-<div class="card-body">
 
-<form method="POST"  id="top_self_form">
-    {% csrf_token %}
-        <div class="col-xl-6 px-0">
-            <div class="row dafault-shelve">
-                <div class="col-md-6">
-                    <div class="mb-8">
-                        <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Dummy</label>
-                        <select class="form-select form-select-solid standard-dummy topShelf-width" data-control="select2" data-hide-search="true" data-placeholder="Select " name="">
-                                        <option selected value="0">Select </option>
-                                        <option value="11.75">11.75</option>
-                                        <option value="12">12</option>
-                                        <option value="12.50">12.50</option>
-                                        <option value="15.75">15.75</option>
-                                        <option value="16">16</option>
-                                        <option value="16.50">16.50</option>
-                                    </select>
+<div class="card mb-5 mb-xxl-8 standard_shelf_block">
+    <div class="card-header border-0 pt-5 d-block">
+        <h3 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+            Standard
+        </h3>
+        <span class="card-label fs-3 mb-1 text-danger small"><small>* Check the Checkbox  next to  the quantity box that to have Edgebanding on short side</small></span>
+    </div>
+    <div class="card-body">
+        <form method="POST" id='top_self_form'> 
+            {% csrf_token %}
+            <div class="row topshelf-Qtys">
+                <div class="mb-8 col-xl-3 col-lg-4 col-md-4">
+                    <h4 class="invisible">Select</h4>
+                    <div class="grouping-box p-4 bg-white">
+                        <div class="mb-2 topshelf-dime">   
+                            <div class=" form-check form-check-custom form-check-solid ">
+                                <input class="form-check-input standard-width" type="radio" value='60_11.75' id="" name="{{form.width.name}}">
+                            </div>                                                    
+                            <label>60&nbsp;X&nbsp;11.75</label>
+                            <input  type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                       
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="72_11.75" id="" name="{{form.width.name}}">
+                            </div>
+                           <label>72&nbsp;X&nbsp;11.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="84_11.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>84&nbsp;X&nbsp;11.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="96_11.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>96&nbsp;X&nbsp;11.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="97_11.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>97&nbsp;X&nbsp;11.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                         
+                        </div>
+                
+                
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="mb-8">
-                        <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Dummy</label>
-                        <select class="form-select form-select-solid standard-dummy topShelf-Depth" disabled data-control="select2" data-hide-search="true" data-placeholder="Select " name="">
-                                        <option selected value="0">Select </option>
-                                        <option value="60">60</option>
-                                        <option value="72">72</option>
-                                        <option value="84">84</option>
-                                        <option value="96">96</option>
-                                        <option value="97">97</option>
-                         </select>
+                
+                <div class="mb-8 col-xl-3 col-lg-4 col-md-4">
+                    <h4 class="invisible">Select</h4>
+                    <div class="grouping-box p-4  bg-white">
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid ">
+                                <input class="form-check-input standard-width" type="radio" value="60_12" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>60&nbsp;X&nbsp;12</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="72_12" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>72&nbsp;X&nbsp;12</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div> 
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="84_12" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>84&nbsp;X&nbsp;12</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="96_12" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>96&nbsp;X&nbsp;12</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">  
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>                                                      
+                        </div>
                     </div>
                 </div>
-
-                <div class="col-md-6">
-                    <div class="mb-8">
-                        <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Qty</label>
-                        <input type="text" class="form-control form-control-solid standard-qty qty onlyNumber" placeholder="Qty" />
+                
+                <div class="mb-8 col-xl-3 col-lg-4 col-md-4">
+                    <label class="text-muted fs-6 fw-bold mb-2 ">Typically Round</label>
+                    <div class="topshelf-border  grouping-box p-4 px-xxl-1 bg-white">
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid ">
+                                <input class="form-check-input standard-width" type="radio" value="60_12.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>60&nbsp;X&nbsp;12.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div> 
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="72_12.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>72&nbsp;X&nbsp;12.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="84_12.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>84&nbsp;X&nbsp;12.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="96_12.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>96&nbsp;X&nbsp;12.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">  
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="97_12.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>97&nbsp;X&nbsp;12.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                        </div>
                     </div>
                 </div>
-
-                <div class="d-flex flex-stack mb-8 edgebanding d-none">
-                    <!--begin::Label-->
-                    <div class="me-5">
-                        <label class="fs-6 fw-bold">Check the Checkbox that to have Edgebanding on short side</label>
+                
+                <div class="mb-8 col-xl-3 col-lg-4 col-md-4">
+                    <label class="text-muted fs-6 fw-bold mb-2 invisible ">Typically Round</label>
+                    <div class="grouping-box p-4  bg-white">
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid ">
+                                <input class="form-check-input standard-width" type="radio" value="60_15.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>60&nbsp;X&nbsp;15.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="72_15.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>72&nbsp;X&nbsp;15.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                            <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                        </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="84_15.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>84&nbsp;X&nbsp;15.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="" >
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="96_15.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>96&nbsp;X&nbsp;15.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">  
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="97_15.75" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>97&nbsp;X&nbsp;15.75</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                        </div>
                     </div>
-                    <!--end::Label-->
-                    <!--begin::Switch-->
-                    <label class="form-check form-switch form-check-custom form-check-solid">
-                            <span class="form-check-label fw-bold text-gray-400 me-2">No</span>
-                            <input class="form-check-input" id="material-same" type="checkbox" value="" />
-                            <span class="form-check-label fw-bold text-gray-400">yes</span>
-                        </label>
-                    <!--end::Switch-->
                 </div>
-
+                
+                <div class="mb-8 col-xl-3 col-lg-4 col-md-4">
+                    <label class="text-muted fs-6 fw-bold mb-2 invisible ">Typically Round</label>
+                    <div class="grouping-box p-4 bg-white">
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid ">
+                                <input class="form-check-input standard-width" type="radio" value="60_60" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>60&nbsp;X&nbsp;60</label>
+                            <input type="text" class="form-control quantity1 form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid onlyNumber">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="72_60" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>72&nbsp;X&nbsp;60</label>
+                            <input type="text" class="form-control quantity1 form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="84_60" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>84&nbsp;X&nbsp;60</label>
+                            <input type="text" class="form-control quantity1 form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="96_60" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>96&nbsp;X&nbsp;60</label>
+                            <input type="text" class="form-control quantity1 form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">  
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>                                                  
+                    </div>
+                </div>
+                
+                <div class="mb-8 col-xl-3 col-lg-4 col-md-4">
+                    <label class="text-muted fs-6 fw-bold mb-2">Typically Round</label>
+                    <div class="topshelf-border  grouping-box p-4  bg-white">
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid ">
+                                <input class="form-check-input standard-width" type="radio" value="60_16.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>60&nbsp;X&nbsp;16.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="72_16.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>72&nbsp;X&nbsp;16.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class=" form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="84_16.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>84&nbsp;X&nbsp;16.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                <input class="form-check-input edgebanding" type="checkbox" value="true" name="{{form.exposed_ends.name}}" disabled="">
+                            </div>
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="96_16.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>96&nbsp;X&nbsp;16.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">  
+                        </div>
+                        <div class="mb-2 topshelf-dime">
+                            <div class="form-check form-check-custom form-check-solid">
+                                <input class="form-check-input standard-width" type="radio" value="97_16.50" id="" name="{{form.width.name}}">
+                            </div>
+                            <label>97&nbsp;X&nbsp;16.50</label>
+                            <input type="text" class="form-control quantity form-control-solid onlyNumber standard_qty" name="{{form.quantity.name}}" disabled="">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" class="exposed_ends" value="long_sides" name="">
+            <!-- <div class="col-md-6" style="display: none;">
+                <div class="mb-8">
+                    <label
+                        class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Exposed Ends</label>
+                    <select name="{{form.exposed_ends.name}}" 
+                        class="form-select form-select-solid material_select top-shelf-exposed"
+                        data-control="select2" data-hide-search="true"
+                        data-placeholder="Select Exposed Ends">
+                        <option selected value="">Select Exposed Ends</option>
+                        {% for value, text in form.exposed_ends.field.choices %}
+                        <option value="{{value}}" {% if value == 3 %} selected {% endif %} >{{text}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div> -->
+            <div class="col-md-6">
                 <div class="notes">
                     <label class="fs-6 fw-bold mb-2">Notes:</label>
-                    <textarea class="form-control form-control-solid standard_notes"></textarea>
+                    <textarea  name="{{form.notes.name}}" class="form-control 1_shelf_notes form-control-solid">{% if order_items.notes  %} {{ order_items.notes }}  {% endif %}</textarea>
                 </div>
-
+                <input type="hidden" name="{{form.part_sub_category.name}}" value="STANDARD">
                 <div class="d-flex justify-content-end pt-7">
-                    <button type="button" class="btn btn-secondary me-2 clear-btn ">Clear</button>
-                    <button type="button" class="btn btn-primary standard_submit">Submit</button>
+                    <button type="button" class="btn btn-secondary me-2 clear-btn" id='clear_button'>Clear</button>
+                    <button type="button" class="btn btn-primary standard_submit" id='submit_button'>Submit</button>
                 </div>
-            </div> 
-        </div>
-    
-</form>
+            </div>
+        </form>
+    </div>
 </div>
-</div>
+
 <div class="card mb-5 mb-xxl-8" id="kt_post">
     <div class="card-header border-0 pt-5" id="kt_content_container">
         <h3
@@ -108,17 +373,18 @@
             <table class="table door_tbl table-bordered table-alternet">
                 <thead>
                     <tr>
-                        <th>S.No</th>
-                        <th>Action</th>
-                        <th>Room</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Material</th>
-                        <th>Qty</th>
-                        <th>width</th>
-                        <th>Depth</th>
-                        <th>Exposed Ends</th>
-                        <th>Notes</th>
+                        <th>SERIAL NO.</th>
+                        <th>ACTION</th>
+                        <th>ROOM</th>
+                        <th>CATEGORY</th>
+                        <th>DESCRIPTION</th>
+                        <th>MATERIAL</th>
+                        <th>QTY</th>
+                        <th>WIDTH</th>
+                        <th>DEPTH</th>
+                        <th>HEIGHT</th>
+                        <th>EXPOSED ENDS</th>
+                        <th>NOTES</th>
                     </tr>
                 </thead>
                 <tbody class="l_shelf_tbody">
@@ -172,11 +438,12 @@
                             </td>
                             <td>{{ each_l_shelf.room }}</td>
                             <td>{{ each_l_shelf.part_sub_category }}</td>
-                            <td>{{each_l_shelf.description}}</td>
+                            <td>{{each_l_shelf.description2}}</td>
                             <td>{{each_l_shelf.get_mat_type_display}}   </td>
                             <td>{{ each_l_shelf.quantity }}</td>    
                             <td>{{ each_l_shelf.width }}</td>
                             <td>{{ each_l_shelf.depth }}</td>
+                            <td>{{ each_l_shelf.height }}</td>
                             <td>{{ each_l_shelf.get_exposed_ends_display }}</td>
                             <td>{{ each_l_shelf.notes }}</td>
                         </tr>
@@ -197,111 +464,44 @@
 {% block extra_scripts %}
 
 <script>    
-    $('#top_self_form').on('submit', function(e){         
+  $('.standard_submit').on('click', function(e){
+    // $('#top_self_form').on('submit', function(e){         
         $(".topShelf-Depth").prop("disabled", true);
         if($('.standard_btn').hasClass('active')) {
 
-                if(($('.standard-dummy').val() == 0 || $('.standard-dummy').val() == null) &&  $('.standard-qty').val() == "") {
+                if($('input[name=quantity]:enabled', '#top_self_form').val() == undefined && $('input[name=width]:checked', '#top_self_form').val()==undefined) {
                     sweetAlert("Please fill in all the required fields.");
                     return false;
                 }
-                else if($('.standard-dummy').val() == 0 || $('.standard-dummy').val() == null)
+                else if($('input[name=quantity]:enabled', '#top_self_form').val() == 0 || $('input[name=quantity]:enabled', '#top_self_form').val() == null)
                 {
-                    sweetAlert("Please select dummy.");
+                    sweetAlert("Quantity is required.");
                     return false;
+                } else {
+                    $('#submit_button').attr('disabled', true);
+                    $('#top_self_form').submit() 
                 }
-                else if($('.standard-qty').is(':visible') && $('.standard-qty').val() == "")
-                {
-                    sweetAlert("Quantity is required");
-                    return false;
-                }
+               
             }
-            else if($('.custom_top_shelf').hasClass('active')) {
+            });
 
-                    if($('.top-shelf-material').val() == 0  &&  $('.top-shelf-exposed').val() == 0 &&  $('.top-shelf-qty').val() == "" &&  $('.top-shelf-width').val() == "" &&  $('.top-shelf-depth').val() == "") {
-                        sweetAlert("Please fill in all the required fields.");
-                        return false;
-                    }
-                    else if($('.top-shelf-material').val() == 0 || $('.top-shelf-material').val() == null)
-                    {
-                        sweetAlert("Please select material.");
-                        return false;
-                    }
-                    else if($('.top-shelf-exposed').val() == 0 || $('.top-shelf-exposed').val() == null)
-                    {
-                        sweetAlert("Please select exposed ends.");
-                        return false;
-                    }
-                    else if($('.top-shelf-qty').val() == ""){
+            $('.standard-width').on("change",function(){
+            $('.standard_qty').attr("disabled","disabled");
+            $('.standard_qty').val('');
+            $('.topshelf-dime [type="checkbox"]').prop("checked",false).attr("disabled","disabled");
+            $('.exposed_ends').attr('name', 'exposed_ends');
 
-                        sweetAlert("Quantity is required");
-                        return false;
-                    }
-                    else if($('.top-shelf-width').val() == ""){
-
-                        sweetAlert("Width is required");
-                        return false;
-                    }
-                    else if($('.top-shelf-depth').val() == ""){
-
-                        sweetAlert("Depth is required");
-                        return false;
-                    }
-                   
-            }
-            else if($('.counter_btn').hasClass('active')) {
-
-                if(($('.counter-dummy').val() == 0 || $('.counter-dummy').val() == null) &&  $('.counter-qty').val() == "") {
-                    sweetAlert("Please fill in all the required fields.");
-                    return false;
+            $('.edgebanding').on('change', function() {
+                if ($(this).is(':checked')) {
+                    $('.exposed_ends').removeAttr('name')
+                    $(this).attr('value', 'short_and_long_sides')
+                } else {
+                    $('.exposed_ends').attr('name', 'exposed_ends')
                 }
-                else if($('.counter-dummy').val() == 0 || $('.counter-dummy').val() == null)
-                {
-                    sweetAlert("Please select dummy.");
-                    return false;
-                }
-                else if($('.counter-qty').is(':visible') && $('.counter-qty').val() == "")
-                {
-                    sweetAlert("Quantity is required");
-                    return false;
-                }
-                   
-            }
-            else if($('.custom_counter_top').hasClass('active')) {
-
-                if($('.custom-material').val() == 0  &&  $('.custom-exposed').val() == 0 &&  $('.custom-qty').val() == "" &&  $('.custom-width').val() == "" &&  $('.custom-depth').val() == "") {
-                        sweetAlert("Please fill all fields.");
-                        return false;
-                    }
-                    else if($('.custom-material').val() == 0 || $('.custom-material').val() == null)
-                    {
-                        sweetAlert("Please select material.");
-                        return false;
-                    }
-                    else if($('.custom-exposed').val() == 0 || $('.custom-exposed').val() == null)
-                    {
-                        sweetAlert("Please select exposed ends.");
-                        return false;
-                    }
-                    else if($('.custom-qty').val() == ""){
-
-                        sweetAlert("Quantity is required");
-                        return false;
-                    }
-                    else if($('.custom-width').val() == ""){
-
-                        sweetAlert("Width is required");
-                        return false;
-                    }
-                    else if($('.custom-depth').val() == ""){
-
-                        sweetAlert("Depth is required");
-                        return false;
-                    }
-   
-            }
-                  
-                });
+            })
+            
+            $(this).parents(".topshelf-dime").find("[disabled]").prop("disabled",false);//.removeAttr('disabled');
+        });
 
                 var depth =  ["Select",60, 72, 84, 96, 97];
                 
@@ -396,14 +596,15 @@ $(document).on("click", ".del-data", function (e) {
       })
     e.preventDefault();
 });
-$("#clear_door").on("click",function(){
+$("#clear_button").on("click",function(){
+
           if(isUpdate()){
              window.location.href=window.location.pathname
           }
        })
 
 isUpdate= ()=>{
-      if(window.location.search.indexOf('room_item')==1){
+      if(window.location.search.indexOf('room_item') >0){
          return true;
       }
       else{
@@ -422,11 +623,31 @@ updateSetups =() => {
 
       }
    }
-
+ getWholeNumber = (num)=>{
+    rem= num.split('.')[1]
+    return  rem[0]=='0' && rem[1]=='0' ?num.split('.')[0] : num
+ } 
+ 
  $(document).ready(function() {
+    var width='{{order_items.width}}';
+    var depth='{{order_items.depth}}';
+    var quantity='{{order_items.quantity}}';
+    var edgebanding='{{order_items.edgebanding}}'
+     width=width.split('.')[0]
+     width_depth=width+"_"+getWholeNumber(depth)
+     $("input[name=width][value='" + width_depth +"']").prop("checked", true).trigger("change")
+     $('input[name=quantity]:enabled', '#top_self_form').val(quantity)
+   
+     if(edgebanding=='True'){
+       
+        $('input[name=edgebanding]:enabled', '#top_self_form').prop("checked", true).trigger("change")
+     }
+     
      updateSetups();
+    
  })
 
+ 
 </script>
 
 {% endblock %}

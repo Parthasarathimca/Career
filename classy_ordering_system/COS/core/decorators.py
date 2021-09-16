@@ -1,9 +1,11 @@
 ''' Decorators '''
+from franchise.models import ProductionCenter
 from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.http.response import JsonResponse
 from django.urls import reverse
+from  accounts.conf import UserRole
 
 def anonymous_only(redirect_to=None):
     ''' 
@@ -97,3 +99,113 @@ def logged_user_view(cls=None, **function_args):
             return logged_user_view(inner_cls, **function_args)
 
         return inner_decorator
+
+def can_access_account():
+    ''' 
+    Check access for accounts view 
+    '''
+    def decorator(view_func):
+        ''' Decorator '''
+        def wrapper(request, *args, **kwargs):
+            redirect_url = kwargs.get('redirect_to', reverse_lazy('dashboard'))
+            if  request.user.is_employee :  
+                redirect_to = redirect(redirect_url)
+            else:
+                redirect_to = view_func(request, *args, **kwargs)
+            return redirect_to
+        return wrapper  
+    return decorator
+
+def can_accounts_view(cls=None, **function_args):
+    ''' 
+    can_access_account  View Dispatch
+    '''
+    if cls is not None:
+        if not hasattr(cls, 'dispatch'):
+            raise TypeError(('View class is not valid: %r.  Class-based views '
+                             'must have a dispatch method.') % cls)
+        original = cls.dispatch
+        modified = method_decorator(
+            can_access_account(**function_args))(original)
+        cls.dispatch = modified
+        return cls
+    else:
+        def inner_decorator(inner_cls):
+            ''' Inner Decorator '''
+            return can_accounts_view(inner_cls, **function_args)
+        return inner_decorator
+
+
+# For Production center
+def is_production_center():
+    ''' 
+    Check access for Prodcution center
+    '''
+    def decorator(view_func):
+        ''' Decorator '''
+        def wrapper(request, *args, **kwargs):
+            redirect_url = kwargs.get('redirect_to', reverse_lazy('dashboard'))
+            if request.user.user_role == UserRole.PRODUCTION_CENTER or request.user.is_superuser:    
+                redirect_to = view_func(request, *args, **kwargs)
+            else:
+                redirect_to = redirect(redirect_url)              
+            return redirect_to
+        return wrapper  
+    return decorator
+
+def is_production_center_view(cls=None, **function_args):
+    ''' 
+    Is Productio Center  View Dispatch
+    '''
+    if cls is not None:
+        if not hasattr(cls, 'dispatch'):
+            raise TypeError(('View class is not valid: %r.  Class-based views '
+                             'must have a dispatch method.') % cls)
+        original = cls.dispatch
+        modified = method_decorator(
+            is_production_center(**function_args))(original)
+        cls.dispatch = modified
+        return cls
+    else:
+        def inner_decorator(inner_cls):
+            ''' Inner Decorator '''
+            return is_production_center_view(inner_cls, **function_args)
+        return inner_decorator
+
+# For Checking non productin center role 
+def is_classy_user():
+    ''' 
+    Check access for Prodcution center
+    '''
+    def decorator(view_func):
+        ''' Decorator '''
+        def wrapper(request, *args, **kwargs):
+            urls='production_center:production-dashboard' if request.user.user_role == UserRole.PRODUCTION_CENTER else 'dashboard'
+            redirect_url = kwargs.get('redirect_to', reverse_lazy(urls))
+            if request.user.user_role != UserRole.PRODUCTION_CENTER or request.user.is_superuser:  
+                redirect_to = view_func(request, *args, **kwargs)
+            else:
+                redirect_to = redirect(redirect_url)              
+            return redirect_to
+        return wrapper  
+    return decorator
+
+def is_classy_user_view(cls=None, **function_args):
+    ''' 
+    Is classy user  View Dispatch
+    '''
+    if cls is not None:
+        if not hasattr(cls, 'dispatch'):
+            raise TypeError(('View class is not valid: %r.  Class-based views '
+                             'must have a dispatch method.') % cls)
+        original = cls.dispatch
+        modified = method_decorator(
+            is_classy_user(**function_args))(original)
+        cls.dispatch = modified
+        return cls
+    else:
+        def inner_decorator(inner_cls):
+            ''' Inner Decorator '''
+            return is_classy_user_view(inner_cls, **function_args)
+        return inner_decorator
+

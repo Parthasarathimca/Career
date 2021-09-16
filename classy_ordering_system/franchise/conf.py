@@ -47,3 +47,11 @@ class Colors(object):
         (MAGENTA, 'Magenta'),
         (EMERALD, 'Emerald'),
     )
+
+
+class orderStatus(object):
+
+    STATUS_CHOICES = (
+            ('SENT', 'Orders Sent'),
+            ('INPROGRESS', 'Orders Inprogress'),
+        )

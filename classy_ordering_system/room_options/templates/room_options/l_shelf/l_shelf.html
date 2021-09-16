@@ -5,12 +5,30 @@
 {% block navbartitle %} L-Shelf {% endblock %}
 {% block option_title %}L-Shelf{% endblock %}
 {% block crumb %}L-Shelf{% endblock %}
-
+{% block extra_stylesheets %}
+<style>
+    .shelf_width {
+    width: 35%;
+    margin: auto;
+}
+.sideA1 > input, .sideA>input{
+    width: 35%;
+}
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+</style>
+{% endblock %}
 
 {% block room_form %}
 <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
     <h3 class="card-title ">
-        Selected Room : {{ room }}
+        Selected Room : {{ room|title }}
     </h3>
 </div>
 
@@ -30,31 +48,31 @@
                         <div class="col-md-4 mt-4 text-end">
                             <div class="me-6 sideA">
                                 <span class="fs-6 fw-bold required">Side A:</span>
-                                <input name="{{form.width.name}}"  {% if order_items.width %} value="{{order_items.width}}" {% endif %} type="text" class="form-control form-control-solid numberWithFloat side-a">
+                                <input name="{{form.width.name}}"  {% if order_items.width %} value="{{order_items.width}}" {% endif %} type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid numberWithFloat side-a">
                             </div>
                         </div>
                         <div class="col-md-4  mt-md-0 mt-6">
                             <div class="mb-3 ms-6">
                                 <span class="fs-6 fw-bold required">Side B:</span>
-                                <input name="{{form.width2.name}}"  {% if order_items.width2 %} value="{{order_items.width2}}" {% endif %} type="text" class="form-control form-control-solid shelf_width side-b mx-0 numberWithFloat">
+                                <input name="{{form.width2.name}}"  {% if order_items.width2 %} value="{{order_items.width2}}" {% endif %} type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid shelf_width side-b mx-0 numberWithFloat">
                             </div>
                             <div>
                                 <img src="{% static 'images/L-shape.png' %}" class="img-fluid mt-4 L-shelf" alt="image" />
                             </div>        
                             <div class="mt-8 sideA1 ms-6">
                                 <span class="fs-6 fw-bold required">Side A1:</span>
-                                <input name="{{form.depth.name}}" {% if order_items.depth %} value="{{order_items.depth}}" {% endif %} type="text" class="form-control form-control-solid numberWithFloat side-a1">
+                                <input name="{{form.depth.name}}" {% if order_items.depth %} value="{{order_items.depth}}" {% endif %} type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid numberWithFloat side-a1">
                             </div>        
                         </div>
 
                         <div class="col-md-4">
                             <div class="sideA1 ms-4">
                                 <span class="fs-6 fw-bold required">Side B1:</span>
-                                <input name="{{form.depth2.name}}" {% if order_items.depth2 %} value="{{order_items.depth2}}" {% endif %} type="text" class="form-control form-control-solid numberWithFloat side-b1">
+                                <input name="{{form.depth2.name}}" {% if order_items.depth2 %} value="{{order_items.depth2}}" {% endif %} type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid numberWithFloat side-b1">
                             </div>    
                             <div class="mt-8 sideA1 ms-4 col-md-4 lShelf-qty">
                                 <span class="fs-6 fw-bold required">Qty:</span>
-                                <input name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %} type="text" class="form-control form-control-solid  onlyNumber quantity">
+                                <input name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %} type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid  text-center onlyNumber quantity">
                             </div>                                                                                                            
                         </div>
                     </div>
@@ -217,15 +235,13 @@
                                     Notes: Normal drilling of KD's for L-shelf is done with KD's facing down. On units that sit on a toe kick, the drilling is reserved and is drilled with the KD's facing upward on the bottom KD shelf.
                                
                             </i>                                                       
-                        </div>
-                        <div class="d-flex justify-content-end pt-7">
-                            <button type="reset" id="clear_door"
-                                class="btn btn-secondary me-2 clear-btn"
-                                data-kt-search-element="preferences-dismiss">Clear</button>
-                            <button type="submit" id="submit_door"
-                                class="btn btn-primary submit-l-shelf">Submit</button>
-                        </div>
-                    
+                        </div>   
+                <div class="d-flex justify-content-end pt-7">
+                    <button class="btn btn-secondary me-2 clear-btn clear-data" data-kt-search-element="preferences-dismiss"
+                            id="clear_door" type="reset">Clear</button>
+                    <button class="btn btn-primary submit-l-shelf" id="submit-data" type="button">Submit</button>
+                </div>
+
                 </div>
                 
                 <!--end::Feeds Widget 1-->
@@ -249,22 +265,23 @@
             <table class="table door_tbl table-bordered table-alternet">
                 <thead>
                     <tr>
-                        <th>S.No</th>
-                        <th>Action</th>
-                        <th>Room</th>
-                        <!-- <th>Category</th> -->
-                        <th>Description</th>
-                        <th>Material</th>
-                        <th>Qty</th>
-                        <th>Side A</th>
-                        <th>Side A1</th>
-                        <th>Side B</th>
-                        <th>Side B1</th>
-                        <th>Notch for Mitered Pard</th>
-                        <th>Shelf Type</th>
-                        <th>Partitions</th>
-                        <th>Drill for Toe kick </th>
-                        <th>Notes</th>
+                        <th>SERIAL NO.</th>
+                        <th>ACTIONS</th>
+                        <th>ROOM</th>
+                        <th>Category</th>
+                        <th>DESCRIPTION</th>
+                        <th>MATERIAL</th>
+                        <th>QTY</th>
+                        <th>SIDE A</th>
+                        <th>SIDE A1</th>
+                        <th>SIDE B</th>
+                        <th>SIDE B1</th>
+                        <th>HEIGHT</th>
+                        <th>NOTCH FOR MITERED PARD</th>
+                        <th>SHELF TYPE</th>
+                        <th>PARTITIONS</th>
+                        <th>DRILL FOR TOE KICK </th>
+                        <th>NOTES</th>
                     </tr>
                 </thead>
                 <tbody class="l_shelf_tbody">
@@ -317,20 +334,21 @@
                                 </a>
                             </td>
                             <td>{{ each_l_shelf.room }}</td>
-                            <!-- <td>{{ each_l_shelf.part_sub_category }}</td> -->
-                            <td>{{each_l_shelf.description}} ({{ each_l_shelf.get_shelf_type_display }})</td>
+                            <td>{{ each_l_shelf.part_sub_category }}</td>
+                            <td>{{each_l_shelf.description}}</td>
                             <td>{{each_l_shelf.get_mat_type_display}}   </td>
                             <td>{{ each_l_shelf.quantity }}</td>    
-                            <td>{{ each_l_shelf.width }}</td>
-                            <td>{{ each_l_shelf.depth }}</td>
-                            <td>{{ each_l_shelf.width2 }}</td>
-                            <td>{{ each_l_shelf.depth2 }}</td>
-                            <td>{{ each_l_shelf.notch_mitered_pard }}</td>
-                            <td>{{ each_l_shelf.get_shelf_type_display }}</td>
-                            <td>{{ each_l_shelf.get_shelfs_partitions_display }}</td>
-                            <td>{{ each_l_shelf.drill_toe_kick }}</td>
+                            <td>{{ each_l_shelf.width|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.depth|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.width2|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.depth2|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.height|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.notch_mitered_pard|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.get_shelf_type_display|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.get_shelfs_partitions_display|default_if_none:"-" }}</td>
+                            <td>{{ each_l_shelf.drill_toe_kick|default_if_none:"-" }}</td>
                         
-                            <td>{{ each_l_shelf.notes }}</td>
+                            <td>{{ each_l_shelf.notes|default_if_none:"-" }}</td>
                         </tr>
                     {% endfor %}
                     </tbody>
@@ -355,7 +373,7 @@
         e.preventDefault();
     });
 
-    $('#l_self_form').on('submit', function(e){
+    $('.submit-l-shelf').on('click', function(e){
     //$(".submit-l-shelf1").click(function (e) {
         var sideA = $(".side-a").val();
         var sideB = $(".side-b").val();
@@ -364,40 +382,40 @@
         var qty = $(".quantity").val();
         // var Material_type = $("input[name='mel']:checked").val()
         // var all = $("input[name='all']:checked").val()
-        if(sideA == "" && sideB == "" && sideA1 == "" && sideB1 == "" && qty == "" && $("input[name='notch_mitered_pard']:checked").length == 0 &&  $("input[name='mat_type']:checked").length == 0 && $("input[name='shelf_type']:checked").length == 0){
+        if(sideA == "" || undefined && sideB == "" || undefined && sideA1 == "" || undefined && sideB1 == "" || undefined && qty == "" || undefined && $("input[name='notch_mitered_pard']:checked").length == 0 &&  $("input[name='mat_type']:checked").length == 0 && $("input[name='shelf_type']:checked").length == 0){
             sweetAlert("Please fill in all the required fields.");
             return false;
         }
-       else if (sideA == "") {
+       else if (sideA == "" || undefined) {
             sweetAlert("Side A is required.");
             return false;
         }
-        else if (sideB == "") {
+        else if (sideB == "" || undefined) {
             sweetAlert("Side B is required.");
             return false;
         }
-        else if (sideA1 == "") {
+        else if (sideA1 == "" || undefined) {
             sweetAlert("Side A1 is required.");
             return false;
         }
-        else if (sideB1 == ""){
+        else if (sideB1 == "" || undefined){
             sweetAlert("Side B1 is required.");
             return false;
         }
-        else if (qty == ""){
+        else if (qty == "" || undefined){
             sweetAlert("Quantity is required.");
             return false;
         }
-        else if ($("input[name='notch_mitered_pard']:checked").length == 0){
+        else if ($("input[name='notch_mitered_pard']:checked").length == 0 || undefined){
                sweetAlert("Choose option for Notch for Mitered Pard.");
                return false;
         }
-        else if ($("input[name='mat_type']:checked").length == 0)
+        else if ($("input[name='mat_type']:checked").length == 0 || undefined)
          {
             sweetAlert("Choose option for Material type.");
             return false;
          }
-         else if ($("input[name='shelf_type']:checked").length == 0)
+         else if ($("input[name='shelf_type']:checked").length == 0 || undefined)
          {
             sweetAlert("Choose option for shelf type.");
             return false;
@@ -409,6 +427,9 @@
          else if($('.partition_check').is(':visible') && $("input[name='drill_toe_kick']:checked").length == 0){
             sweetAlert("Choose drill for toe kick.");
             return false;
+         } else {
+             $('#submit-data').attr('disabled', true);
+             $('#l_self_form').submit()
          }
       
 
@@ -419,7 +440,6 @@
 $(document).on('change','.shelf_type_radio',function() {
 
     if ($(this).prop("checked") == true) {
-        console.log("val", $(this).val());
         if ($(this).val() == "2") {
            $(".partition_check").removeClass("d-none");
            $(".kd-note").removeClass("d-none");
@@ -440,9 +460,9 @@ isUpdate= ()=>{
    }
 updateSetups =() => {
       if(isUpdate()){
-         $("#submit_door").text('Update')
+         $("#submit-data").text('Update')
          $("#clear_door").text('cancel')
-        
+
       }
       else{
          $("#submit_door").text('Submit')
@@ -452,10 +472,18 @@ updateSetups =() => {
    }
 
  $(document).ready(function() {
+    value=1;
      updateSetups();
      if(window.location.search){ 
     $('.shelf_type_radio').trigger("change");
      }
+     $("input[name=mat_type][value=" + value + "]").attr('checked', 'checked');
+     $("#clear_door").on("click",function(){
+          if(isUpdate()){
+             window.location.href=window.location.pathname
+          }
+       })
+
  })
 
 $('.notch_input').change(function() {

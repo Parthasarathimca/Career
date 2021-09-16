@@ -1,0 +1,22 @@
+{% if options.type == 'DRAWER_SIZE' %}
+    {% for each_size in options.drawer_size %}
+    <div class="custom-door solid-rdo">
+        <input name="lti_drawer_size" class="form-check-input" type="radio" data-height="{{each_size.height}}" value="{{each_size.id}}" id="{{each_size.description}}"  />
+        <label class="form-check-label fs-6 fw-bold" for="{{each_size.description}}">{{each_size.description}}</label>
+    </div>
+   {% endfor %}
+   
+   <!-- <div class="custom-door">
+    <input class="form-check-input" type="radio" data-label="custom" value="Custom" id="customRdo" name="lti_drawer_size" />
+    <label class="form-check-label fs-6 fw-bold" for="customRdo">Custom</label>
+</div>  -->
+{% else %}
+
+<option selected value="0" hidden>Select</option>
+{% for size in options.door_size %}
+
+<option data-height={{size.height }} value="{{size.id}}"  data-value="{{size.description}}">{{size.description}} </option>
+{% endfor %}
+
+   
+{% endif %}

@@ -4,25 +4,26 @@
             <table class="table cleats_tbl table-alternet table-bordered">
                 <thead>
                     <tr>
-                        <th></th>
-                        <th>Action</th>
-                        <th>Room</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Material</th>
-                        <th>Qty</th>
-                        <th>Width</th>
-                        <th>Height</th>
-                        <th>Exposed Ends</th>
-                        <th>Notes</th>
+                        <th>SERIAL NO.</th>
+                        <th>ACTIONS</th>
+                        <th>ROOM</th>
+                        <th>CATEGORY</th>
+                        <th>DESCRIPTION</th>
+                        <th>MATERIAL</th>
+                        <th>QTY</th>
+                        <th>WIDTH</th>
+                        <th>HEIGHT</th>
+                        <th>DEPTH</th>
+                        <th>EXPOSED ENDS</th>
+                        <th>NOTES</th>
                     </tr>
                 </thead>
                 <tbody class="cleats_tbody">
-                {% for cleat in cleats %}
-                                <tr>
-                                    <td>{{forloop.counter}}</td>
-                                    <td>
-                                        <a href="{% url 'room_options:edit-cleat' room_id=room.id pk=cleat.id %}"
+                    {% for cleat in cleats %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>
+                            <a href="{% url 'room_options:edit-cleat' room_id=room.id pk=cleat.id %}?type={{cleat.part_sub_category}}"
                             class="btn btn-icon btn-active-light-primary w-30px h-30px me-3">
                             <span data-bs-toggle="tooltip" data-bs-trigger="hover"
                                 title="Edit">
@@ -65,18 +66,19 @@
                                     </svg>
                                 </span>
                             </a></td>
-                                    <td class="form_detail">{{cleat.room.room_name}}</td>
-                                    <td>{{cleat.part_sub_category}}</td>
-                                <td>{{cleat.description}}</td>
-                                <td>{{cleat.get_mat_type_display}}</td>
-                                <td>{{cleat.quantity|default_if_none:"-"}}</td>
+                                <td class="form_detail">{{cleat.room.room_name}}</td>
+                                <td>{{cleat.part_sub_category}}</td>
+                            <td>{{cleat.description}}</td>
+                            <td>{{cleat.get_mat_type_display|default_if_none:"-"}}</td>
+                            <td>{{cleat.quantity|default_if_none:"-"}}</td>
 
-                                <td>{{cleat.width|default_if_none:"-"}}</td>
-                                <td>{{cleat.height|default_if_none:"-"}}</td>
-                                <td>{{cleat.cleat_exposed_ends|default_if_none:"-"}}</td>
-                                <td>{{cleat.notes|default_if_none:"-"}}</td>
-                                </tr>
-                                {% endfor %}
+                            <td>{{cleat.width|default_if_none:"-"}}</td>
+                            <td>{{cleat.height|default_if_none:"-"}}</td>
+                            <td>{{cleat.depth|default_if_none:"-"}}</td>
+                            <td>{{cleat.cleat_exposed_ends|default_if_none:"-"}}</td>
+                            <td>{{cleat.notes|default_if_none:"-"}}</td>
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

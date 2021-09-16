@@ -7,14 +7,14 @@
     <div class="page-title d-lg-flex d-none  align-items-center flex-wrap me-3 mb-5 mb-lg-0 mx-3">
         <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
             <li class="breadcrumb-item text-muted">
-                <a href="{% url 'franchise:dashboard'%}"
+                <a href="{% url 'dashboard'%}"
                     class="text-muted text-hover-primary">Home</a>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-200 w-5px h-2px"></span>
             </li>
            
-            <li class="breadcrumb-item text-dark">{% block crumb %}  Create Order {% endblock %}</li>
+            <li class="breadcrumb-item text-dark">{% block crumb %}   Orders {% endblock %}</li>
         </ul>
         <!--end::Breadcrumb-->
     </div>
@@ -26,21 +26,193 @@
 <div class="post d-flex flex-column-fluid" id="kt_post">
     <!--begin::Container-->
     <div id="kt_content_container" class="container">
-
         <div class="row">
-            <div class="col-xl-6 mb-5">
+            
+            <div class="col-xl-6">
+                <div class="card mb-6 ">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">Available Customers</span>                                                
+                        </h3>
+                        <p>
+                            <button type="button" class="btn btn-secondary" id="available_referesh">
+                              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-counterclockwise" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"></path>
+                                <path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"></path>
+                                </svg>
+                            </button>
+                          </p>
+                    </div>
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0 inprogress-job-scroll ">
+                        <div class="ms-auto col-md-7 mt-4  d-flex align-items-center">
+                            <label class="fs-5 fw-bold me-2 ">Search </label>
+                            
+                            <input id='avalialbe_search' type="text" class="form-control form-control-solid" placeholder="Search here..." />
+                            <button type="button" class="btn btn-secondary" id="avalialbe_search_button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                  </svg>
+                            </button>
+                            
+                        </div>
+                        <div class="text-end mb-3">
+                            <i class="small">Search by Client name, Client ID or job ID</i>
+                        </div>
+                        <div id='job_list'>
+                        <!--begin::Table-->
+                        {% include 'franchise/job_list.html' %}
+                    </div>
+                        <!--end::Table-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <div class="col-xl-6">
+                <div class="card mb-6">
+                    <div class="card-header border-0 pt-5">
+                        <h3 class="card-title align-items-start flex-column">
+                            <span class="card-label fw-bolder fs-3 mb-1">Order in progress</span>                                                
+                        </h3>
+                    </div>
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <div class="ms-auto col-md-7 mt-4  d-flex align-items-center">
+                            <label class="fs-5 fw-bold me-2 ">Search </label>
+                            <input id="inprogress_search" type="text" class="form-control form-control-solid" placeholder="Search here... " />
+                            <button type="button" class="btn btn-secondary" id="inprogress_search_button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                  </svg>
+                            </button>
+                            
+                        </div>
+                        <div class="text-end mb-3">
+                            <i class="small">Search by Client name, Client ID or job ID</i>
+                        </div>
+                        <!--begin::Table-->
+                        <div id='inprogress_list'>
+                        <div class="table-responsive">
+                            <table class="table align-middle table-bordered table-alternet table-alternet-red table fs-6 gy-5">
+                                <thead>
+                                    <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="w-10px pe-2"></th>
+                                        <th class="min-w-125px">Job ID</th>
+                                        <th class="min-w-125px">Client ID</th>
+                                        <th class="min-w-125px">Client Name</th>
+                                    </tr>
+                                </thead>
+                                <!--begin::Table body-->
+                                <tbody class="text-gray-600 fw-bold">
+                                    <!--begin::Table row-->
+                                    {% for inprogress_project in jobs_in_progress  %}
+                                    <tr>
+                                        <!--begin::Checkbox-->
+                                        <td>
+                                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                                <input class="form-check-input inprogress_orders jId-select" type="radio" value="{{inprogress_project.id}}"  name="job-client-ID" />
+                                            </div>
+                                        </td>
+                                        <!--end::Checkbox-->
+                                        <td>
+                                            <span class="job-ID"> {{inprogress_project.job_id}}</span>
+                                        </td>
+                                        <td><span class="client-ID">{{inprogress_project.client_id}}</span></td>
+                                        <td>{{inprogress_project.client_name}}</td>
+                                    </tr>
+                                
+                                    {% endfor %}
+
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                        </div>
+                    </div>
+                        <!--end::Table-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Card-->
+            </div>
+            <div class="row">
+            <div class="col-xl-6">
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder fs-3 mb-1">Send Orders </span>                                                
+                    </h3>
+                    <div class="card-body pt-0">
+                        <div class="ms-auto col-md-7 mt-4  d-flex align-items-center">
+                            <label class="fs-5 fw-bold me-2 ">Search </label>
+                            <input id="send_orders_search" type="text" class="form-control form-control-solid" placeholder="Search here... " />
+                            <button type="button" class="btn btn-secondary" id="send_orders_search_button">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
+                                  </svg>
+                            </button>
+                            
+                        </div>
+                        <div class="text-end mb-3">
+                            <i class="small">Search by Client name, Client ID or job ID</i>
+                        </div>
+                        <!--begin::Table-->
+                        <div id='send_orders_list'>
+                        <div class="table-responsive">
+                            <table class="table align-middle table-bordered table-alternet table-alternet table fs-6 gy-5">
+                                <thead>
+                                    <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                                        <th class="w-10px pe-2"></th>
+                                        <th class="min-w-125px">Job ID1</th>
+                                        <th class="min-w-125px">Client ID</th>
+                                        <th class="min-w-125px">Client Name</th>
+                                    </tr>
+                                </thead>
+                                <!--begin::Table body-->
+                                <tbody class="text-gray-600 fw-bold">
+                                    <!--begin::Table row-->
+                                    {% for send_project in jobs_send  %}
+                                    <tr>
+                                        <!--begin::Checkbox-->
+                                        <td>
+                                            <div class="form-check form-check-sm form-check-custom form-check-solid">
+                                                <input class="form-check-input jId-select" type="radio" value="{{send_project.id}}"  name="job-client-ID" />
+                                            </div>
+                                        </td>
+                                        <!--end::Checkbox-->
+                                        <td>
+                                            <span class="job-ID"> {{send_project.job_id}}</span>
+                                        </td>
+                                        <td><span class="client-ID">{{send_project.client_id}}</span></td>
+                                        <td>{{send_project.client_name}}</td>
+                                    </tr>
+                                
+                                    {% endfor %}
+
+                                </tbody>
+                                <!--end::Table body-->
+                            </table>
+                        </div>
+                    </div>
+                        <!--end::Table-->
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+            <div class="col-xl-6 mb-6">
                 <div class="card mb-xl-8">
                     <div class="card-header border-0 pt-5">
                         <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder fs-3 mb-1">New Order</span>
-                            <span class="text-muted mt-1 fw-bold fs-7">Enter a job ID or, Enter the Client ID to see all the available job ID's for that Client ID</span>
+                            <span class="card-label fw-bolder fs-3 mb-1">Add/Edit Order</span>
+    
                         </h3>
                     </div>
                     <!--begin::Body-->
                     <div class="card-body d-flex flex-column p-0">
                         <div class="flex-grow-1 card-p pb-0">
                             <!--begin::Form-->
-                            <form class="form" id="CreateJob_form" method="POST" action="">
+                            <form class="form" method='POST' id="CreateJob_form">
                                 {% csrf_token %}
                                 <!--begin::Step 1-->
                                 <div class="current" data-kt-stepper-element="content">
@@ -48,37 +220,29 @@
                                         <div class="fv-row row">
                                             <div class="mb-5 col-6">
                                                 <label class="d-flex align-items-center fs-5 fw-bold mb-2">
-                                    <span class="required">Job ID</span>
+                                    <span class="required">Job ID</span> 													
                                 </label>
-                                                <input type="text" class="form-control form-control-lg form-control-solid" id="jobId" name="{{form.job_id.name}}" placeholder="" value="{% if form.job_id.value %} {{form.job_id.value}} {% endif %}"/>
-                                                {{form.job_id.errors.0}}
+                                                <input type="text" readonly class="form-control form-control-lg form-control-solid" id="jobId" name="{{form.job_id.name}}"  placeholder="" value="" />
                                             </div>
-
                                             <div class="col-6 mb-5">
                                                 <label class="d-flex align-items-center fs-5 fw-bold mb-2">
-                                    <span class="required">Client ID</span>
+                                    <span class="required">Client ID</span>													
                                 </label>
-                                                <input type="text" class="form-control form-control-lg form-control-solid" id="clientID" name="{{form.client_id.name}}" placeholder="" value="{% if form.client_id.value %}{{form.client_id.value}} {% endif %}"/>
-                                                {{form.client_id.errors.0}}
+                                                <input type="text" readonly class="form-control form-control-lg form-control-solid" id="clientID" name="{{form.client_id.name}}" placeholder="" value="" />
                                             </div>
-
                                         </div>
 
-                                        <div class="fv-row mb-5">
-                                            <label class="d-flex align-items-center fs-5 fw-bold mb-2">
-                                <span class="">Adj. ID</span>
-                            </label>
-                                            <input type="text" class="form-control form-control-lg form-control-solid" name="name" placeholder="" value="" />
-                                        </div>
-                                        <!--end::Input group-->
-
+                          
                                     </div>
                                 </div>
+                                <input type="hidden" id="id"  value="" />
+                                <input type="hidden" id="client_name" name="{{form.client_name.name}}"  value="" />
+                                <input type="hidden" id="job_description" name="{{form.job_description.name}}"  value="" />
                                 <!--end::Step 1-->
                                 <!--begin::Actions-->
                                 <div class="d-flex flex-stack pt-10">
-                                    <button type="submit" class="btn btn-lg btn-primary form_submit" id="createJob">
-                        <span class="indicator-label">Submit
+                                    <button type="button" class="btn btn-lg btn-primary" id="createJob">
+                        <span class="indicator-label"><span class="btn-text">Submit</span>
                         <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
                         <span class="svg-icon svg-icon-3 ms-2 me-0">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
@@ -90,24 +254,8 @@
                             </svg>
                         </span>
                         <!--end::Svg Icon--></span>
-
+                    
                     </button>
-
-                    <a class="btn btn-lg btn-primary update_submit d-none" id="createJob">
-                        <span class="indicator-label">Submit
-                        <!--begin::Svg Icon | path: icons/duotone/Navigation/Right-2.svg-->
-                        <span class="svg-icon svg-icon-3 ms-2 me-0">
-                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-                                    <polygon points="0 0 24 0 24 24 0 24" />
-                                    <rect fill="#000000" opacity="0.5" transform="translate(8.500000, 12.000000) rotate(-90.000000) translate(-8.500000, -12.000000)" x="7.5" y="7.5" width="2" height="9" rx="1" />
-                                    <path d="M9.70710318,15.7071045 C9.31657888,16.0976288 8.68341391,16.0976288 8.29288961,15.7071045 C7.90236532,15.3165802 7.90236532,14.6834152 8.29288961,14.2928909 L14.2928896,8.29289093 C14.6714686,7.914312 15.281055,7.90106637 15.675721,8.26284357 L21.675721,13.7628436 C22.08284,14.136036 22.1103429,14.7686034 21.7371505,15.1757223 C21.3639581,15.5828413 20.7313908,15.6103443 20.3242718,15.2371519 L15.0300721,10.3841355 L9.70710318,15.7071045 Z" fill="#000000" fill-rule="nonzero" transform="translate(14.999999, 11.999997) scale(1, -1) rotate(90.000000) translate(-14.999999, -11.999997)" />
-                                </g>
-                            </svg>
-                        </span>
-                        <!--end::Svg Icon--></span>
-
-                    </a>
                                 </div>
                                 <!--end::Actions-->
                             </form>
@@ -116,57 +264,8 @@
                     </div>
                     <!--end::Body-->
                 </div>
-            </div>
-            <div class="col-xl-6">
-                <div class="card mb-5">
-                    <div class="card-header border-0 pt-5">
-                        <h3 class="card-title align-items-start flex-column">
-                            <span class="card-label fw-bolder fs-3 mb-1">Order in progress</span>
-                            <span class="text-muted mt-1 fw-bold fs-7">Select one of these Jobs that are	currently NOT Completed </span>
-                        </h3>
-                    </div>
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Table-->
-                        <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
-                            <thead>
-                                <tr class="text-start text-gray-400 fw-bolder fs-7 text-uppercase gs-0">
-                                    <th class="w-10px pe-2"></th>
-                                    <th class="min-w-125px">Job ID</th>
-                                    <th class="min-w-125px">Client ID</th>
-                                </tr>
-                            </thead>
-                            <!--begin::Table body-->
-                            <tbody class="text-gray-600 fw-bold">
-                                <!--begin::Table row-->
-                                {% for job in jobs_in_progress %}
-
-                                <tr>
-                                    <!--begin::Checkbox-->
-                                    <td>
-                                        <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                            <input class="form-check-input jId-select" type="radio" value="{{job.id}}"  name="job-client-ID" data-href="{% url 'franchise:job-detail' job_id=job.id %}"/>
-                                        </div>
-                                    </td>
-                                    <!--end::Checkbox-->
-                                    <td>
-                                        <span class="job-ID">{{job.job_id}}</span>
-                                    </td>
-                                    <td><span class="client-ID">{{job.client_id}}</span></td>
-                                </tr>
-                                {% endfor %}
-
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end::Table-->
-                    </div>
-                    <!--end::Card body-->
-                </div>
-                <!--end::Card-->
-            </div>
+            </div> 
         </div>
-
 
         <!-- Begin:: table  -->
         <div class="card" id="clientJobs">
@@ -207,7 +306,7 @@
 </div>
 <div class="">
     <a href="#!" class="btn btn-primary disabled">Initial Order</a>
-    <a href="#" class="btn btn-primary add_to_order">Add to Order</a>
+    <a href="#" class="btn btn-primary add_to_order">Add To Order</a>
     <a href="#!" class="btn btn-primary replace_order">Replace Order</a>
     <a href="#!" class="btn btn-primary adj_order">Adjustment</a>
 </div>
@@ -224,50 +323,109 @@
 
 {% block extra_scripts %}
 <script>
-    // $("#createJob").click(function() {
-    //             if ($("#jobId").val() != "" && $("#clientID").val() != "") {
-    //                 $("#clientJobs").slideDown();
-    //             } else {
-    //                 Swal.fire({
-    //                             text: 'Fill required Field',                                    		
-    //                             customClass: {
-    //                                 confirmButton: 'btn btn-primary'                                							
-    //                     }
-    // 		});
-    // 	}
-      // });
+          $("#createJob").click(function() {
+            if ($("#jobId").val() != "" && $("#clientID").val() != "") {
+                if($("#createJob").find(".btn-text").text() =='Edit Order' ){
+                    window.location.href='/classy/franchise/job_detail/'+parseInt($('#id').val())
+                }
+                else if($("#createJob").find(".btn-text").text() =='Add to Order' ){
+                    window.location.href='/classy/franchise/job_detail/'+parseInt($('#id').val())
+                }
+                else{
+                    $('#CreateJob_form').submit()
+                }
+                // $("#clientJobs").slideDown();
+            } else {
+                Swal.fire({
+                    text: 'Select data from table',
+                    customClass: {
+                        confirmButton: 'btn btn-primary'
+                    }
+                });
+            }
+
+        });
+
+            // $("#client_id").val(client_name);
+            // $("#job_description").val(client_name);            
+        
+        $(document).on("change", ".jId-select", function (e) {
+            var id=this.value
+            var jID = $(this).parents("tr").find(".job-ID").text();
+            var clientID = $(this).parents("tr").find(".client-ID").text();
+            var client_name=$(this).parents("tr").find(".client-name").text();
+            var job_description=$(this).parents("tr").find(".job_description").text();
+           
+            $("#id").val(id);
+            $("#jobId").val(jID);
+            $("#clientID").val(clientID);            
+            $("#client_name").val(client_name);
+            $('#job_description').val(job_description);
+            if($(this).hasClass("available-order")){
+                $("#createJob").find(".btn-text").text("Create Order");
+            } else if($(this).hasClass("inprogress_orders"))  {
+                $("#createJob").find(".btn-text").text("Edit Order");
+            }
+            else{
+                $("#createJob").find(".btn-text").text("Add to Order");
+            }
+        });
+
+
+loadAvailableOrders=(url,searchID,type,divID,calback=null)=>{
+    $.ajax({                       
+            url: url,                  
+            data: {
+                'search_id':searchID,'type':type,
+            },
+            success: function (data) { 
+                
+                $("#"+divID).html(data); 
+                if (calback){
+                    calback()
+                }
+                
+            }
+        });
+}
+
+
+$(document).find('#avalialbe_search_button').on('click',function(e) {
+   searchID= $('#avalialbe_search').val()
+          url="{% url 'franchise:job-list' %}"
+          loadAvailableOrders(url,searchID,'Available','job_list')
+});
+
+$(document).find('#inprogress_search_button').on('click',function(e) {
+   searchID= $('#inprogress_search').val()
+          url="{% url 'franchise:job-list' %}"
+          loadAvailableOrders(url,searchID,'Inprogress','inprogress_list')
+
+});
+$(document).find('#send_orders_search_button').on('click',function(e) {
+   searchID= $('#send_orders_search').val()
+          url="{% url 'franchise:job-list' %}"
+          loadAvailableOrders(url,searchID,'send','send_orders_list')
+
+});
+function refereshAcknowledge(){
+    Swal.fire({
+    text: 'Available Customers Refereshed  ',
+    icon:  'success',
+                   
+    customClass: {
+        confirmButton: 'btn btn-primary'
+    }
+    });
+}
+$('#available_referesh').on('click',function(){
+    url="{% url 'franchise:job-list' %}"
+    $('#avalialbe_search').val('')
+    searchID=$('#avalialbe_search').val()
+    loadAvailableOrders(url,searchID,'Available','job_list',refereshAcknowledge)
     
-      $(".jId-select").change(function(){
-        var jID = $(this).parents("tr").find(".job-ID").text();
-        var clientID = $(this).parents("tr").find(".client-ID").text();    
-        $("#jobId").val(jID);
-        $("#clientID").val(clientID);
-        $('.form_submit').hide()
-        $('.update_submit').removeClass('d-none')
-      });
-
-      $(".update_submit").click(function() {
-    $("#clientJobs").slideDown();
-})
-
-$(".update_submit").on('click', function(event){
-    job_id = $("input[name=job_id]").val()
-    var html = `<tr>
-                    <td></td>
-                    <td>${job_id}</td>
-                    <td>Office</td>
-                    <td>2 March 2021</td>
-                    <td>2 March 2021</td>
-                    </tr>`;
-    $('.job_detail_table').append(html)
-
-    edit_url = $('input[type=radio][name=job-client-ID]:checked').data('href')
-
-    $(".add_to_order").attr('href', edit_url)
-    $(".replace_order").attr('href', edit_url)
-    $(".adj_order").attr('href', edit_url)
-    $("#clientJobs").slideDown();
 })
 
 </script>
+
 {% endblock %}

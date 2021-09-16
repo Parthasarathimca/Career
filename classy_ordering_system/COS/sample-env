@@ -1,0 +1,31 @@
+DATABASE_ENGINE="django.db.backends.mysql"
+DATABASE_NAME="cos_stage1"
+DATABASE_USER="root"
+DATABASE_PASSWORD="root"
+DATABASE_HOST="localhost"
+DATABASE_PORT="3306"
+
+STATIC_URL =  '/static/'
+MEDIA_URL = '/media/'
+
+# Email configs
+EMAIL_USE_TLS = True
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'satawaretester23@gmail.com'
+EMAIL_HOST_PASSWORD = 'Gsjzfk(*1307'    
+EMAIL_DEFAULT = 'noreply@cos.com'
+FROM_EMAIL_DEFAULT = 'noreply@cos.com'
+DEFAULT_FROM_EMAIL = EMAIL_DEFAULT
+
+CLASSY_URL="localhost:8000"
+
+
+TWILIO_EMAIL=classyorderingsys@gmail.com
+PASSWORD=classyorderings@123
+
+TWILIO_ACCOUNT_SID=AC0fab2a9193a5581e971de7404d0421b5
+TWILIO_AUTH_TOKEN=6f706188c528f8073663132ee1d2af0c
+FROM=+13156653049
+SERVICE_ID=MG016fa34ce6c646a56c5ac6a83b3d9d1f
+

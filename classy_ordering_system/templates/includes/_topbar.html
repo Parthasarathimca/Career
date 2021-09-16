@@ -8,10 +8,14 @@
             <!--begin::User-->
             <div class="d-flex align-items-center ms-1 ms-lg-3" id="kt_header_user_menu_toggle">
                 <!--begin::Menu wrapper-->
+                <div style="margin-right: 30px;">
+                    <span class="card-label fs-6 mb-1"><strong class="text-muted">Name:  </strong><b>{{ request.user.name|title }}</b></span><br>
+                    {% if request.user.user_role != 1 %}<span class="card-label fs-6 mb-1"><strong class="text-muted">Tenent ID:  </strong><b>{{ request.user.tenent_id|default_if_none:"-" }}</b></span>{% endif %}
+                </div>
                 <div class="cursor-pointer symbol symbol-30px symbol-md-40px"
                     data-kt-menu-trigger="click" data-kt-menu-attach="parent"
                     data-kt-menu-placement="bottom-end" data-kt-menu-flip="bottom">
-                    <img src="{% static 'images/150-26.jpg' %}" alt="Cos" />
+                    <img src="{% static 'images/no-photo-male.jpg' %}" alt="Cos" />
                 </div>
                 <!--begin::Menu-->
                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg menu-state-primary fw-bold py-4 fs-6 w-275px"

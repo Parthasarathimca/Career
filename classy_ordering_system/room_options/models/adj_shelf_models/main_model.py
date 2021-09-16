@@ -1,5 +1,5 @@
 from django.db import models
-from COS.core.utils import TimestampedModel,IsActiveManager
+from COS.core.utils import TimestampedModel,IsActiveManager,SortingModel
 from franchise.models import RoomModel
 
 # Create your models here.
@@ -8,7 +8,7 @@ from franchise.models import RoomModel
 ADJUSTABLE SHELF MAP TABLE STARTS HERE
 '''
 
-class AdjDepth(TimestampedModel):
+class AdjDepth(TimestampedModel,SortingModel):
     depth = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     depth_text = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -24,7 +24,7 @@ class AdjDepth(TimestampedModel):
         verbose_name_plural = "Adj Depth"
 
 
-class AdjWidth(TimestampedModel):
+class AdjWidth(TimestampedModel,SortingModel):
     width = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     width_text = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -39,7 +39,7 @@ class AdjWidth(TimestampedModel):
         verbose_name_plural = "Adj Width"
 
 
-class AdjMaterial(TimestampedModel):
+class AdjMaterial(TimestampedModel,SortingModel):
     material = models.BigIntegerField()
     material_text = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -54,7 +54,7 @@ class AdjMaterial(TimestampedModel):
         verbose_name_plural = "Adj Material"
 
 
-class AdjEdge(TimestampedModel):
+class AdjEdge(TimestampedModel,SortingModel):
     edge = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     edge_text = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -69,7 +69,7 @@ class AdjEdge(TimestampedModel):
         verbose_name_plural = "Adj Edge"
 
 
-class AdjInsertBacking(TimestampedModel):
+class AdjInsertBacking(TimestampedModel,SortingModel):
     backing_size = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     backing_text = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
@@ -85,7 +85,7 @@ class AdjInsertBacking(TimestampedModel):
         verbose_name_plural = "Adj Shelf Insert backing"
 
 
-class AdjExposedEnd(TimestampedModel):
+class AdjExposedEnd(TimestampedModel,SortingModel):
     end_code = models.DecimalField(decimal_places=2, max_digits=20, null=True, blank=True)
     end_code_text = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)

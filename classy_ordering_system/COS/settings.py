@@ -23,7 +23,7 @@ load_dotenv(os.path.join(BASE_DIR, "COS", ".env"))
 SECRET_KEY = '9$qwhe@i6y*&1%ahwirb3(tt343)bx7w&!co1p0y44v*1@!@i='
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*","sataware.dev","www.sataware.dev","testing.sataware.dev", "www.testing.sataware.dev"]
 
@@ -37,13 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admin_reorder',
 ]
 
 LOCAL_APPS = [
     'accounts',
     'app',
     'franchise',
-    'room_options'
+    'room_options',
+    'inventory_options',
+    'production_center',
+    'jobline',
 ]
 
 INSTALLED_APPS += LOCAL_APPS
@@ -58,6 +62,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'admin_reorder.middleware.ModelAdminReorder',
+
 ]
 
 ROOT_URLCONF = 'COS.urls'
@@ -73,6 +79,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'franchise.custom_context_processor.order_status_renderer',
             ],
         },
     },
@@ -165,3 +172,71 @@ MESSAGE_TAGS = {message_constants.DEBUG: 'debug',
                 message_constants.SUCCESS: 'success',
                 message_constants.WARNING: 'warning',
                 message_constants.ERROR: 'danger',}
+
+
+API_LOGIN_URL=os.environ.get('API_LOGIN_URL')
+API_TENENT_LIST=os.environ.get('API_TENENT_LIST')
+API_PROJECT_LIST=os.environ.get('API_PROJECT_LIST','https://staging-crm.classyclosets.com/api/projects/list')
+API_EMAIL=os.environ.get('API_EMAIL')
+API_PASSWORD=os.environ.get('API_PASSWORD')
+
+ADMIN_REORDER = (
+    # Keep original label and models
+    'sites',
+    'accounts',
+    'app',
+    'auth',
+    # Rename app
+    {'app': 'franchise', 'label': 'Job','models':('franchise.CategoryCode','franchise.ProductionCenter' )},
+
+    # Reorder app models
+        {'app': 'franchise','label': 'Room', 'models': 
+        ('franchise.RoomColorChoiceModelMap',
+         'franchise.RoomMatTypeModelMap',
+          'franchise.RoomProfileModelMap',
+          'franchise.RoomEdgeType', 
+          'franchise.RoomStainColorChoiceModelMap',
+          'franchise.ProdMeterialColorMap'),
+        },
+
+{'app': 'room_options', 'label': 'KD s ','models':('room_options.KdDepth','room_options.KdWidth',
+    'room_options.KdMaterial','room_options.KdEdge','room_options.KdInsertBacking', 'room_options.RoomOptionsMasterModel')},
+    
+{'app': 'room_options', 'label': 'Adj.Shelves ','models':('room_options.AdjDepth','room_options.AdjWidth',
+    'room_options.AdjMaterial','room_options.AdjEdge','room_options.AdjInsertBacking','room_options.AdjExposedEnd')},
+
+{'app': 'room_options', 'label': 'Doors 1/2 Pair','models':('room_options.DoorOpeningSizeMapModel','room_options.DoorOpeningheightWidthMapModel',
+    'room_options.DoorDrillMapModel','room_options.GlassTypeMapModel')},
+{'app': 'room_options', 'label': 'Doors Single','models':('room_options.DoorSingleOpeningSizeMapModel','room_options.DoorSingleOpeningheightWidthMapModel',)},
+
+{'app': 'room_options', 'label': 'Custom Form Options','models':('room_options.CustomMapCategory',
+                                                                 'room_options.CustomMapMaterial',
+                                                                 'room_options.CustomMapBoardColor',
+                                                                 'room_options.CustomMapEdgeProfile',
+                                                                 'room_options.CustomMapEdgeType',
+                                                                 'room_options.CustomMapEdgeColor',
+                                                                 'room_options.CustomStainColor',
+                                                                 'room_options.CustomMapDrill',
+                                                                 )},
+{'app': 'room_options', 'label': 'Custom Partition Drills','models':('room_options.CustomPartitionDrillMap',
+                                                                 )},
+{'app': 'room_options', 'label': 'LTI Doors','models':('room_options.DoorDrawerBaseTypeMapModel','room_options.SolidDoorMapModel',
+'room_options.DoorGlassOptionsMapModel','room_options.DoorColorsMapModel','room_options.DoorSizeMapModel','room_options.LTIDrawerSizeMapModel',)},
+
+{'app': 'room_options', 'label': 'Wood Doors','models':('room_options.WoodDoorDrawerStyleMapModel','room_options.WoodSpeciesMapModel',
+'room_options.WoodDoorColorChoiceMap','room_options.WoodDrawerSizeMapModel', 'room_options.WoodDoorDrawerSizeMapModel')},
+
+'inventory_options',
+'production_center',
+    # Exclude models
+  #  {'app': 'auth', 'models': ('auth.User', )},
+
+    # Cross-linked models
+    # {'app': 'auth', 'models': ('auth.User', 'sites.Site')},
+
+    # models with custom name
+    # {'app': 'auth', 'models': (
+    #     'auth.Group',
+    #     {'model': 'auth.User', 'label': 'Staff'},
+    # )},
+)

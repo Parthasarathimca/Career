@@ -8,8 +8,11 @@ class UserRole(object):
     '''
     ADMIN = 1
     FRANCHISE = 2
-
+    EMPLOYEE=3
+    PRODUCTION_CENTER=4
     ROLE_CHOICES = (
         (ADMIN, 'Admin'),
-        (FRANCHISE, 'Franchise')
+        (FRANCHISE, 'Franchise'),
+        (EMPLOYEE,'Employee'),
+        (PRODUCTION_CENTER,'Production Center')
     )

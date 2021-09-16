@@ -1,14 +1,14 @@
 from django import forms
-from room_options.models import RoomOptionsMasterModel
+from room_options.models import ToeKick
 
-from room_options.conf import  TOE_KICK_DEPTH_CHOICES
+from room_options.conf import TOE_KICK_DEPTH_CHOICES
 
 
 class ToeKickForm(forms.ModelForm):
 
     class Meta:
-        model = RoomOptionsMasterModel
-        fields = ['width', 'height', 'notes', 'quantity', 'end_caps', 'face_color', 'toe_kick_depth', 'plywood']
+        model = ToeKick
+        fields = ['width', 'height', 'notes', 'quantity', 'end_caps', 'face_color', 'depth', 'plywood']
         widgets = {
             'plywood': forms.CheckboxInput(attrs={
                 'class': "form-check-input"
@@ -18,7 +18,7 @@ class ToeKickForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(ToeKickForm, self).__init__(*args, **kwargs)
 
-        self.fields['toe_kick_depth'] = forms.ChoiceField(choices=TOE_KICK_DEPTH_CHOICES, required=False)
+        self.fields['depth'] = forms.ChoiceField(choices=TOE_KICK_DEPTH_CHOICES, required=False)
 
         self.fields['width'] = forms.CharField()
         self.fields['height'] = forms.CharField()
@@ -43,3 +43,9 @@ class ToeKickForm(forms.ModelForm):
         if data == 0:
             return None
         return data
+
+    def clean(self):
+
+        if not self.cleaned_data['end_caps']:
+            self.cleaned_data['face_color'] = None
+            self.cleaned_data['toe_kick_depth'] = None

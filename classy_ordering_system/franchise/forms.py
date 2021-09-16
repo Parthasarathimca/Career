@@ -1,8 +1,9 @@
 from enum import unique
 from django import forms
 from django.forms import fields, widgets
-from franchise.models import JobModel, RoomModel
-from franchise import messages
+from franchise.models import JobModel, RoomModel,ProdMeterialColorMap,RoomMatTypeModelMap
+from COS.core.utils import Projects
+
 
 class CreateJobForm(forms.ModelForm):
 
@@ -25,7 +26,8 @@ class CreateJobForm(forms.ModelForm):
 
     class Meta:
         model = JobModel
-        fields = ['job_id', 'client_id']
+        fields = ['job_id', 'client_id','client_name','job_description','email','job_install_start_date','job_install_end_date','job_updated_at',
+        'designer','is_project_admin']
 
     def __init__(self, request=None, user=None, image_path=None, *args, **kwargs):
         self.request = request
@@ -40,11 +42,23 @@ class CreateJobForm(forms.ModelForm):
             pass
         
         return job_id
-    
+
+    def clean(self):
+        project_obj=Projects()
+        available_projects=project_obj.get_available_projects(self.request.user.tenent_id)
+        #available_projects=project_obj.get_available_projects()
+        available_projects=available_projects.get('projects')
+        selected_project=[ i for i in available_projects if i.get('id')== int(self.cleaned_data.get('job_id'))]
+        selected_project=selected_project[0] if len(selected_project)==1 else {}
+        self.cleaned_data['email']=selected_project.get('email')
+        self.cleaned_data['job_install_start_date']=selected_project.get('install_start_date')
+        self.cleaned_data['job_install_end_date']=selected_project.get('install_end_date')
+        self.cleaned_data['job_updated_at']=selected_project.get('updated_at')
+        self.cleaned_data['designer']=selected_project.get('designer')
+        self.cleaned_data['is_project_admin']=selected_project.get('isProjectAdmin')
     def save(self):
         job = JobModel.objects.create(user=self.request.user, **self.cleaned_data)
         return job
-
 
 class CreateRoomForm(forms.ModelForm):
 
@@ -53,13 +67,12 @@ class CreateRoomForm(forms.ModelForm):
     class Meta:
         model = RoomModel
         fields = ['is_dd_same','room_name', 'mat_type', 'bd_color', 'ed_color', 'ed_profile', 'ed_type',
-                    'dd_color','dd_mat_type','dd_ed_profile', 'dd_ed_type', 'dd_ed_color']
+                    'dd_color','dd_mat_type','dd_ed_profile', 'dd_ed_type', 'dd_ed_color', 'mat_color_stain', 'dd_mat_color_stain',]
        # fields = ['room_name', 'is_dd_same', 'room_name', 'mat_type', 'bd_color', 'ed_color', 'ed_profile', 'ed_type']                    
         widgets = {
             'mat_type': forms.RadioSelect(),
             'dd_mat_type': forms.Select(attrs={"class": "form-select form-select-solid drawer_size",
                                                     "id":"dd_mat_type",
-                                                    "data-hide-search":"true",
                                                     "data-control":"select2",
                                                     "required":"true",
                                                     "data-placeholder": "Select  Material Type"
@@ -74,28 +87,40 @@ class CreateRoomForm(forms.ModelForm):
         }
 
 
-    def __init__(self, user=None, job=None, *args, **kwargs):
+    def __init__(self, request=None,user=None, job=None, *args, **kwargs):
+        from franchise.views import get_production_center_id
+        self.request=request
         super(CreateRoomForm, self).__init__(*args, **kwargs)
         self.job = job
         self.fields['job'] = forms.ModelChoiceField(queryset=JobModel.objects.filter(user=user))
-
+        production_center_id=get_production_center_id(self.request)
+        prod_mat= ProdMeterialColorMap.objects.filter(production_center__id__in=production_center_id)
+        
+        prod_mat=prod_mat.values('meterial_type__id')
+        
+        prod_mat_ids= [mat.get('meterial_type__id') for mat in prod_mat]
+        print(">>>>>>>",RoomMatTypeModelMap.objects.filter(id__in=prod_mat_ids))
+        self.fields['mat_type']=forms.ModelChoiceField(queryset=RoomMatTypeModelMap.objects.filter(id__in=prod_mat_ids))
 
     def clean(self):
+
         self.cleaned_data['job'] = self.job
         if 'is_dd_same' in self.cleaned_data.keys():
             if self.cleaned_data['is_dd_same']:
                 self.cleaned_data.pop('is_dd_same')
-                self.cleaned_data['dd_color'] = self.cleaned_data['bd_color']
-                self.cleaned_data['dd_mat_type'] = self.cleaned_data['mat_type']
-                self.cleaned_data['dd_ed_type'] = self.cleaned_data['ed_type']
-                self.cleaned_data['dd_ed_profile'] = self.cleaned_data['ed_profile']
-                self.cleaned_data['dd_ed_color'] = self.cleaned_data['ed_color']
+                self.cleaned_data['dd_color'] = self.cleaned_data.get('bd_color')
+                self.cleaned_data['dd_mat_type'] = self.cleaned_data.get('mat_type')
+                self.cleaned_data['dd_ed_type'] = self.cleaned_data.get('ed_type')
+                self.cleaned_data['dd_ed_profile'] = self.cleaned_data.get('ed_profile')
+                self.cleaned_data['dd_ed_color'] = self.cleaned_data.get('ed_color')
+                self.cleaned_data['dd_mat_color_stain'] = self.cleaned_data.get('mat_color_stain')
             else:
                 self.cleaned_data.pop('is_dd_same')
 
             # else:
         #     if not self.cleaned_data.get('dd_color', None) or not self.cleaned_data.get('dd_mat_type', None) or not self.cleaned_data.get('dd_ed_type', None) or not self.cleaned_data.get('dd_ed_profile', None) or not self.cleaned_data.get('dd_ed_color', None):
         #         raise forms.ValidationError("Kindly fill all the fields")
+        data = self.cleaned_data
         return self.cleaned_data
 
     def save(self):

@@ -43,7 +43,7 @@ class Email(object):
 
     def message_from_template(self, template_name, context, request=None):
         ''' Message Body '''
-        context['classy_url']=settings.CLASSY_URL
+        context['classy_url'] = settings.CLASSY_URL
         self.html = get_template(template_name).render(context, request)
         return self
 

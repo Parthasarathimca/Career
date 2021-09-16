@@ -1,0 +1,50 @@
+{% extends 'app-layout.html' %}
+
+{% block breadcrumb %}
+
+    <div class="page-title d-lg-flex d-none  align-items-center flex-wrap me-3 mb-5 mb-lg-0 mx-3">
+        <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'dashboard' %}"
+                    class="text-muted text-hover-primary">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item text-muted">
+                <a href="{% url 'franchise:create-inventory' %}" class="text-muted text-hover-primary"> Inventory Order</a>
+            </li>
+            <li class="breadcrumb-item">
+                <span class="bullet bg-gray-200 w-5px h-2px"></span>
+            </li>
+            <li class="breadcrumb-item text-dark">{% block crumb %}{% endblock %}</li>
+        </ul>
+        <!--end::Breadcrumb-->
+    </div>
+{% endblock %}
+
+{% block content %}
+     <!--begin::Post-->
+    <div class="post d-flex flex-column-fluid" id="kt_post">
+        <!--begin::Container-->
+        <div id="kt_content_container" class="container">
+            <!--begin::Row-->
+            <!-- Begin:: Basic info-->
+
+            <!-- End:: Basic info-->
+            <!--Begin::  -->
+            <div class="card mb-5 mb-xxl-4">
+                <div class="card-header border-0 pt-5 flex-column">
+                    <div class="d-flex justify-content-between mb-10 border-bottom pb-3">
+                        <h2 class="fs-2x fw-bolder">{% block option_title %}{% endblock %}</h2>
+                        <a href="{% url 'dashboard' %}" class="btn btn-primary">Exit</a>
+                    </div>
+                </div>
+            </div>
+            {% block room_form %}
+            {% endblock %}
+        </div>
+    </div>
+
+
+{% endblock %}

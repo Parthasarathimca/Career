@@ -2,13 +2,13 @@ from django.http import JsonResponse, HttpResponse, request
 from django.views.generic import FormView, RedirectView
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
-from COS.core.decorators import logged_user_view
+from COS.core.decorators import logged_user_view,is_classy_user_view
 from room_options.conf import Description
 from room_options.models import RoomOptionsMasterModel
 from room_options.forms import TopSelfForm
 from room_options.utils import RoomViewMixin
 
-
+@is_classy_user_view()
 @logged_user_view()
 class TopShelfView(FormView, RoomViewMixin):
 
@@ -21,6 +21,8 @@ class TopShelfView(FormView, RoomViewMixin):
             template_name = 'room_options/top_shelf/custom_top_shelf.html'
         elif self.request.GET.get('type')=="CUSTOM_COUNTER_TOP":
             template_name = 'room_options/top_shelf/custom_counter_top.html'
+        elif self.request.GET.get('type')=="COUNTER_TOP":
+            template_name = 'room_options/top_shelf/counter_top.html'   
         else: template_name = 'room_options/top_shelf/top_shelf.html'
         return template_name
 
@@ -32,6 +34,7 @@ class TopShelfView(FormView, RoomViewMixin):
         data.update({'room': room,
                      'request': request,
                      'description':Description.TOP_SHELF})
+
         return data
 
 
@@ -45,14 +48,23 @@ class TopShelfView(FormView, RoomViewMixin):
         if self.request.GET.get('room_item'):
             self.room_item_id=self.request.GET.get('room_item')
             context['order_items']=RoomOptionsMasterModel.objects.get(id=self.room_item_id)
+        if self.request.GET.get('type')=='COUNTER_TOP' and self.request.GET.get('room_item'):
+            width=str(context['order_items'].width)
+            str_width=width.split('.')[0]
+            context['order_items'].width=str_width+' X '+str(context['order_items'].depth)
         context.update(kwargs)
         return context
-
+       
+        
     def get_success_url(self):
-        return reverse_lazy('room_options:top-shelf',
-                            kwargs={'room_id': self.room.id},
-                                            )
-
+        type = self.request.GET.get('type')
+        if type:
+            return reverse_lazy('room_options:top-shelf', kwargs={
+            'room_id' : self.kwargs['room_id']}) + '?type=' + type 
+        else:
+            return reverse_lazy('room_options:top-shelf', kwargs={
+            'room_id' : self.kwargs['room_id']})
+     
     def form_invalid(self, form):
         print(form.errors)
         messages.error(self.request, 'Problem saving Top-Shelf')
@@ -62,7 +74,7 @@ class TopShelfView(FormView, RoomViewMixin):
         form.save()
         return super().form_valid(form)
 
-
+@is_classy_user_view()
 @logged_user_view()
 class TopShelfDeleteView(RedirectView, RoomViewMixin):
 

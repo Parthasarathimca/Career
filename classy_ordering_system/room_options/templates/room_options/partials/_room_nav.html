@@ -23,7 +23,7 @@
         {% for mroom in all_rooms %}
             <div class="room-lbl">
             <input type="radio" class="" id="room_{{mroom.id}}" data-room_text="{{mroom}}" name="roomList" value="{{mroom.id}}" >
-            <label for="room_{{mroom.id}}" class="btn">{{mroom}}</label>
+            <label for="room_{{mroom.id}}" class="btn">{{mroom|title}}</label>
             </div>
         {% endfor %}
 

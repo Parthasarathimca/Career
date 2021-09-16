@@ -32,7 +32,7 @@
             <!--begin::Menu-->
             <div class="menu menu-column menu-title-gray-800 menu-state-title-primary menu-state-icon-primary menu-state-bullet-primary menu-arrow-gray-500" id="#kt_aside_menu" data-kt-menu="true">
                 <div class="menu-item">
-                    <a class="menu-link active" href="index.html">
+                    <a class = "menu-link active" href="{% url 'dashboard' %}">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -102,29 +102,25 @@
                         <span class="menu-arrow"></span>
                     </span>
                     <div class="menu-sub menu-sub-accordion menu-active-bg">
+                        {% for job in inprogress %}
                         <div class="menu-item">
-                            <a class="menu-link" href="#!">
+                            <a href="{% url 'franchise:job-detail' job_id=job.id %}"  class="menu-link">
+
                                 <span class="menu-bullet">
                                     <span class="bullet bullet-dot"></span>
                                 </span>
-                                <span class="menu-title">Order 1</span>
+                                <span class="menu-title">Order #{{ job.job_id }}</span>
                             </a>
                         </div>
-                        <div class="menu-item">
-                            <a class="menu-link" href="#!">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">order 2</span>
-                            </a>
-                        </div>
+                        {% endfor %}
+
                     </div>
                 </div>
-
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                    <span class="menu-link">
+              
+                <div class="menu-item">
+                    <a class = "menu-link " href="{% url 'franchise:send_order_page' %}">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/Design/Substract.svg-->
+                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                             <span class="svg-icon svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                     <path d="M6,9 L6,15 C6,16.6568542 7.34314575,18 9,18 L15,18 L15,18.8181818 C15,20.2324881 14.2324881,21 12.8181818,21 L5.18181818,21 C3.76751186,21 3,20.2324881 3,18.8181818 L3,11.1818182 C3,9.76751186 3.76751186,9 5.18181818,9 L6,9 Z" fill="#000000" fill-rule="nonzero" />
@@ -133,34 +129,12 @@
                             </span>
                             <!--end::Svg Icon-->
                         </span>
-                        <span class="menu-title">Orders Sent</span>
-                        <span class="menu-arrow"></span>
-                    </span>
-                    <div class="menu-sub menu-sub-accordion menu-active-bg">
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                            <a href="#!"  class="menu-link">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Order 1</span>
-
-                            </a>
-
-                        </div>
-                        <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                            <a href="#!" class="menu-link">
-                                <span class="menu-bullet">
-                                    <span class="bullet bullet-dot"></span>
-                                </span>
-                                <span class="menu-title">Order 2</span>
-
-                            </a>
-                        </div>
-                    </div>
+                        <span class="menu-title">Send Order</span>
+                    </a>
                 </div>
 
                 <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                    <span class="menu-link">
+                    <span class="menu-link d-none">
                         <span class="menu-icon">
                             <!--begin::Svg Icon | path: icons/duotone/Communication/Group.svg-->
                             <span class="svg-icon svg-icon-2">
@@ -212,10 +186,32 @@
                         <span class="menu-title">FAQ's</span>
                     </a>
                 </div>
-                <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-1">
-                    <a class="menu-link" href="#!">
+                
+                {% if request.user.is_employee == False %}
+                <!-- <div data-kt-menu-trigger="click" class="menu-item menu-accordion mb-1">
+                    <a class = "menu-link active" href="{% url 'dashboard' %}">
                         <span class="menu-icon">
-                            <!--begin::Svg Icon | path: icons/duotone/General/Shield-protected.svg-->
+                             <span class="svg-icon svg-icon-2">
+                                <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                    <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                        <rect x="0" y="0" width="24" height="24" />
+                                        <path d="M4,4 L11.6314229,2.5691082 C11.8750185,2.52343403 12.1249815,2.52343403 12.3685771,2.5691082 L20,4 L20,13.2830094 C20,16.2173861 18.4883464,18.9447835 16,20.5 L12.5299989,22.6687507 C12.2057287,22.8714196 11.7942713,22.8714196 11.4700011,22.6687507 L8,20.5 C5.51165358,18.9447835 4,16.2173861 4,13.2830094 L4,4 Z" fill="#000000" opacity="0.3" />
+                                        <path d="M14.5,11 C15.0522847,11 15.5,11.4477153 15.5,12 L15.5,15 C15.5,15.5522847 15.0522847,16 14.5,16 L9.5,16 C8.94771525,16 8.5,15.5522847 8.5,15 L8.5,12 C8.5,11.4477153 8.94771525,11 9.5,11 L9.5,10.5 C9.5,9.11928813 10.6192881,8 12,8 C13.3807119,8 14.5,9.11928813 14.5,10.5 L14.5,11 Z M12,9 C11.1715729,9 10.5,9.67157288 10.5,10.5 L10.5,11 L13.5,11 L13.5,10.5 C13.5,9.67157288 12.8284271,9 12,9 Z" fill="#000000" />
+                                    </g>
+                                </svg>
+                            </span>
+                            
+                        </span>
+                       
+                        <span class="menu-title">Account</span>
+                        
+                    </a>
+
+                </div> -->
+                <div class="menu-item">
+                    <a class = "menu-link " href="{% url 'accounts:employee' %}">
+                        <span class="menu-icon">
+                            <!--begin::Svg Icon | path: icons/duotone/Design/PenAndRuller.svg-->
                             <span class="svg-icon svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
                                     <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -225,12 +221,13 @@
                                     </g>
                                 </svg>
                             </span>
+
                             <!--end::Svg Icon-->
                         </span>
                         <span class="menu-title">Account</span>
                     </a>
-
                 </div>
+                {% endif %}
             </div>
             <!--end::Menu-->
         </div>

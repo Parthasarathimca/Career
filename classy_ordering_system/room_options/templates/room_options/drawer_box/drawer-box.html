@@ -1,0 +1,264 @@
+
+{% extends "room_options/base_room_option.html" %}
+{% load room_extras %}
+{% block navbartitle %} Drawer Box {% endblock %}
+{% block option_title %}Drawer Box{% endblock %}
+{% block crumb %}Drawer Box{% endblock %}
+{% block extra_stylesheets %}
+<style>
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+    }
+    input[type=number] {
+    -moz-appearance: textfield;
+    }
+</style>
+{% endblock %}
+{% block room_form %}
+    <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
+        <h3 class="card-title ">
+            Selected Room : {{ room }}
+        </h3>
+    </div>
+
+    <form method="POST" action="" id="create-drawer-box-form" name="drawer-box">
+    {% csrf_token %}
+        <div class="card mb-5 mb-xxl-4">
+
+            <div class="card-body">
+                <div class="col-md-6">
+                    <div class="row">
+
+
+                        <div class="col-md-6 standard_size">
+                            <div class="mb-8 ">
+                                <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Choose Drawer
+                                    Size</label>
+
+                                <select class="form-select form-select-solid  drawer_category " data-control="select2" data-placeholder="Choose Drawer size" name="{{form.size.name}}">
+                                        <option value="0">Select</option>
+                                    {% for value, text in form.size.field.choices %}
+                                        <option {% if form.size.value == value %} selected {% endif %} value="{{value}}">{{text}}</option>
+                                     {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6 d-none custom-size mb-8">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Custom</label>
+                            <input type="text" class="form-control form-control-solid custom" name="{{ form.custom_height.name }}"
+                            value="{{ form.custom_height.value|default_if_none:"" }}"/>
+                        </div>
+
+                        <div class="mb-8 col-md-6 select-drawerSize d-none">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required ">Height </label>
+                            <input type="text" readonly class="form-control form-control-solid" name="{{ form.height.name }}"
+                                   value={{ form.height.value }} />
+                        </div>
+
+                        <div class="mb-8 d-none select-quantity col-md-6">
+                            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">No. of Drawer boxes: </label>
+                            <input type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid no_of_boxes onlyNumber" value="{{ form.quantity.value|default_if_none:"" }}" name="{{form.quantity.name}}">
+                            <!-- {{ form.quantity }} -->
+                        </div>
+
+
+
+                        <span class="text-danger box-note mb-8 d-none"><strong>Note:: </strong> First select the type of  drawer box you would like. Next,  Select how the box front should be drilled. Then select depth of box from the list or enter in a custom size. However, If it is not a standard size there will be a custom price charged.  <strong>Click outside the box when done</strong> </span>
+
+                        <div class="standard-melamine-open d-none">
+                        <div class="d-flex mb-8">
+                            {% for value, text in form.standard_melamine.field.choices %}
+
+                            <div class="form-check form-check-custom form-check-solid mx-3 mb-3 mt-2">
+                                <input class="form-check-input" type="radio"
+                                        {% if form.standard_melamine.value == value %} checked {% endif %}
+                                       value={{ value }} id="sm" name="{{ form.standard_melamine.name }}" />
+                                <label class="form-check-label fs-6 fw-bold" for="sm">{{ text }}</label>
+                            </div>
+                            {% endfor %}
+                        </div>
+
+
+                            <div class="row">
+                                <div class="mb-8 col-md-6 ">
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Depth of box</label>
+                                    <select class="form-select form-select-solid deptBox" data-control="select2"
+                                            data-placeholder="Select"
+                                            name="{{ form.depth.name }}">
+
+                                        {% for value, text in form.depth.field.choices %}
+                                            <option {% if form.depth.value == value %} selected {% endif %}
+                                                    value="{{ value }}">{{ text }}</option>
+                                        {% endfor %} 
+                                </select>
+
+                                </div>
+
+                                <div class="mb-8 col-md-6 ">
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Drill Sub
+                                    Front</label>
+                                    <select class="form-select form-select-solid drill-sub-front "
+                                            data-control="select2"
+                                            data-placeholder="Select" name="{{ form.drill_sub_front.name }}">
+                                        <option value="0">Select</option>
+                                        {% for value, text in form.drill_sub_front.field.choices %}
+                                            <option {% if form.drill_sub_front.value == value %} selected {% endif %}
+                                                    value="{{ value }}">{{ text }}</option>
+                                        {% endfor %}
+                                </select>
+                                    <i class="custom-note text-danger mt-2 d-block d-none">Note::  This selection means YOU or YOUR shop is responsible for drilling the face with custom drilling pattern. </i>
+                                </div>
+
+
+                                <div class="mb-8 col-md-6 opn-size">
+
+                                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Opening Size</label>
+
+                                    <select class="form-select form-select-solid mb-2 opening-size" data-control="select2"
+                                            data-placeholder="Select" name="{{ form.opening.name }}">
+                                        <option value="0">Select</option>
+                                        {% for value, text in form.opening.field.choices %}
+                                            <option value="{{ value }}"
+                                                    {% if form.opening.value == value %} selected {% endif %}
+                                            >{{ text }}</option>
+                                        {% endfor %}
+                                </select>
+                                <i class="text-danger subDrill"><strong>Note:: </strong> Select the opening size from the list or enter a custom size. </i>
+                                </div>
+
+                            </div>
+                    </div>
+                        <div class="notes">
+                            <label class="fs-6 fw-bold mb-2">Notes:</label>
+                            <textarea class="form-control form-control-solid" name="{{form.notes.name}}">{% if form.notes.value %}{{form.notes.value}}{% endif %}</textarea>
+                        </div>
+
+                         {% if drawer_box %}
+                <div class="d-flex justify-content-end pt-7">
+                    <a class="btn btn-secondary me-2" href="{% url 'room_options:drawer-boxes' room_id=room.id  %}">Cancel</a>
+                    <button class="btn btn-primary submit-form" id="submit-box" type="submit">Update</button>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-end pt-7">
+                    <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                    <button class="btn btn-primary submit-form" id="submit-box" type="button">Submit</button>
+                </div>
+                {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    {% include 'room_options/drawer_box/_drawer_box_table.html' with drawer_boxes=drawer_boxes %}
+{% endblock %}
+{% block extra_scripts %}
+    {% include 'room_options/_delete_room_option.html' with obj_ref='room_options:drawer-boxes' room_id=room.id %}
+    <script>
+        var height_map = {
+            {% for map, val in height_map.items %}
+                "{{ map }}" : {{ val }},
+            {% endfor %}
+        }
+        $(".drawer_category").on("select2:select select2:unselecting", function() {
+            let val = $(this).val();
+
+            if (val == "CUSTOM") { //custom
+
+                $(".custom-size").removeClass("d-none");
+                $(".select-drawerSize").addClass("d-none");
+                $(".select-quantity").removeClass("d-none");
+                $(".box-note").addClass("d-none");
+            } else {
+                $(".select-quantity").removeClass("d-none");
+                $(".custom-size").addClass("d-none");
+                $(".box-note").removeClass("d-none");
+                $(".select-drawerSize").removeClass("d-none");
+                $("input[name='height']").val(height_map[val]);
+
+            }
+
+        });
+         $(".no_of_boxes").focusout(function() {
+            if ($(this).val() != "") {
+                $(".standard-melamine-open").removeClass("d-none");
+            }
+        });
+        $(".custom").focusout(function() {
+            if ($(this).val() != "") {
+                $(".standard-melamine-open").removeClass("d-none");
+                $("input[name='height']").val($(this).val())
+
+            }
+        });
+         $(".submit-form").click(function(e) {
+
+            var drawer_category = $('.drawer_category').val();
+
+            if (drawer_category == 0 || drawer_category == null) {
+                sweetAlert('Please select drawer size');
+                return false;
+            }
+            else if ($('.custom').is(':visible') && $('.custom').val() == "") {
+                sweetAlert('Custom Field is required');
+                return false;
+            }
+            else if ($('.no_of_boxes').is(':visible') && $('.no_of_boxes').val() == "") {
+                sweetAlert('No. of boxes is required');
+                return false;
+            }
+            else if($('.deptBox').is(':visible') && $('.deptBox').val() == 0){
+                sweetAlert('Choose depth of box');
+                return false;
+            }
+            else if($('.drill-sub-front').is(':visible') && $('.drill-sub-front').val() == 0){
+                sweetAlert('Choose drill sub front');
+                return false;
+            }
+            else if($('.opening-size').is(':visible') && $('.opening-size').val() == 0){
+                sweetAlert('Choose opening size');
+                return false;
+            } else {
+                $('#submit-box').attr('disabled', true)
+                $('#create-drawer-box-form').submit()
+            }
+           
+         });
+
+
+
+        </script>
+{% if not form.size.value %}
+    <script>
+    $(document).ready(function() {
+
+        $(".drawer_category").val('0').change();
+
+    })
+</script>
+
+    {% endif %}
+    {% if drawer_box %}
+<script>
+    $(document).ready(function() {
+        {% if drawer_box.size == "CUSTOM" %}
+            $(".custom-size").removeClass("d-none");
+            $(".select-drawerSize").addClass("d-none");
+            $(".select-quantity").removeClass("d-none");
+            $(".custom").val($("input[name='height']").val())
+        {% else %}
+            $(".custom-size").addClass("d-none");
+            $(".select-drawerSize").removeClass("d-none");
+            $(".select-quantity").removeClass("d-none")
+
+        {% endif %}
+
+        $(".standard-melamine-open").removeClass("d-none");
+
+
+    })
+</script>
+    {% endif%}
+
+{% endblock %}

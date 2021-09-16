@@ -9,8 +9,9 @@
     <!--begin::Container-->
     <div class="container">
         <div class="d-flex align-items-center py-1 justify-content-end  mb-8 ">
-            <a href="{% url 'franchise:create-job' %}" class="btn btn-sm btn-primary">Create New order</a>
-            <a href="#" class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button">Create new Inventory Order</a>
+            <a href="{% url 'franchise:create-job' %}" class="btn btn-sm btn-primary">Create Project Order</a>
+            <a href="{% url 'franchise:create-inventory' %}" class="btn btn-sm btn-primary ms-3" id="kt_toolbar_primary_button">Create New Inventory Order</a>
+            <!-- <a href="#" class="btn btn-sm btn-primary ms-3" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button">Create New Inventory Order</a> -->
         </div>
         <!-- Begin:: top block -->
         <div class="row gy-5 g-xl-8">
@@ -18,7 +19,7 @@
                 <div class="card order-card card1">
                     <div class="card-body">
                         <h5>Total orders</h5>
-                        <h2>1000</h2>
+                        <h2>{{ total_orders.count }}</h2>
                     </div>
                 </div>
             </div>
@@ -26,15 +27,15 @@
                 <div class="card order-card card2">
                     <div class="card-body">
                         <h5>Total orders sent</h5>
-                        <h2>1000</h2>
+                        <h2>{{ total_orders_sent.count }}</h2>
                     </div>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="card order-card card3">
                     <div class="card-body ">
-                        <h5>Total Progress Orders</h5>
-                        <h2>1000</h2>
+                        <h5>Total In Progress Orders</h5>
+                        <h2>{{ total_orders_inprogress.count }}</h2>
                     </div>
                 </div>
             </div>
@@ -64,7 +65,7 @@
                                 <!--begin::Col-->
                                 <div class="col bg-light-warning px-6 py-8 rounded-2 me-7 mb-7">
                                     <h2 class="text-warning stat-count">
-                                        2
+                                        {{day_count}}
                                     </h2>
                                     <a href="#" class="text-warning fw-bold fs-6">Today </a>
                                 </div>
@@ -72,7 +73,7 @@
 
                                 <!--begin::Col-->
                                 <div class="col bg-light-primary px-6 py-8 rounded-2 mb-7">
-                                    <h2 class="text-primary stat-count">3</h2>
+                                    <h2 class="text-primary stat-count">{{week_count}}</h2>
                                     <a href="#" class="text-primary fw-bold fs-6">Weekly</a>
                                 </div>
                                 <!--end::Col-->
@@ -83,7 +84,7 @@
                                 <!--begin::Col-->
                                 <div class="col bg-light-danger px-6 py-8 rounded-2 me-7">
                                     <h2 class="text-danger stat-count">
-                                        9
+                                        {{month_count}}
                                     </h2>
                                     <a href="#" class="text-danger fw-bold fs-6 mt-2">Monthly</a>
                                 </div>
@@ -91,7 +92,7 @@
                                 <!--begin::Col-->
                                 <div class="col bg-light-success px-6 py-8 rounded-2">
                                     <h2 class="text-success stat-count">
-                                        20
+                                        {{year_count}}
                                     </h2>
                                     <a href="#" class="text-success fw-bold fs-6 mt-2">Yearly</a>
                                 </div>
@@ -122,115 +123,12 @@
                     <div class="card-body pt-5">
                         <!--begin::Timeline-->
                         <div class="timeline-label">
+                            
+                            {% for job in inprogress %}
                             <!--begin::Item-->
                             <div class="timeline-item">
                                 <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Jan</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-warning fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Feb</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-success fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Content-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Content-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Mar</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-danger fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Desc-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Desc-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Apr</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-primary fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-danger fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Desc-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Desc-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">12 jun</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-primary fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-danger fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Desc-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Desc-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">{{ job.create_date }}</div>
                                 <!--end::Label-->
                                 <!--begin::Badge-->
                                 <div class="timeline-badge">
@@ -238,10 +136,13 @@
                                 </div>
                                 <!--end::Badge-->
                                 <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <a href="{% url 'franchise:job-detail' job_id=job.id %}" class="fw-mormal timeline-content text-muted ps-3">Job ID :{{ job.job_id }} | Client ID :{{ job.client_id }}</a>
                                 <!--end::Text-->
                             </div>
+                            {% endfor %}
                             <!--end::Item-->
+                            <!--begin::Item-->
+
                         </div>
                         <!--end::Timeline-->
                     </div>
@@ -266,10 +167,11 @@
                     <div class="card-body pt-5">
                         <!--begin::Timeline-->
                         <div class="timeline-label">
+                            {% for job in total_sent %}
                             <!--begin::Item-->
                             <div class="timeline-item">
                                 <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Jan</div>
+                                <div class="timeline-label fw-bolder text-gray-800 fs-6">{{ job.create_date }}</div>
                                 <!--end::Label-->
                                 <!--begin::Badge-->
                                 <div class="timeline-badge">
@@ -277,110 +179,13 @@
                                 </div>
                                 <!--end::Badge-->
                                 <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
+                                <a href="{% url 'franchise:job-detail' job_id=job.id %}" class="fw-mormal timeline-content text-muted ps-3">Job ID : {{ job.job_id }} | Client ID : {{ job.client_id }}</a>
                                 <!--end::Text-->
                             </div>
+                            {% endfor %}
                             <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Feb</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-success fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Content-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Content-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Mar</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-danger fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Desc-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Desc-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 Apr</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-primary fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-danger fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Desc-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Desc-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">12 jun</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-primary fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Text-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-danger fs-1"></i>
-                                </div>
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Desc-->
-                            </div>
-                            <!--end::Item-->
-                            <!--begin::Item-->
-                            <div class="timeline-item">
-                                <!--begin::Label-->
-                                <div class="timeline-label fw-bolder text-gray-800 fs-6">21 jun</div>
-                                <!--end::Label-->
-                                <!--begin::Badge-->
-                                <div class="timeline-badge">
-                                    <i class="fa fa-genderless text-success fs-1"></i>
-                                </div>
-                                <!--end::Badge-->
-                                <!--begin::Text-->
-                                <a href="order/order-item.html" class="fw-mormal timeline-content text-muted ps-3">Job ID: 65262 | Client: 215641</a>
-                                <!--end::Text-->
-                            </div>
+
+
                         </div>
                     </div>
                     <!--end: Card Body-->
@@ -388,7 +193,7 @@
             </div>
         </div>
 
-        <!--begin::Row-->
+        <!--begin::Row-->   
         <div class="row g-5 gx-xl-8">
             <!--begin::Col-->
             <div class="col-lg-12">
@@ -413,77 +218,26 @@
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody>
+                                        {% for each_order in total_orders %}
                                         <tr>
                                             <td>
-                                                <div class="symbol symbol-45px me-2">
-                                                    13 jul
+                                                <div class="symbol symbol-45px me-2"></div>
+                                                  {{each_order.create_date}}
                                                 </div>
                                             </td>
                                             <td>
-                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
+                                                <a  class="text-dark fw-bolder text-hover-primary mb-1 fs-6">{{each_order.client_name}}</a>
                                             </td>
-                                            <td class="text-muted fw-bold">Classy Order</td>
+                                            <td class="text-muted fw-bold">{{each_order.job_description }}</td>
                                             <td class="">
-                                                2
+                                                {{each_order.job_room.count}}
                                             </td>
                                             <td class="">
-                                                <span class="badge badge-light-success">sent</span>
+                                                <span class="badge {% if each_order.order_status == 'SENT' %} badge-light-success {% else %} badge-light-warning {% endif %} ">{{each_order.order_status}}</span>
                                             </td>
 
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="symbol symbol-45px me-2">
-                                                    13 jul
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
-                                            </td>
-                                            <td class="text-muted fw-bold">Classy Order</td>
-                                            <td class="">
-                                                2
-                                            </td>
-                                            <td class="">
-                                                <span class="badge badge-light-warning">In progress</span>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="symbol symbol-45px me-2">
-                                                    13 jul
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
-                                            </td>
-                                            <td class="text-muted fw-bold">Classy Order</td>
-                                            <td class="">
-                                                2
-                                            </td>
-                                            <td class="">
-                                                <span class="badge badge-light-success">sent</span>
-                                            </td>
-
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="symbol symbol-45px me-2">
-                                                    13 jul
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <a href="#" class="text-dark fw-bolder text-hover-primary mb-1 fs-6">Brad Simmons</a>
-                                            </td>
-                                            <td class="text-muted fw-bold">Classy Order</td>
-                                            <td class="">
-                                                2
-                                            </td>
-                                            <td class="">
-                                                <span class="badge badge-light-warning">In progress</span>
-                                            </td>
-                                        </tr>
+                                       {% endfor %}
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>

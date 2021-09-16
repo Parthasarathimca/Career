@@ -1,0 +1,16 @@
+{% if  options.type == 'HEIGHT' %}
+<option value="">Select Category</option> 
+{% for each_opening in options.openings %}
+
+<option  {% if options.order_items.id == each_opening.id %} selected {% endif %}   value="{{each_opening.id}}" data-value="{{each_opening.text}}">
+     {{each_opening.width}}x {{each_opening.height}} ({{each_opening.holes | stringformat:'d' }} Holes ) </option>
+{% endfor %}
+{% endif %}
+{% if options.type == 'OPENING' %}
+
+<option value="">Select Category</option>
+{% for each_opening in  options.opeing_sizes %}
+<option {% if options.order_items.id == each_opening.id %} selected {% endif %} data-vals ={{each_opening.opening_size}} value="{{each_opening.id}}" data-value="{{each_opening.opening_size}}">{{each_opening.text}}</option>
+{% endfor %}
+
+{% endif %}

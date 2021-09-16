@@ -15,13 +15,13 @@ class CleatForm(forms.ModelForm):
         super(CleatForm, self).__init__(*args, **kwargs)
         if form_type == 'STANDARD':
             self.fields['width'] = forms.ChoiceField(choices=CLEAT_WIDTH_CHOICES)
+            self.fields['height'] = forms.CharField(widget=forms.HiddenInput())
         elif form_type == 'CUSTOM':
             self.fields['width'] = forms.CharField()
             self.fields['height'] = forms.CharField(widget=forms.HiddenInput())
         elif form_type == 'COVER':
             self.fields['width'] = forms.CharField(widget=forms.HiddenInput())
             self.fields['height'] = forms.CharField(widget=forms.HiddenInput())
-
 
         self.fields['width'].widget.attrs = ({
             'class': 'form-control width form-control-solid numberWithFloat custom-width',
@@ -30,6 +30,6 @@ class CleatForm(forms.ModelForm):
 
         self.fields['mat_type'].choices.pop(0)
         self.fields['quantity'] = forms.CharField()
-        self.fields['quantity'].widget.attrs = ({"class": "form-control form-control-solid quantity qty onlyNumber custom-qty",
-                                                "placeholder":"Qty"})
-
+        self.fields['quantity'].widget.attrs = ({"class": "form-control form-control-solid \
+                                                quantity qty onlyNumber custom-qty",
+                                                "placeholder": "Qty"})

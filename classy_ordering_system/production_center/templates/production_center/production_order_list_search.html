@@ -1,0 +1,79 @@
+
+{% if type == 'received' %}
+<div class="table-responsive">
+    <table class="table align-middle table-bordered table-alternet tbl-white fs-6 gy-5  ">
+        <thead>
+            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                <th class="w-10px pe-2"></th>
+                <th class="min-w-125px">Job ID</th>
+                <th class="min-w-125px">Job Sub ID</th>
+                <th class="min-w-125px">Client ID</th>
+                <th class="min-w-125px">Client Name</th>
+            </tr>
+        </thead>
+        <!--begin::Table body-->
+        <tbody class="text-gray-600 fw-bold">
+            <!--begin::Table row-->
+            {% for order in received_orders  %}
+            <tr>
+                <!--begin::Checkbox-->
+                <td>
+                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                        <input class="form-check-input inprogress_orders jId-select " type="checkbox" value="{{order.id}}"  name="job-client-ID_check" />
+                    </div>
+                </td>
+                <!--end::Checkbox-->
+                <td>
+                    <span class="job-ID"> {{order.job.job_id}}</span>
+                </td>
+                <td><span class="job_status_id">{{order.job_status_id}}</span></td>
+                <td><span class="client-ID">{{order.job.client_id}}</span></td>
+                <td>{{order.job.client_name}}</td>
+            </tr>
+        
+            {% endfor %}
+
+        </tbody>
+        <!--end::Table body-->
+    </table>
+</div>
+<!--  -->
+{% else %}
+<div class="table-responsive">
+    <table class="table align-middle table-bordered table-alternet table-alternet-red table fs-6 gy-5">
+        <thead>
+            <tr class="text-start fw-bolder fs-7 text-uppercase gs-0">
+                <th class="w-10px pe-2"></th>
+                <th class="min-w-125px">Job ID</th>
+                <th class="min-w-125px">Job Sub ID</th>
+                <th class="min-w-125px">Client ID</th>
+                <th class="min-w-125px">Client Name</th>
+            </tr>
+        </thead>
+        <!--begin::Table body-->
+        <tbody class="text-gray-600 fw-bold">
+            <!--begin::Table row-->
+            {% for order in completed_orders  %}
+            <tr>
+                <!--begin::Checkbox-->
+                <td>
+                    <div class="form-check form-check-sm form-check-custom form-check-solid">
+                        <input class="form-check-input inprogress_orders jId-select " type="checkbox" value="{{order.id}}"  name="job-client-ID_check" />
+                    </div>
+                </td>
+                <!--end::Checkbox-->
+                <td>
+                    <span class="job-ID"> {{order.job.job_id}}</span>
+                </td>
+                <td><span class="job_status_id">{{order.job_status_id}}</span></td>
+                <td><span class="client-ID">{{order.job.client_id}}</span></td>
+                <td>{{order.job.client_name}}</td>
+            </tr>
+        
+            {% endfor %}
+
+        </tbody>
+        <!--end::Table body-->
+    </table>
+</div>
+{% endif %}

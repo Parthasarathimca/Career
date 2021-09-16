@@ -14,7 +14,7 @@
                             <label
                                 class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Width</label>
                             <select class="form-select form-select-solid standard-width"
-                                                        data-control="select2" data-hide-search="true"
+                                                        data-control="select2"
                                                         data-placeholder="Select Width" name="{{ form.width.name }}">
                             <option selected value="">Select Depth</option>
                                 {% for value, text in form.width.field.choices %}
@@ -22,13 +22,15 @@
                                 {% endfor %}
                             </select>
                         </div>
-                        <div class="mb-4">
-                            <div class="mb-8">
-                                <label
-                                    class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Qty</label>
-                                {{ form.quantity }}
+                        <div class="col-md-3 fv-row">
+                            <label class="form-check-label fs-6 fw-bold mb-2 required"
+                                for="1mm">Height</label>
+                            {{ form.height }}
+                            <div class="col-md-1 fv-row ms-12">
+                                <label class="height-font fw-bold text-center">{{ form.height.value }}</label>
                             </div>
                         </div>
+                       
                     </div>
                 </div>
 
@@ -37,14 +39,20 @@
                         <label
                             class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Material</label>
                         <select class="form-select form-select-solid material_select material"
-                                    data-control="select2" data-hide-search="true" data-placeholder="Select Material"
-                                    name="{{form.mat_type.name}}">
-                                <option selected value="">Select Material</option>
-                                {% for value, text in form.mat_type.field.choices %}
-                                <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
-                                {% endfor %}
-                            </select>
-
+                                data-control="select2" data-hide-search="true" data-placeholder="Select Material"
+                                name="{{form.mat_type.name}}">
+                            <option selected value="">Select Material</option>
+                            {% for value, text in form.mat_type.field.choices %}
+                            <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <div class="mb-8">
+                            <label
+                                class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Qty</label>
+                            {{ form.quantity }}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -61,7 +69,7 @@
                 {% else %}
                 <div class="d-flex justify-content-end pt-7">
                     <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
-                    <button class="btn btn-primary submit-form" type="submit">Submit</button>
+                    <button class="btn btn-primary submit-form" id="cleat_submit" type="button">Submit</button>
                 </div>
                 {% endif %}
 
@@ -88,6 +96,9 @@ $("#cleat_submit").on("click", function () {
         } else if ($('#id_quantity').is(':visible') && $('.quantity').val() == "") {
             sweetAlert("Quantity is required.");
             return false;
+        } else {
+            $('#cleat_submit').attr('disabled', true);
+            $('#create-cleat-form').submit();
         }
     }
 });

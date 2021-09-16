@@ -7,22 +7,24 @@
 
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table class="table table-bordered table-alternet toe_tbl">
+                                    <table class="table table-bordered table-managed toe_tbl">
                                         <thead>
                                             <tr>
-                                                <th></th>
-                                                <th>Action</th>
-                                                <th>Room</th>
-                                                <th>Category</th>
-                                                <th>Description</th>
-                                                <th>Qty</th>
-                                                <th>Width</th>
-                                                <th>Height</th>
-                                                <th>End Caps</th>
-                                                <th>Depth</th>
-                                                <th>Face Color - same as</th>
-                                                <th>Plywood ?</th>
-                                                <th>Notes</th>
+                                                <th>SERIAL NO.</th>
+                                                <th>ACTIONS</th>
+                                                <th>ROOM</th>
+                                                <th>CATEGORY</th>
+                                                <th>DESCRIPTION</th>
+                                                <th>DESCRIPTION 2</th>
+                                                <th>QTY</th>
+                                                <th>HEIGHT</th>
+                                                <th>WIDTH</th>
+                                                <th>DEPTH</th>
+                                                <th>END CAPS</th>
+
+                                                <th>FACE COLOR - SAME AS</th>
+                                                <th>PLYWOOD ?</th>
+                                                <th>NOTES</th>
 
                                             </tr>
                                         </thead>
@@ -30,9 +32,12 @@
                                         <tbody class="toe_tbody">
 
                         {% for toe_kick in toe_kicks %}
-                                <tr>
-                                    <td>{{forloop.counter}}</td>
-                                    <td>
+                            {% for room_option in toe_kick.toe_kick_facets.all %}
+
+                                <tr {% if forloop.parentloop.counter|divisibleby:2 %}class="bg-white" {% else %}class="odd-table-row" {% endif %}>
+                                    <td>{{ counter }}</td>
+                                    {% if forloop.first %}
+                                    <td rowspan="{% if toe_kick.end_caps %}4{% else %}3{% endif %}">
                                         <a href="{% url 'room_options:edit-toe-kick' room_id=room.id pk=toe_kick.id %}"
                             class="btn btn-icon btn-active-light-primary w-30px h-30px me-3">
                             <span data-bs-toggle="tooltip" data-bs-trigger="hover"
@@ -55,7 +60,7 @@
                         </a>
 
                         <a href=""
-                        class="btn btn-icon btn-active-light-primary w-30px h-30px del-data" title="Delete" data-url="{% url 'room_options:delete-room-option' pk=toe_kick.id %}"
+                        class="btn btn-icon btn-active-light-primary w-30px h-30px del-data" title="Delete" data-url="{% url 'room_options:delete-toe-kick' room_id=room.id pk=toe_kick.id %}"
                         data-bs-toggle="tooltip" title="Delete"
                         >
                                 <span class="svg-icon svg-icon-3 mt-n1">
@@ -76,21 +81,25 @@
                                     </svg>
                                 </span>
                             </a></td>
-                                    <td class="form_detail">{{toe_kick.room.room_name}}</td>
-                                    <td>{{toe_kick.part_sub_category|default_if_none:"-"}}</td>
-                                <td>{{toe_kick.description}}</td>
+                                    {% endif %}
+                                    <td class="form_detail">{{room_option.room.room_name}}</td>
+                                    <td>{{room_option.part_sub_category|default_if_none:"-"}}</td>
+                                <td>{{room_option.description}}</td>
+                                <td>{{room_option.description2}}</td>
 
-                                <td>{{toe_kick.quantity|default_if_none:"-"}}</td>
+                                <td>{{room_option.quantity|default_if_none:"-"}}</td>
+                                <td>{{room_option.height|default_if_none:"-"}}</td>
+                                <td>{{room_option.width|default_if_none:"-"}}</td>
+                                <td>{{room_option.depth}}</td>
 
-                                <td>{{toe_kick.width|default_if_none:"-"}}</td>
-                                <td>{{toe_kick.height|default_if_none:"-"}}</td>
-                                <td>{{toe_kick.end_caps}}</td>
-                                <td>{{toe_kick.toe_kick_depth}}</td>
-                                <td>{{toe_kick.face_color}}</td>
-                                <td>{{toe_kick.plywood|yesno:"Yes,No"}}</td>
-                                <td>{{toe_kick.notes}}</td>
+                                <td>{{room_option.toe_kick_form.end_caps}}</td>
+
+                                <td>{{room_option.toe_kick_form.face_color}}</td>
+                                <td>{{room_option.plywood|yesno:"Yes,No"}}</td>
+                                <td>{{room_option.toe_kick_form.notes}}</td>
                                 </tr>
                                 {% endfor %}
+                                        {% endfor %}
                                         </tbody>
                                         <!--end::Table body-->
                                     </table>

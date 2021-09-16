@@ -2,21 +2,20 @@
 {% load room_extras %}
 {% load static %}
 
-{% block navbartitle %} Top-Shelf {% endblock %}
-{% block option_title %}Top-Shelf{% endblock %}
-{% block crumb %}Top-Shelf{% endblock %}
-
+{% block navbartitle %} Top Shelf {% endblock %}
+{% block option_title %}Top Shelf{% endblock %}
+{% block crumb %}Top Shelf{% endblock %}
 
 {% block room_form %}
 <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
     <h3 class="card-title ">
-        Selected Room : {{ room }}
+        Selected Room : {{ room|title }}
     </h3>
     <div class="buttons-type-list">
         <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=STANDARD" class="btn btn-secondary standard_btn me-4 " id="standard_shelf">Standard</a>
-        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM" class="btn btn-secondary custom me-4 custom_top_shelf " id="custom_shelf">Custom top Shelf</a>
-        <a class="btn btn-secondary counter_btn">Counter top</a>
-        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM_COUNTER_TOP" class="btn btn-secondary custom_counter_top active ">Custom counter top</a>
+        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM" class="btn btn-secondary custom me-4 custom_top_shelf " id="custom_shelf">Custom Top Shelf</a>
+        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=COUNTER_TOP"  class="btn btn-secondary counter_btn ">Counter Top</a>
+        <a href="{% url 'room_options:top-shelf' room_id=room.id  %}?type=CUSTOM_COUNTER_TOP" class="btn btn-secondary custom_counter_top active ">Custom Counter Top</a>
     </div>
 </div>
 <div class="card-header border-0 pt-5 d-block">
@@ -54,9 +53,9 @@
                         class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Exposed Ends</label>
                     <select name="{{form.exposed_ends.name}}"
                         class="form-select form-select-solid material_select custom-exposed"
-                        data-control="select2" data-hide-search="true"
-                        data-placeholder="Select Material">
-                        <option selected value="0">Select Exposed Ends</option>
+                        data-control="select2" data-hide-search="false"
+                        data-placeholder="Select Exposed Ends">
+                        <option selected value="">Select Exposed Ends</option>
                         {% for value, text in form.exposed_ends.field.choices %}
                         <option value="{{value}}" {% if order_items.exposed_ends == value %} selected {% endif %} >{{text}}</option>
                         {% endfor %}
@@ -68,7 +67,7 @@
             <div class="col-md-4 col-3 fv-row">
                 <label class="form-check-label fs-6 fw-bold mb-2 required"
                     for="1mm">Qty</label>
-                <input type="text" name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %}
+                <input type="number" min="0" oninput="this.value = Math.abs(this.value)" name="{{form.quantity.name}}" {% if order_items.quantity %} value="{{order_items.quantity}}" {% endif %}
                     class="form-control quantity form-control-solid onlyNumber custom-qty"
                     placeholder="Qty" >
             </div>
@@ -100,8 +99,8 @@
             <input type="hidden" name="{{form.part_sub_category.name}}" value="CUSTOM_COUNTER_TOP">
 
             <div class="d-flex justify-content-end pt-7">
-                <button id="clear_button" type="button" class="btn btn-secondary me-2 clear-btn ">Clear</button>
-                <button id="submit_button" type="submit" class="btn btn-primary standard_submit">Submit</button>
+                <button id="clear_button" type="button" class="btn btn-secondary me-2 clear-btn " id='clear_button'>Clear</button>
+                <button id="submit_button" type="button" class="btn btn-primary standard_submit" id='submit_button'>Submit</button>
             </div>
         </div> 
     </div>
@@ -128,17 +127,18 @@
             <table class="table door_tbl table-bordered table-alternet">
                 <thead>
                     <tr>
-                        <th>S.No</th>
-                        <th>Action</th>
-                        <th>Room</th>
-                        <th>Category</th>
-                        <th>Description</th>
-                        <th>Material</th>
-                        <th>Qty</th>
-                        <th>width</th>
-                        <th>Depth</th>
-                        <th>Exposed Ends</th>
-                        <th>Notes</th>
+                        <th>SERIAL NO.</th>
+                        <th>ACTION</th>
+                        <th>ROOM</th>
+                        <th>CATEGORY</th>
+                        <th>DESCRIPTION</th>
+                        <th>MATERIAL</th>
+                        <th>QTY</th>
+                        <th>WIDTH</th>
+                        <th>DEPTH</th>
+                        <th>HEIGHT</th>
+                        <th>EXPOSED ENDS</th>
+                        <th>NOTES</th>
                     </tr>
                 </thead>
                 <tbody class="l_shelf_tbody">
@@ -197,6 +197,7 @@
                             <td>{{ each_l_shelf.quantity }}</td>    
                             <td>{{ each_l_shelf.width }}</td>
                             <td>{{ each_l_shelf.depth }}</td>
+                            <td>{{ each_l_shelf.height }}</td>
                             <td>{{ each_l_shelf.get_exposed_ends_display }}</td>
                             <td>{{ each_l_shelf.notes }}</td>
                         </tr>
@@ -217,160 +218,93 @@
 {% block extra_scripts %}
 
 <script>    
-    $('#top_self_form').on('submit', function(e){         
+    $('.standard_submit').on('click', function(e){
+
         $(".topShelf-Depth").prop("disabled", true);
-        if($('.standard_btn').hasClass('active')) {
+        if($('.custom_counter_top').hasClass('active')) {
 
-                if(($('.standard-dummy').val() == 0 || $('.standard-dummy').val() == null) &&  $('.standard-qty').val() == "") {
-                    sweetAlert("Please fill in all the required fields.");
+
+            if($('.custom-material').val() == 0  &&  $('.custom-exposed').val() == 0 &&  $('.custom-qty').val() == "" &&  $('.custom-width').val() == "" &&  $('.custom-depth').val() == "") {
+                    sweetAlert("Please fill all fields.");
                     return false;
-                }
-                else if($('.standard-dummy').val() == 0 || $('.standard-dummy').val() == null)
-                {
-                    sweetAlert("Please select dummy.");
-                    return false;
-                }
-                else if($('.standard-qty').is(':visible') && $('.standard-qty').val() == "")
-                {
-                    sweetAlert("Quantity is required");
-                    return false;
-                }
+            } else if($('.custom-material').val() == 0 || $('.custom-material').val() == null)
+            {
+                sweetAlert("Please select material.");
+                return false;
+            } else if($('.custom-exposed').val() == 0 || $('.custom-exposed').val() == null)
+            {
+                sweetAlert("Please select exposed ends.");
+                return false;
             }
-            else if($('.custom_top_shelf').hasClass('active')) {
+            else if($('.custom-qty').val() == ""){
 
-                    if($('.top-shelf-material').val() == 0  &&  $('.top-shelf-exposed').val() == 0 &&  $('.top-shelf-qty').val() == "" &&  $('.top-shelf-width').val() == "" &&  $('.top-shelf-depth').val() == "") {
-                        sweetAlert("Please fill in all the required fields.");
-                        return false;
-                    }
-                    else if($('.top-shelf-material').val() == 0 || $('.top-shelf-material').val() == null)
-                    {
-                        sweetAlert("Please select material.");
-                        return false;
-                    }
-                    else if($('.top-shelf-exposed').val() == 0 || $('.top-shelf-exposed').val() == null)
-                    {
-                        sweetAlert("Please select exposed ends.");
-                        return false;
-                    }
-                    else if($('.top-shelf-qty').val() == ""){
-
-                        sweetAlert("Quantity is required");
-                        return false;
-                    }
-                    else if($('.top-shelf-width').val() == ""){
-
-                        sweetAlert("Width is required");
-                        return false;
-                    }
-                    else if($('.top-shelf-depth').val() == ""){
-
-                        sweetAlert("Depth is required");
-                        return false;
-                    }
-                   
+                sweetAlert("Quantity is required");
+                return false;
             }
-            else if($('.counter_btn').hasClass('active')) {
+            else if($('.custom-width').val() == ""){
 
-                if(($('.counter-dummy').val() == 0 || $('.counter-dummy').val() == null) &&  $('.counter-qty').val() == "") {
-                    sweetAlert("Please fill in all the required fields.");
-                    return false;
-                }
-                else if($('.counter-dummy').val() == 0 || $('.counter-dummy').val() == null)
-                {
-                    sweetAlert("Please select dummy.");
-                    return false;
-                }
-                else if($('.counter-qty').is(':visible') && $('.counter-qty').val() == "")
-                {
-                    sweetAlert("Quantity is required");
-                    return false;
-                }
-                   
+                sweetAlert("Width is required");
+                return false;
             }
-            else if($('.custom_counter_top').hasClass('active')) {
+            else if($('.custom-depth').val() == ""){
 
-                if($('.custom-material').val() == 0  &&  $('.custom-exposed').val() == 0 &&  $('.custom-qty').val() == "" &&  $('.custom-width').val() == "" &&  $('.custom-depth').val() == "") {
-                        sweetAlert("Please fill all fields.");
-                        return false;
-                    }
-                    else if($('.custom-material').val() == 0 || $('.custom-material').val() == null)
-                    {
-                        sweetAlert("Please select material.");
-                        return false;
-                    }
-                    else if($('.custom-exposed').val() == 0 || $('.custom-exposed').val() == null)
-                    {
-                        sweetAlert("Please select exposed ends.");
-                        return false;
-                    }
-                    else if($('.custom-qty').val() == ""){
-
-                        sweetAlert("Quantity is required");
-                        return false;
-                    }
-                    else if($('.custom-width').val() == ""){
-
-                        sweetAlert("Width is required");
-                        return false;
-                    }
-                    else if($('.custom-depth').val() == ""){
-
-                        sweetAlert("Depth is required");
-                        return false;
-                    }
-   
+                sweetAlert("Depth is required");
+                return false;
+            } else {
+                $('#submit_button').attr('disabled', true);
+                $('#top_self_form').submit();
             }
-                  
-                });
+        }
+    });
 
-                var depth =  ["Select",60, 72, 84, 96, 97];
-                
-                $(".topShelf-width").on("select2:select select2:unselecting", function () {
-                    var getWidth = $(this).val();
-                    var option_html = "";          
-                    $(".topShelf-Depth").empty();
-                    $(".edgebanding").addClass("d-none");
-                    if((getWidth == 11.75) || (getWidth == 12.50) || (getWidth == 15.75) || (getWidth == 16.50)){
-                        $.each( depth, function( i, val ) {                            
-                        if (i <= 5) {
-                        if(val == "Select")
-                            option_html += ` <option value="0">${val}</option>`;    
-                         else 
-                        option_html += ` <option value="${val}">${val}</option>`;
-                        }
-                        });                   
-                    }
-                    else {
-                        $.each( depth, function( i, val ) {                            
-                        if (i <= 4) {
-                        if(val == "Select")
-                            option_html += ` <option value="0">${val}</option>`;    
-                         else 
-                        option_html += ` <option value="${val}">${val}</option>`;
-                        }
-                        });                              
-                   }
-                   $(".topShelf-Depth").prop("disabled", false);
-                    $(".topShelf-Depth").append(option_html);
-                    $("select").select2({
-                minimumResultsForSearch: -1,
-            });
-                });
+    var depth =  ["Select",60, 72, 84, 96, 97];
+    
+    $(".topShelf-width").on("select2:select select2:unselecting", function () {
+        var getWidth = $(this).val();
+        var option_html = "";          
+        $(".topShelf-Depth").empty();
+        $(".edgebanding").addClass("d-none");
+        if((getWidth == 11.75) || (getWidth == 12.50) || (getWidth == 15.75) || (getWidth == 16.50)){
+            $.each( depth, function( i, val ) {                            
+            if (i <= 5) {
+            if(val == "Select")
+                option_html += ` <option value="0">${val}</option>`;    
+                else 
+            option_html += ` <option value="${val}">${val}</option>`;
+            }
+            });                   
+        }
+        else {
+            $.each( depth, function( i, val ) {                            
+            if (i <= 4) {
+            if(val == "Select")
+                option_html += ` <option value="0">${val}</option>`;    
+                else 
+            option_html += ` <option value="${val}">${val}</option>`;
+            }
+            });                              
+        }
+        $(".topShelf-Depth").prop("disabled", false);
+        $(".topShelf-Depth").append(option_html);
+        $("select").select2({
+            minimumResultsForSearch: -1,
+        });
+    });
 
-                $(".topShelf-Depth").on("select2:select select2:unselecting", function () {
-                    var getWidth = $(".topShelf-width").val();
-                    var getDepth = $(this).val();
-                    console.log(getWidth);
-                    $(".edgebanding").addClass("d-none");
-                    if((getWidth == 11.75) || (getWidth == 12.50) || (getWidth == 15.75) || (getWidth == 16.50)){
-                        if(getDepth <= 84 ){
-                            $(".edgebanding").removeClass("d-none");
-                        }
-                    }
-                    else{
-                        $(".edgebanding").removeClass("d-none");
-                    }
-                });
+    $(".topShelf-Depth").on("select2:select select2:unselecting", function () {
+        var getWidth = $(".topShelf-width").val();
+        var getDepth = $(this).val();
+        console.log(getWidth);
+        $(".edgebanding").addClass("d-none");
+        if((getWidth == 11.75) || (getWidth == 12.50) || (getWidth == 15.75) || (getWidth == 16.50)){
+            if(getDepth <= 84 ){
+                $(".edgebanding").removeClass("d-none");
+            }
+        }
+        else{
+            $(".edgebanding").removeClass("d-none");
+        }
+    });
 $(".clear-btn").click(function(){
     $(".topShelf-Depth").prop("disabled", true);
 });
@@ -416,14 +350,14 @@ $(document).on("click", ".del-data", function (e) {
       })
     e.preventDefault();
 });
-$("#clear_door").on("click",function(){
+$("#clear_button").on("click",function(){
           if(isUpdate()){
              window.location.href=window.location.pathname
           }
        })
 
 isUpdate= ()=>{
-      if(window.location.search.indexOf('room_item')==1){
+      if(window.location.search.indexOf('room_item')>0){
          return true;
       }
       else{
@@ -445,6 +379,8 @@ updateSetups =() => {
 
  $(document).ready(function() {
      updateSetups();
+
+     $('select[name="mat_type"]').val(1).trigger("change");
  })
 
 </script>

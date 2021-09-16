@@ -1,8 +1,8 @@
 {% extends 'room_options/base_room_option.html' %} {% load static custom_tag %}
 {% load room_extras %}
-{% block navbartitle %} Adjustable shelve{% endblock %}
-{% block option_title %}Adjustable shelve{% endblock %}
-{% block crumb %}Adjustable shelve{% endblock %}
+{% block navbartitle %} Adjustable Shelf{% endblock %}
+{% block option_title %}Adjustable Shelf{% endblock %}
+{% block crumb %}Adjustable Shelf{% endblock %}
 {% block extra_stylesheets %}
 <style>
     .pdtop-20
@@ -26,19 +26,19 @@
 {% endblock %}
 
 {% block room_form %}
-<form method="POST" action="">
+<form method="POST" action="" id="adj_form">
     {% csrf_token %}
     <div class="d-lg-flex mb-8 pb-3 mt-8 justify-content-between align-items-center">
-        <h2 class="selected_room">Selected Room: {% if form.room.value %} {{form.room.value}} {% else %} {{selected_room.room_name}} {% endif %}</h2>
+        <h2 class="selected_room">Selected Room: {{ room|title }}</h2>
         {% for room in rooms %}
         <input type="hidden" name="room" data-url="{% url 'franchise:room-detail' room_id=room.id %}" value="{{room.id}}"  {% if form.room.value == room.id %} checked {% endif %} {% if selected_room.id == room.id %} checked {% endif %}/>
         {% endfor %}
         <div class="buttons-type-list">
-            <a class="btn btn-primary me-4" href="{% url 'room_options:room-adj-shelf' room_id=room.id  %}?type=STANDARD">Standard</a>
-            <a class="btn btn-primary me-4" href="{% url 'room_options:room-adj-shelf' room_id=room.id %}?type=CUSTOM">Custom Adj
-            Shelves</a>
-            <a class="btn btn-primary me-4" href="{% url 'room_options:room-adj-shelf' room_id=room.id %}?type=1_IN_KD">1 in Adj Shelf</a>
-            <a class="btn btn-primary " href="{% url 'room_options:room-adj-shelf' room_id=room.id %}?type=SHOE_SHELF">Shoe Shelf</a>
+            <a class="btn btn-secondary me-2 text-center standard-btn active" href="{% url 'room_options:room-adj-shelf' room_id=room.id  %}?type=STANDARD">Standard</a>
+            <a class="btn btn-secondary me-2 text-center standard-btn" href="{% url 'room_options:room-adj-shelf' room_id=room.id %}?type=CUSTOM">Custom Adj
+                Shelf</a>
+            <a class="btn btn-secondary me-2 text-center standard-btn" href="{% url 'room_options:room-adj-shelf' room_id=room.id %}?type=1_IN_ADJ">1 In Adj Shelf</a>
+            <a class="btn btn-secondary me-2 text-center standard-btn" href="{% url 'room_options:room-adj-shelf' room_id=room.id %}?type=SHOE_SHELF">Shoe Shelf</a>
         </div>
     </div>
     <!-- End:: Basic info-->
@@ -57,31 +57,33 @@
                         <div class="mb-8">
                             <label
                                 class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Depth</label>
-                            <select class="form-select form-select-solid depth_select" data-control="select2" data-hide-search="true" data-placeholder="Select Depth" name="{{form.depth.name}}" required="true">
+                            <select class="form-select form-select-solid depth_select adj-depth" data-control="select2" data-placeholder="Select Depth" name="{{form.depth.name}}" required="true">
                                 <option selected value="">Select Depth</option>
                                 {% for value, text in form.depth.field.choices %}
-                                <option value="{{value}}" {% if form.depth.value == value %} selected {% endif %} >{{text}}"</option>
+                                <option value="{{value}}" {% if form.depth.value|floatformat == text|floatformat %} selected {% endif %} >{{text}}</option>
                                 {% endfor %}
                             </select>
-                            {{form.depth.errors.0}}
                         </div>
+                        {{form.depth.errors.0}}
+                       
                         <div class="mb-8">
                             <label
                                 class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Width</label>
-                            <select class="form-select form-select-solid height_select" data-control="select2" data-hide-search="true" data-placeholder="Select Width" name="{{form.width.name}}" required="true">
+                            <select class="form-select form-select-solid height_select adj-width" data-control="select2" data-placeholder="Select Width" name="{{form.width.name}}" required="true">
                                 <option selected value="">Select Width</option>
                                 {% for value, text in form.width.field.choices %}
-                                <option value="{{value}}" {% if form.width.value == value %} selected {% endif %} >{{text}} "</option>
+                                <span>{{value}}</span>
+                                <option value="{{value}}" {% if form.width.value|floatformat == text|floatformat %} selected {% endif %}>{{text}} "</option>
                                 {% endfor %}
                             </select>
-                            {{form.width.errors.0}}
                         </div>
+                        {{form.width.errors.0}}
                     </div>
                     <div class="col-md-6">
                         <div class="mb-8">
                             <label
                                 class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Material</label>
-                            <select class="form-select form-select-solid material_select" data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{form.mat_type.name}}" required="true">
+                            <select class="form-select form-select-solid material_select" data-control="select2" data-placeholder="Select Material" name="{{form.mat_type.name}}" required="true">
                                 <option selected value="">Select Material</option>
                                 {% for value, text in form.mat_type.field.choices %}
                                 <option value="{{value}}" {% if form.mat_type.value == value %} selected {% endif %} >{{text}}</option>
@@ -92,7 +94,7 @@
                         <div class="mb-8">
                             <label
                                 class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Qty</label>
-                            <input type="text" class="form-control form-control-solid qty" placeholder="Qty" name="{{form.quantity.name}}" value="{% if form.quantity.value %} {{form.quantity.value}} {% endif %} " required="true"/>
+                            <input type="number" min="0" oninput="this.value = Math.abs(this.value)" class="form-control form-control-solid qty" placeholder="Qty" name="{{form.quantity.name}}" value="{% if form.quantity.value %}{{form.quantity.value}}{% endif %}" required/>
                             {{form.quantity.errors.0}}
                         </div>
                     </div>
@@ -101,112 +103,24 @@
                         <textarea class="form-control form-control-solid standard_notes" name="{{form.notes.name}}" >{% if form.notes.value %} {{form.notes.value}} {% endif %}</textarea>
                     </div>
                     <input type="hidden" name="{{form.part_sub_category.name}}" value="STANDARD">
+                    {% if room_adj %}
                     <div class="d-flex justify-content-end pt-7">
-                        <button
-                            class="btn btn-secondary me-2 clear-btn ">Clear</button>
-                        <button class="btn btn-primary standard_submit"
-                            id="submit">Submit</button>
+                        <a class="btn btn-secondary me-2" href="{% url 'room_options:room-adj-shelf' room_id=room.id  %}">Cancel</a>
+                        <button class="btn btn-primary standard_submit submit-form" id="submit-data" type="button">Update</button>
                     </div>
+                    {% else %}
+                    <div class="d-flex justify-content-end pt-7">
+                        <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                        <button class="btn btn-primary standard_submit" id="submit-data" type="button">Submit</button>
+                    </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 </form>
-<div class="card mb-5 mb-xxl-8">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-lg-12">
-                <div class="card-body">
-                    <!--begin::Card body-->
-                    <div class="table-responsive">
-                        <!--begin::Table-->
-                        <table
-                            class="table table-alternet fs-6 gy-5 table-bordered"
-                            id="kt_table_users">
-                            <thead>
-                                <tr>
-                                    <th class="min-w-125px">Serial No.</th>
-                                    <th class="min-w-125px">Actions</th>
-                                    <th class="min-w-125px">Room ID</th>
-                                    <th class="min-w-125px">Category</th>
-                                    <th class="min-w-125px">Description</th>
-                                    <th class="min-w-125px">Depth</th>
-                                    <th class="min-w-125px">Width</th>
-                                    <th class="min-w-125px">Material</th>
-                                    <th class="min-w-125px">Quantity</th>
-                                    <th class="min-w-125px">Notes</th>
-                                </tr>
-                            </thead>
-                            <!--begin::Table body-->
-                            <tbody class="text-gray-600 fw-bold kd_table" id="data_table">
-                                {% for shelf in adj_shelves_standard %}
-                                <tr>
-                                    <td>{{forloop.counter}}</td>
-                                    <td>
-                                        <a href="{% url 'room_options:update-room-adj-shelf' room_id=room.id id=shelf.id %}?type={{shelf.part_sub_category}}"
-                                            class="btn btn-icon btn-active-light-primary w-30px h-30px me-3">
-                                            <span data-bs-toggle="tooltip" data-bs-trigger="hover"
-                                                title="Edit">
-                                                <span class="svg-icon svg-icon-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                                        width="24px" height="24px"
-                                                        viewBox="0 0 24 24" version="1.1">
-                                                        <path
-                                                            d="M12.2674799,18.2323597 L12.0084872,5.45852451 C12.0004303,5.06114792 12.1504154,4.6768183 12.4255037,4.38993949 L15.0030167,1.70195304 L17.5910752,4.40093695 C17.8599071,4.6812911 18.0095067,5.05499603 18.0083938,5.44341307 L17.9718262,18.2062508 C17.9694575,19.0329966 17.2985816,19.701953 16.4718324,19.701953 L13.7671717,19.701953 C12.9505952,19.701953 12.2840328,19.0487684 12.2674799,18.2323597 Z"
-                                                            fill="#000000" fill-rule="nonzero"
-                                                            transform="translate(14.701953, 10.701953) rotate(-135.000000) translate(-14.701953, -10.701953)" />
-                                                        <path
-                                                            d="M12.9,2 C13.4522847,2 13.9,2.44771525 13.9,3 C13.9,3.55228475 13.4522847,4 12.9,4 L6,4 C4.8954305,4 4,4.8954305 4,6 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,13 C20,12.4477153 20.4477153,12 21,12 C21.5522847,12 22,12.4477153 22,13 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,6 C2,3.790861 3.790861,2 6,2 L12.9,2 Z"
-                                                            fill="#000000" fill-rule="nonzero"
-                                                            opacity="0.3" />
-                                                    </svg>
-                                                </span>
-                                            </span>
-                                        </a>
-                                        <a href="#"
-                                            class="btn btn-icon btn-active-light-primary w-30px h-30px del-data" title="Delete" data-url="{% url 'room_options:delete-room-option' pk=shelf.id %}"
-                                            data-bs-toggle="tooltip" title="Delete"
-                                            >
-                                            <span class="svg-icon svg-icon-3 mt-n1">
-                                                <svg xmlns="http://www.w3.org/2000/svg"
-                                                    xmlns:xlink="http://www.w3.org/1999/xlink"
-                                                    width="24px" height="24px" viewBox="0 0 24 24"
-                                                    version="1.1">
-                                                    <g stroke="none" stroke-width="1" fill="none"
-                                                        fill-rule="evenodd">
-                                                        <rect x="0" y="0" width="24" height="24" />
-                                                        <path
-                                                            d="M6,8 L6,20.5 C6,21.3284271 6.67157288,22 7.5,22 L16.5,22 C17.3284271,22 18,21.3284271 18,20.5 L18,8 L6,8 Z"
-                                                            fill="#000000" fill-rule="nonzero" />
-                                                        <path
-                                                            d="M14,4.5 L14,4 C14,3.44771525 13.5522847,3 13,3 L11,3 C10.4477153,3 10,3.44771525 10,4 L10,4.5 L5.5,4.5 C5.22385763,4.5 5,4.72385763 5,5 L5,5.5 C5,5.77614237 5.22385763,6 5.5,6 L18.5,6 C18.7761424,6 19,5.77614237 19,5.5 L19,5 C19,4.72385763 18.7761424,4.5 18.5,4.5 L14,4.5 Z"
-                                                            fill="#000000" opacity="0.3" />
-                                                    </g>
-                                                </svg>
-                                            </span>
-                                        </a>
-                                    </td>
-                                    <td class="form_detail">{{shelf.room.room_name}}</td>
-                                    <td>{{shelf.description}}</td>
-                                    <td>{{shelf.part_sub_category}}</td>
-                                    <td>{{shelf.depth}}</td>
-                                    <td>{{shelf.width}}</td>
-                                    <td>{{shelf.mat_type}}</td>
-                                    <td>{{shelf.quantity}}</td>
-                                    <td>{{shelf.notes}}</td>
-                                </tr>
-                                {% endfor %}    
-                            </tbody>
-                            <!--end::Table body-->
-                        </table>
-                        <!--end::Table-->
-                    </div>
-                </div>
-                <!--end::Card body-->
-            </div>
-        </div>
-    </div>
-</div>
+{% include 'room_options/partials/_adj_shelf_table.html' with adj_shelves=adj_shelves %}
+
 {% endblock %}
 
 {% block extra_scripts %}
@@ -254,10 +168,7 @@
         var height = $(ele).find(".height_select  option:selected").val();
         var qty = $(ele).find(".qty").val();
         var notes = $(ele).find(".standard_notes").val();
-    
-        console.log("ele", ele);
-        console.log(material, depth, height, qty);
-    
+
         if (material == 0 && depth == 0 && height == 0 && qty == 0) {
             e.preventDefault();
             sweetAlert('Please Fill all the Field');
@@ -274,43 +185,28 @@
         }
         else if (depth == 0 || depth == undefined) {
             e.preventDefault();
-            sweetAlert('depth is required.');
+            sweetAlert('Depth is required.');
     
         }
         else if (height == 0 || height == undefined) {
             e.preventDefault();
-            sweetAlert('height is required.');
+            sweetAlert('Width is required.');
     
         }
         else if (qty == "") {
             e.preventDefault();
             sweetAlert('Quantity is required.');
-        }
-    
+        }  else if (qty <= 0) {
+                sweetAlert('Quantity must be greater than zero.');
+        } 
     
         else {
-            $(this).parents('form').submit()
-            // var html = `<tr>
-            //             <td>1</td>
-            //             ${actions}
-            //             <td>Room 1</td>
-            //             <td>${category}</td>
-            //             <td>${depth}</td>
-            //             <td>${height}</td>
-            //             <td>${material}</td>
-            //             <td>${qty}</td>
-            //             <td>--</td>
-            //             <td>--</td>
-            //             <td>--</td>   
-            //             <td>${notes}</td>
-            //         </tr>`;
-    
-    
-            // $(".adj_table").append(html);
-    
+            $('#submit-data').attr('disabled', true);
+            $('#adj_form').submit();
         }
-    
     })
+
+   
     
     $(".add-kd-shelves").click(function(e) {
         var ele = $(this).parents('.add-block');
@@ -451,10 +347,10 @@
         }
     
         else if (depth == 0 || depth == undefined) {
-            sweetAlert('depth is required.');
+            sweetAlert('Depth is required.');
         }
         else if (width == 0 || width == undefined) {
-            sweetAlert('depth is required.');
+            sweetAlert('Width is required.');
         }
     
         else if (quantity == "") {
@@ -719,7 +615,64 @@
         value = $('input[type=radio][name=room]:checked').siblings('label').text();
         $("#data_table td.form_detail:contains('" + value + "')").parent().show();
         $("#data_table td.form_detail:not(:contains('" + value + "'))").parent().hide();
+        $(".adj-depth").on("select2:select select2:unselecting", function () {
+            var getVal = $(this).val();
+            var option = $(this).find("option");
+            var getIndex = $(this).prop('selectedIndex');
+            var option_html = "<option disabled selected value> -- Select Depth -- </option>";
+            var option_html = "";
+            // console.log(getVal = 12);
+            if(getVal != 12){
+                $(".hole3chk").show();
+            } else {
+                $(".hole3chk").hide();
+            }
+
+            option.each(function(i, v) {
+                if (i > 0) {
+                    if (getIndex >= i) {
+                        option_html += ` <option value="${$(this).val()}">${$(this).text()}</option>`;
+                    }
+                }
+        });
+
+        $("select").select2({
+            minimumResultsForSearch: -1,
+        });
+        checkDrillPattern();
+        });
+
+        $(".adj-width").on("select2:select select2:unselecting", function () {
+            console.log("calling me ")
+            var getVal = $(this).val();
+            var option = $(this).find("option");
+            var getIndex = $(this).prop('selectedIndex');
+            console.log("calling me ", getIndex, getVal, option, "------------------------")
+            var option_html = "<option disabled selected value> -- Select Width -- </option>";;
+            option.each(function(i, v) {
+                if (i > 0) {
+                    if (getIndex >= i) {
+                        option_html += ` <option value="${$(this).val()}">${$(this).text()}</option>`;
+                    }
+                }
+            });
+
+            $("select").select2({
+                minimumResultsForSearch: -1,
+            });
+            checkDrillPattern();
+        });
+
+        function checkDrillPattern() {
+
+            if ($(".adj-depth").val() != 0 && $(".adj-width").val() != 0) {
+                $("input[name='drill_pattern_left']").prop("disabled", false);
+                $("input[name='drill_pattern_right']").prop("disabled", false);
+                }          
+        
+        }
     })
+
     
 </script>
 {% endblock %}

@@ -1,0 +1,343 @@
+{% extends "room_options/base_room_option.html" %}
+{% load room_extras %}
+{% block navbartitle %} Custom Form{% endblock %}
+{% block option_title %}Custom Form{% endblock %}
+{% block crumb %}Custom Form{% endblock %}
+{% block room_form %}
+    <div class="d-md-flex align-items-center py-1 justify-content-between  mt-8 mb-4">
+        <h3 class="card-title ">
+            Selected Room : {{ room }}
+        </h3>
+    </div>
+    <div class="card mb-5 mb-xxl-8 standard_shelf_block">
+        <div class="card-header border-0 pt-5 d-block">
+            <h3 class="card-title align-items-start flex-row justify-content-between w-100 align-items-center">
+                Custom Items
+            </h3>
+        </div>
+        <div class="card-body">
+
+    <form method="POST" action="" id="custom-form" name="custom-form">
+    {% csrf_token %}
+
+
+    <div class="row">
+        <div class="row">
+        <div class="col-lg-12">
+            <div class="row g-2">
+                <div class="mb-8 col-md-4">
+                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Category</label>
+
+                     <select class="form-select form-select-solid material_select top-shelf-material category" data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ form.category.name }}">
+                            <option value="">Select</option>
+                        {% for value, text in form.category.field.choices %}
+                            <option {% if form.category.value == value %} selected {% endif %} value="{{value}}">{{text}}</option>
+                         {% endfor %}
+                    </select>
+                </div>
+                <div class="mb-8 col-md-4">
+                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required ">Material</label>
+                    <select class="form-select form-select-solid material_select top-shelf-material material"
+                            data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ form.custom_material.name }}">
+
+                      </select>
+                </div>
+                <div class="mb-8 col-md-4">
+                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Board color</label>
+                    <select class="form-select form-select-solid material_select board_color"
+                            data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ form.custom_bd_color.name }}">
+
+                      </select>
+                </div>
+            </div>
+        </div>
+        </div>
+     <div class="row">
+        <div class="col-lg-12">
+            <div class="row g-2">
+                <div class="col-md-3 col-6 mb-8">
+                    <label class="fs-6 fw-bold mb-2">Qty</label>
+                    <input type="text" name="quantity" class="form-control form-control-solid onlyNumber quantity" required
+                           placeholder="Qty" id="id_quantity" value="{{ form.quantity.value }}">
+
+                </div>
+                <div class="col-md-3 col-6 mb-8">
+                    <label class="fs-6 fw-bold mb-2">Height</label>
+                    {{ form.height }}
+                </div>
+                <div class="col-md-3 col-6 mb-8 "  >
+                    <label class="fs-6 fw-bold mb-2">Width</label>
+                    {{ form.width }}
+                </div>
+                <div class="col-md-3 col-6 mb-8">
+                    <label class="fs-6 fw-bold mb-2">Depth</label>
+                    {{ form.depth }}
+                </div>
+            </div>
+        </div>
+     </div>
+        {% include 'room_options/custom/_sides.html' with num='l1'  name="Long Side 1" %}
+        {% include 'room_options/custom/_sides.html' with num='l2' name="Long Side 2" %}
+        {% include 'room_options/custom/_sides.html' with num='s1' name="Short Side 1" %}
+        {% include 'room_options/custom/_sides.html' with num='s2' name="Short Side 2" %}
+
+        <div class="drill-display-btn d-none add-drill pt-3 pb-7 border-1 bg-light">
+            <div class="d-flex justify-content-end pt-7">
+                <button type="button" class="btn btn-primary button" ><i class="fa fa-plus"></i> Add Drill pattern</button>
+            </div>
+           <div class="row drill-display d-none">
+                <div class="notes col-lg-6">
+                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Left Drill pattern</label>
+                    <select class="form-select form-select-solid material_select drill_pattern" disabled
+                            data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ form.custom_drill_left.name }}">
+
+                     </select>
+                </div>
+                <div class="notes col-lg-6">
+                    <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Right Drill pattern</label>
+                    <select class="form-select form-select-solid material_select drill_pattern" disabled
+                            data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ form.custom_drill_right.name }}">
+
+                     </select>
+                </div>
+            </div>
+        </div>
+        <div class="notes col-lg-6">
+            <div class="stain-color-display d-none">
+            <label class="fs-6 fw-bold mb-2 mt-md-0 mt-3 required">Stain color</label>
+            <select class="form-select form-select-solid material_select st_color"
+                    data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ form.custom_st_color.name }}">
+
+             </select>
+            </div>
+        </div>
+
+        <div class="notes col-lg-6">
+            <label class="fs-6 fw-bold mb-2">Notes : </label>
+
+             <textarea class="form-control form-control-solid standard_notes" name="{{form.notes.name}}">{% if form.notes.value %}{{form.notes.value}}{% endif %}</textarea>
+        </div>
+
+            {% if custom %}
+                <div class="d-flex justify-content-end pt-7">
+                    <a class="btn btn-secondary me-2" href="{% url 'room_options:custom' room_id=room.id  %}">Cancel</a>
+                    <button class="btn btn-primary submit-form" type="button">Update</button>
+                </div>
+                {% else %}
+                <div class="d-flex justify-content-end pt-7">
+                    <button class="btn btn-secondary me-2 clear-btn clear-data" type="reset">Clear</button>
+                    <button class="btn btn-primary submit-form" type="button">Submit</button>
+                </div>
+            {% endif %}
+</form>
+        {% include 'room_options/custom/_custom_table.html' with customs=customs %}
+        </div>
+    </div>
+{% endblock %}
+{% block extra_scripts %}
+    {% include 'room_options/_delete_room_option.html' with obj_ref='room_options:custom' room_id=room.id %}
+    
+    <script>
+
+    function disableSides(selector){
+        $(selector).addClass('block-disabled')
+        $(selector +' .edge-profile' ).attr("disabled", "disabled").val(null).change();
+        $(selector +' .edge-type' ).attr("disabled", "disabled").val(null).change();
+        $(selector +' .edge-color' ).attr("disabled", "disabled").val(null).change();
+    }
+
+    function enableSides(selector, ed_type){
+        $(selector).removeClass('block-disabled')
+        $(selector +' .edge-profile' ).attr("disabled", false).attr("required", true);
+        $(selector +' .edge-type' ).attr("disabled", false).attr("required", true);
+        $(selector +' .edge-color' ).attr("disabled", false).attr("required", true);
+        $(selector +' .edge-type').select2({data: ed_type , minimumResultsForSearch: -1}).change();
+    }
+
+    function disablevals(selector){
+        $(selector).attr("readonly", "readonly");
+    }
+
+    function enablevals(selector){
+        $(selector).attr("readonly", false).attr("required", true);
+    }
+
+    </script>
+    
+    <script>
+    
+        {% autoescape off %}
+        var lookup = {{ lookup }};
+        var matLookup = {{ mat_lookup }};
+        var colorLookup = {{ color_lookup }};
+
+        {% endautoescape %}
+      $('.category').on('change', function () {
+            let value = $(this).val();
+            let selection = _.result(_.find(lookup, function(obj) {return obj.id == value;}), 'text')
+            if(lookup[selection] != undefined ){
+                $('.material').empty();
+                $('.material').select2({data: lookup[selection].mat_type, minimumResultsForSearch: -1}).change();
+                // by default disable
+                lookup[selection].height ? enablevals('#id_height'):disablevals('#id_height')
+                lookup[selection].width ? enablevals('#id_width'):disablevals('#id_width')
+                lookup[selection].depth ? enablevals('#id_depth'):disablevals('#id_depth')
+                if (lookup[selection].drills.length > 1){
+                    $('.drill-display-btn').removeClass('d-none');
+                    $(".drill-display-btn").on("click", function () {
+                        $('.drill-display').removeClass('d-none');
+                        $('.drill-display-btn button').text("Drill Options").attr('disabled', true);
+                    })
+                    $('.drill_pattern').empty().attr('disabled', false);
+                    $('.drill_pattern').select2({data: lookup[selection].drills , minimumResultsForSearch: -1}).change();
+                }
+                else {
+                    $('.drill-display-btn').addClass('d-none');
+                    $('.drill_pattern').empty().attr('disabled', true);
+                }
+
+            }
+            
+        }).change();
+
+        function checkSide(selector){
+            if($(selector +' .edge-profile' ).val() == ""){
+                console.log("on1");
+                return false;
+            }
+            if($(selector +' .edge-type' ).val() == ""){console.log("two");return false;}
+            if($(selector +' .edge-color' ).val() == ""){return false;}
+
+            return true
+        }
+
+        $('.material').on('change', function () {
+
+            $('.stain-color-display').addClass('d-none');
+            $('.st_color').empty();
+
+            let value = $(this).val();
+
+
+            let selection = _.result(_.find(matLookup, function (obj) {return obj.id == value;}), 'text')
+            if(matLookup[selection] != undefined ) {
+
+                $('.board_color').empty();
+                $('.board_color').select2({data: matLookup[selection].bd_color , minimumResultsForSearch: -1}).change();
+
+                if(! $('#id_height').val()){ $('#id_height').val(matLookup[selection].height) };
+                if(! $('#id_width').val()){ $('#id_width').val(matLookup[selection].width)};
+                if(! $('#id_depth').val()){ $('#id_depth').val(matLookup[selection].depth)};
+
+                matLookup[selection].long_side_1 ?  enableSides('#long-side-1', matLookup[selection].ed_type) : disableSides('#long-side-1');
+                matLookup[selection].long_side_2 ?  enableSides('#long-side-2', matLookup[selection].ed_type) : disableSides('#long-side-2');
+                matLookup[selection].short_side_1 ?  enableSides('#short-side-1', matLookup[selection].ed_type) : disableSides('#short-side-1');
+                matLookup[selection].short_side_2 ?  enableSides('#short-side-2', matLookup[selection].ed_type) : disableSides('#short-side-2');
+                if (matLookup[selection].st_color.length > 1){
+                    $('.stain-color-display').removeClass('d-none');
+                    $('.st_color').empty();
+                    $('.st_color').select2({data: matLookup[selection].st_color , minimumResultsForSearch: -1}).change();
+                }
+
+            }
+        })
+
+
+
+     $('.edge-type').on('change', function () {
+            let value = $(this).val();
+
+            let selection = _.result(_.find(colorLookup, function (obj) {return obj.id == value;}), 'text')
+
+         if(colorLookup[selection] != undefined ) {
+             $(this).parent().parent().find('.edge-color').empty();
+             $(this).parent().parent().find('.edge-color').select2({data: colorLookup[selection].edge_colors, minimumResultsForSearch: -1}).change();
+         }
+        })
+
+     $(".submit-form").on("click", function(){
+        if ($('.quantity').val() == "" || $('.quantity').val() == '0') {
+                sweetAlert("Quantity is required and should be greater than zero.");
+            return false;
+        }
+        else if ($('.height').val() == "") {
+            sweetAlert("Height is required.");
+            return false;
+        }
+        else if ($('.width').val() == "") {
+            sweetAlert("Width is required.");
+            return false;
+        }
+        else if (!$('#long-side-1').hasClass('block-disabled') &&  !checkSide('#long-side-1') ){
+            sweetAlert("Long Side 1 values are required");
+            return false;
+        }
+        else if (!$('#long-side-2').hasClass('block-disabled') &&  !checkSide('#long-side-2') ){
+            sweetAlert("Long Side 2 values are required");
+            return false;
+        }
+        else if (!$('#short-side-1').hasClass('block-disabled') &&  !checkSide('#short-side-1') ){
+            sweetAlert("Short Side 1 values are required");
+            return false;
+        }
+        else if (!$('#short-side-2').hasClass('block-disabled') &&  !checkSide('#short-side-2') ){
+            sweetAlert("Short Side 2 values are required");
+            return false;
+        }
+        else {
+            $('.submit-form').attr('disabled', true);
+            $('#custom-form').submit();
+
+        }
+    });
+
+
+    </script>
+
+{% if custom %}
+<script>
+    $(document).ready(function() {
+        let val = _.result(_.find(lookup, function(obj) {return obj.text == "{{ custom.description2|slice:"3:"  }}";}), 'id')
+        $('.category').val(val).change();
+        console.log(val);
+        $('.material').val({{ custom.custom_material.id }}).change();
+        {% if custom.custom_bd_color %}
+            $('.board_color').val({{ custom.custom_bd_color.id }}).change();
+        {% endif %}
+
+        {% if custom.l1ep %}
+            $('#long-side-1 .edge-profile' ).val({{ custom.l1ep.id }}).change();
+            $('#long-side-1 .edge-type').val({{ custom.l1et.id }}).change();
+            $('#long-side-1 .edge-color').val({{ custom.l1ec.id }}).change();
+        {% endif  %}
+        {% if custom.l2ep %}
+            $('#long-side-2 .edge-profile').val({{ custom.l2ep.id }}).change();
+            $('#long-side-2 .edge-type').val({{ custom.l2et.id }}).change();
+            $('#long-side-2 .edge-color').val({{ custom.l2ec.id }}).change();
+        {% endif  %}
+        {% if custom.s1ep %}
+            $('#short-side-1 .edge-profile').val({{ custom.s1ep.id }}).change();
+            $('#short-side-1 .edge-type').val({{ custom.s1et.id }}).change();
+            $('#short-side-1 .edge-color').val({{ custom.s1ec.id }}).change();
+        {% endif  %}
+        {% if custom.s2ep %}
+            $('#short-side-2 .edge-profile').val({{ custom.s2ep.id }}).change();
+            $('#short-side-2 .edge-type').val({{ custom.s2et.id }}).change();
+            $('#short-side-2 .edge-color').val({{ custom.s2ec.id }}).change();
+        {% endif  %}
+        {% if custom.custom_st_color %}
+            $('.st_color').val({{ custom.custom_st_color.id }}).change();
+        {% endif %}
+        {% if custom.custom_drill_left %}
+            $('.drill-display-btn').trigger('click')
+           $('[name="custom_drill_left"]').val({{ custom.custom_drill_left.id }}).change();
+        {% endif %}
+        {% if custom.custom_drill_right %}
+            $('.drill-display-btn').trigger('click')
+           $('[name="custom_drill_right"]').val({{ custom.custom_drill_right.id }}).change();
+        {% endif %}
+    })
+</script>
+{% endif %}
+
+{% endblock %}

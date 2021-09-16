@@ -1,26 +1,37 @@
+import json
+from time import sleep
+
 from django.http import Http404, HttpResponse, JsonResponse
+from django.utils.decorators import method_decorator
+from django.views import View
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import FormView, UpdateView, RedirectView
 from django.urls import reverse, reverse_lazy
 from django.contrib import messages
 
 from room_options.forms import RoomPartitionForm
-from COS.core.decorators import logged_user_view
+from COS.core.decorators import logged_user_view,is_classy_user_view
 from room_options.models import RoomOptionsMasterModel
-from room_options.conf import Description
+from room_options.conf import Description, DogEared
 # Create your views here.
 from room_options.utils import RoomViewMixin
-
+from room_options.models import *
+@is_classy_user_view()
 class RoomPartition(FormView, RoomViewMixin):
     form_class = RoomPartitionForm
+    req_type = "Standard"
 
-    def get_template_for_display(self, partition_type):
-        if partition_type == 'CUSTOM':
+    def get_template_names(self):
+        if self.req_type == 'CUSTOM':
             template_name = 'room_options/partitions/custom_partition.html'
         else:
             template_name = 'room_options/partitions/create_partition.html'
         return template_name
 
+
     def get_success_url(self, *args, **kwargs):
+        if self.req_type == 'CUSTOM':
+            return reverse_lazy('room_options:room-partition', kwargs={'room_id': self.kwargs['room_id']}) + "?type=CUSTOM"
         return reverse_lazy('room_options:room-partition', kwargs={'room_id': self.kwargs['room_id']})
 
     def get_context_data(self, **kwargs):
@@ -32,71 +43,56 @@ class RoomPartition(FormView, RoomViewMixin):
         '''update form args '''
         data = super(RoomPartition, self).get_form_kwargs()
         request = self.request
-        data.update({'request': request, 'description': Description.PARTITION})
+        data.update({'request': request, 'description': Description.PARTITION, 'form_type': self.req_type})
         return data
+
 
     def form_invalid(self, form):
         return super(RoomPartition, self).form_invalid(form)
 
     def form_valid_save(self, form, type):
+        id = self.kwargs.get('room_id')
+        mat_type = RoomModel.objects.get(id=id).dd_mat_type
+
         obj = form.save(commit=False)
         obj.room = self.room
         obj.description = Description.PARTITION
         obj.category = type
+        if mat_type:
+            obj.width = RoomMatTypeModelMap.objects.get(id=mat_type.id).size
         obj.save()
         messages.success(self.request, 'Partition has been added')
         return super(RoomPartition, self).form_valid(form)
 
-
+@is_classy_user_view()
 @logged_user_view()
 class RoomPartitionView(RoomPartition):
     
     form_class = RoomPartitionForm
-    req_type = "Standard"
 
-    def get_template_names(self):
-        return self.get_template_for_display(self.request.GET.get('type'))
+    def dispatch(self, request, *args, **kwargs):
+        self.req_type = self.request.GET.get('type', "STANDARD")
+        return super(RoomPartitionView, self).dispatch(request, *args, **kwargs)
 
     def get_initial(self):
         initial = super(RoomPartitionView, self).get_initial()
-        details = {}
-        try:
-            option = RoomOptionsMasterModel.objects.get(room__job__user=self.request.user, pk=self.kwargs['id'])
-            details={
-                        'ed_type': option.ed_type,
-                        'notes': option.notes,
-                        'drill_pattern_width' : option.drill_pattern_width,
-                        'drill_pattern_depth' : option.drill_pattern_depth,
-                        'drill_pattern_height' : float(option.drill_pattern_height) if option.drill_pattern_height else None,
-                        'mat_type' : option.mat_type,
-                        'drill_pattern_left' : option.drill_pattern_left,
-                        'drill_pattern_right' : option.drill_pattern_right,
-                        'part_sub_category' : option.part_sub_category,
-                        'quantity' : option.quantity,
-                        'edge_profile' : option.edge_profile,
-                        'left_3rd_line_hole' : option.left_3rd_line_hole,
-                        'right_3rd_line_hole' : option.right_3rd_line_hole,
-                        'dog_eared' : option.dog_eared
-                        }        
-        except:
-            pass
-
+        details = {'edge_profile': 1, 'dog_eared':  DogEared.NO_DOG, 'mat_type': 1, 'custom_drill_pattern_left': 1,
+                   'custom_drill_pattern_right': 1, 'left_3rd_line_hole': False, 'right_3rd_line_hole': False}
         initial.update(details)
         return initial
 
     def form_valid(self, form):
         return self.form_valid_save(form, self.request.GET.get('type'))
 
-
-
-
+@is_classy_user_view()
 class RoomPartitionEditView(UpdateView, RoomPartition):
 
     model = RoomOptionsMasterModel
 
-    def get_template_names(self):
+    def dispatch(self, request, *args, **kwargs):
         obj = self.get_object()
-        return self.get_template_for_display(obj.part_sub_category)
+        self.req_type = obj.part_sub_category
+        return super(RoomPartitionEditView, self).dispatch(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         """Use this to add extra context."""
@@ -106,4 +102,24 @@ class RoomPartitionEditView(UpdateView, RoomPartition):
 
         return context
 
+
+@method_decorator(csrf_exempt, name='dispatch')
+class DrillPatternMapView(View):
+
+    def post(self, request, *args, **kwargs):
+        ret_arr = [{"id": '', "text": "Select"}]
+        request_data = json.loads(request.body)
+        rnd = flat = False
+        if request_data['type'] == 'rnd':
+            rnd = True
+        else:
+            flat = True
+        obj = CustomPartitionDrillMap.objects.filter(height__lte=request_data['height'],
+                                                     depth__lte=request_data['depth'],
+                                                     rnd=rnd, flat=flat,
+                                                     mm22=request_data['is_22mm'], category_code='1031')
+        for i in obj:
+            ret_arr.append({"id": i.id, "text": i.description})
+
+        return JsonResponse({"result": ret_arr}, status=200)
 

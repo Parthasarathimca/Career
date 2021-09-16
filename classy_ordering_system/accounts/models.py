@@ -37,7 +37,7 @@ class UserManager(BaseUserManager):
         Create superuser
         '''
         user = self.create_user(**kwargs)
-        user.is_superuser = user.is_staff =  user.is_verified = True
+        user.is_superuser = user.is_staff = user.is_verified = True
         user.is_active = True
         user.save(using=self._db)
         return user
@@ -48,7 +48,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     '''
         User model to keep the records of all type of users
     '''
-
+   
     name = models.CharField(
         ('Name'), max_length=50, db_index=True,
         validators=[
@@ -70,8 +70,14 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-
-
+    #From API
+    tenent_id= models.SmallIntegerField(blank=True,null=True)
+    tenent_name= models.CharField(max_length=100,blank=True,null=True)
+    employee_name= models.CharField(max_length=100,blank=True,null=True)
+    employee_id=models.CharField(max_length=100,blank=True,null=True)
+    is_employee=models.BooleanField(default=False)
+    two_factor_auth = models.BooleanField(default=True,null=True,blank=True)
+    
     USERNAME_FIELD = 'email'
 
     objects = UserManager()
@@ -206,10 +212,15 @@ class Feedbacks(TimestampedModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_feedback')
     page = models.CharField(max_length=255, null=True, blank=True)
     feedback = models.CharField(max_length=255, null=True, blank=True)
+    url=models.CharField(max_length=255,null=True,blank=True)
     client_id = models.BigIntegerField(null=True,blank=True)
+    email = models.EmailField(null=True, blank=True)
+    username = models.CharField(max_length=255, null=True, blank=True)
 
+    def __str__(self):
+        return str(self.feedback)
 
     class Meta:
         db_table="feedbacks"
         verbose_name = "Feedback"
-        verbose_name_plural = "Feedbakcs"
+        verbose_name_plural = "Feedbacks"

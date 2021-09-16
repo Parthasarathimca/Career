@@ -1,0 +1,31 @@
+ <div class="col-lg-6 block-disabled"  id="{{ name|slugify }}">
+            <label class="fs-6 fw-bold mb-2"><i class="show-disable fa fa-lock"></i> <i class="show-enabled fa fa-lock-open"></i> {{ name }}  </label>
+            <div class="border grouping-box mb-8">
+                <div class="row">
+                    <div class="col-md-4 col-6 mb-4 mb-md-0">
+                        <label class="fs-6 fw-bold mb-2">Edge Profile</label>
+                        <select class="form-select form-select-solid material_select top-shelf-material edge-profile form-control"
+                                data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ num }}ep">
+                                             <option value="">Select</option>
+                                    {% for value, text in form.l1ep.field.choices %}
+                                        <option value="{{value}}">{{text}}</option>
+                                     {% endfor %}
+                                          </select>
+                    </div>
+                    <div class="col-md-4 col-6 mb-4 mb-md-0">
+                        <label class="fs-6 fw-bold mb-2">Edge Type</label>
+                        <select class="form-select form-select-solid material_select top-shelf-material edge-type"
+                                data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ num }}et">
+
+                                          </select>
+                    </div>
+                    <div class="col-md-4 col-6 mb-4 mb-md-0">
+                        <label class="fs-6 fw-bold mb-2">Edge Color</label>
+                        <select class="form-select form-select-solid material_select top-shelf-material edge-color"
+                                data-control="select2" data-hide-search="true" data-placeholder="Select Material" name="{{ num }}ec">
+
+                                          </select>
+                    </div>
+                </div>
+            </div>
+        </div>

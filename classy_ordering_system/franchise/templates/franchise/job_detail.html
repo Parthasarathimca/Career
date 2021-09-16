@@ -17,7 +17,7 @@
     <div class="page-title d-lg-flex d-none  align-items-center flex-wrap me-3 mb-5 mb-lg-0 mx-3">
         <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
             <li class="breadcrumb-item text-muted">
-                <a href="{% url 'franchise:dashboard'%}"
+                <a href="{% url 'dashboard'%}"
                     class="text-muted text-hover-primary">Home</a>
             </li>
             <li class="breadcrumb-item">
@@ -47,7 +47,7 @@
         <h1 class="d-flex align-items-center text-dark fw-bolder my-1 fs-3">Order Item</h1>
         <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 my-1">
             <li class="breadcrumb-item text-muted">
-                <a href="{% url 'franchise:dashboard'%}" class="text-muted text-hover-primary">Home</a>
+                <a href="{% url 'dashboard'%}" class="text-muted text-hover-primary">Home</a>
             </li>
             <li class="breadcrumb-item">
                 <span class="bullet bg-gray-200 w-5px h-2px"></span>
@@ -85,11 +85,11 @@
                             </a>
                         </div>
                         <h3 class="card-title align-items-start  col-lg-8 d-md-flex d-block justify-content-between">
-                            <span class="card-label fs-3 mb-1 d-block mb-3"> <i>Client ID:</i>
+                            <span class="card-label fs-6 mb-1 d-block mb-3"> <strong>Client ID: </strong>
                                 #{{job.client_id}}</span>
-                            <span class="card-label fs-3 mb-1 d-block mb-3"> <i>Job ID:</i>
+                            <span class="card-label fs-6 mb-1 d-block mb-3"> <strong>Job ID: </strong>
                                 #{{job.job_id}}</span>
-                            <span id="room_name" class="card-label fs-3 mb-1 d-block mb-3"> <i>Room Name:</i> No Rooms Selected</span>
+                            <span id="room_name" class="card-label fs-6 mb-1 d-block mb-3"> <strong>Room Name: </strong> No Rooms Selected</span>
                         </h3>
 
                     </div>
@@ -129,42 +129,41 @@
                                                     transform="translate(12.000000, 12.000000) rotate(-270.000000) translate(-12.000000, -12.000000)"
                                                     x="4" y="11" width="16" height="2" rx="1" />
                                             </svg>
-                                        </span> Add room</a>
+                                        </span> Add Room</a>
                             </h3>
                         </div>
                         <div class="card-body">
 
                             <!-- Begin:: Button list -->
                             <div class=" mt-10 room-types">
-                                <a id='room_partition' href="" class="btn btn-secondary mb-2 mx-1 disabled ">Partitions</a>
-                                <a id='kd_shelf' href="{% if room_first %}{% url 'room_options:room-kd-shelf' room_id=room_first.id %}{% endif %}" class="btn btn-secondary mb-2 mx-1 disabled">KD's</a>
+                                <a id='room_partition' href="" class="btn btn-secondary mb-2 mx-1 disabled ">Partition</a>
+                                <a id='kd_shelf' href="{% if room_first %}{% url 'room_options:room-kd-shelf' room_id=room_first.id %}{% endif %}" class="btn btn-secondary mb-2 mx-1 disabled">KD</a>
                                 <a id='adj_shelf' href="{% if room_first %}{% url 'room_options:room-adj-shelf' room_id=room_first.id  %}{% endif %}" class="btn btn-secondary mb-2 mx-1 disabled">Adj.
-                                    Shelves</a>
-                                <a id='pair_door' data-url href="" class=" disabled btn btn-secondary mb-2 mx-1 disabled ">Doors 1/2
+                                    Shelf</a>
+                                <a id='pair_door' data-url href="" class=" disabled btn btn-secondary mb-2 mx-1 disabled ">Door 1/2
                                     pair</a>
-                                <a id='single_door' href="{% if room_first %} {% url 'room_options:single-door' room_id=room_first.id %} {% endif %}" class="btn btn-secondary mb-2 mx-1 disabled  ">Doors
+                                <a id='single_door' href="{% if room_first %} {% url 'room_options:single-door' room_id=room_first.id %} {% endif %}" class="btn btn-secondary mb-2 mx-1 disabled  ">Door
                                     Single</a>
                                 <a id='drawer_faces' href="#" class="btn btn-secondary mb-2 mx-1 disabled">Drawer
-                                    Faces</a>
+                                    Face</a>
                                 <a id="drawer_boxes" href="#" class="btn btn-secondary mb-2 mx-1 disabled "
                                         >
-                                        Drawer Boxes
+                                        Drawer Box
                                     </a>
-                                <a id="l_shelf" href="#" class="btn btn-secondary mb-2 mx-1 disabled">L-shelf</a>
+                                <a id="l_shelf" href="#" class="btn btn-secondary mb-2 mx-1 disabled">L-Shelf</a>
                                 <a id="corner_shelf" href="" class="btn btn-secondary mb-2 mx-1 disabled">Corner
-                                    shelf</a>
-                                <a href="#" id="cleats-stricker" class="btn btn-secondary mb-2 mx-1 disabled">Cleats /
-                                    Strikers</a>
-                                <a id="top_shelf" href="#" class="btn btn-secondary mb-2 mx-1 disabled">Top shelf</a>
-                                <a href="#" id="toe-kicks" class="btn btn-secondary mb-2 mx-1 disabled">Toe kicks</a>
-                                <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Wall Beds</a>
+                                    Shelf</a>
+                                <a href="#" id="cleats-stricker" class="btn btn-secondary mb-2 mx-1 disabled">Cleat</a>
+                                <a id="top_shelf" href="#" class="btn btn-secondary mb-2 mx-1 disabled">Top Shelf</a>
+                                <a href="#" id="toe-kicks" class="btn btn-secondary mb-2 mx-1 disabled">Toe Kick</a>
+                                <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Wall Bed</a>
                                 <!-- <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Garages</a> -->
-                                <a href="room-type/deco-doors.html" class="btn btn-secondary mb-2 mx-1 disabled">Deco doors</a>
-                                <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">LTI doors</a>
-                                <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Custom</a>
+                                <a id="wood_doors" href="#" class="btn btn-secondary mb-2 mx-1 disabled">Wood Door</a>
+                                <a id='lti_doors' href="#" class="btn btn-secondary mb-2 mx-1 disabled">LTI Doors</a>
+                                <a href="#" id="custom-form" class="btn btn-secondary mb-2 mx-1 disabled">Custom</a>
                                 <!-- <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Pocket
                                     Doors</a> -->
-                                <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Moldings
+                                <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Molding
                                     Etc.</a>
                                 <!-- <a href="#" class="btn btn-secondary mb-2 mx-1 disabled">Daytona Garage
                                     Specials</a> -->
@@ -184,16 +183,22 @@
                             <h3 class="card-title align-items-start flex-column">
                                 <span class="card-label fw-bolder fs-3 mb-1">Job Id: {{job.job_id}}</span>
                             </h3>
+                            <!-- <button type="button" class="btn btn-primary" id="send_order" disabled>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-circle-fill" viewBox="0 0 16 16">
+                                     <path d="M16 8A8 8 0 1 0 0 8a8 8 0 0 0 16 0zm-7.5 3.5a.5.5 0 0 1-1 0V5.707L5.354 7.854a.5.5 0 1 1-.708-.708l3-3a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 5.707V11.5z"></path>
+                                </svg>&nbsp;&nbsp; Send Order
+                              </button> -->
+
                             <!--end::Title-->
                         </div>
                         <!--end::Header-->
                         <!--begin::Body-->
 
-                        <div class="card-body">
+                        <div class="card-body tree-scroll" style="width:95%">
                             {% if rooms|length == 0 %}
                             <p>No Room is available</p>
                             {% else %}
-                            <div id="tree"></div>
+                            <div  class='' id="tree"></div>
                             {% endif %}
                         </div>
                         <!--end::Body-->
@@ -210,13 +215,27 @@
     </div>
     <!--end::Post-->
 </div>
+<div class="d-none" id='all_room_names'>
+    {% for room  in  job.job_room.all %}
+    <input type="hidden" value="{{room.room_name}}">
+    {% endfor %}
+</div>
+<div class="d-block" id='disabled_nodes'>
+    {% for each_node  in  disabled_nodes %}
+    <input type="hidden" value="{{each_node}}">
+    {% endfor %}
+</div>
+
+
+
 
 {% endblock %}
-{% block extra_scripts %}
 
+{% block extra_scripts %}
+<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
 <script>
     showRoomOptions= (roomID,roomText)=>{
-        $('#room_name').html("<i>Room Name:    </i>"+roomText)
+        $('#room_name').html("<strong>Room Name:    </strong>"+roomText)
         $('#room_partition').removeClass("disabled").attr('href',"/classy/room/room_partition/"+roomID)
         $('#pair_door').removeClass("disabled").attr('href',"/classy/room/pair_doors/"+roomID)
         $('#single_door').removeClass("disabled").attr('href',"/classy/room/single_door/"+roomID)
@@ -231,9 +250,12 @@
         $('#top_shelf').removeClass("disabled").attr('href',"/classy/room/top-shelf/"+roomID)
         $('#drawer_faces').removeClass("disabled").attr('href',"/classy/room/drawer-faces/"+roomID)
         $('#adj_shelf').removeClass("disabled").attr('href',"/classy/room/room_adj_shelf/"+roomID)
-        
+        $('#custom-form').removeClass("disabled").attr('href',"/classy/room/custom/"+roomID)
         $('#toe-kicks').removeClass("disabled").attr('href',"/classy/room/toe-kicks/"+roomID)
+        $('#lti_doors').removeClass("disabled").attr('href',"/classy/room/lti-doors/"+roomID)
         
+
+        $('#wood_doors').removeClass("disabled").attr('href',"/classy/room/wood-doors/"+roomID)     
 
     }
 
@@ -252,19 +274,92 @@
             primaryKey: 'id',
             uiLibrary: 'bootstrap4',
             dataSource: '{% url "franchise:job-detail-tree-data" job_id=job.id %}',
-            //checkboxes: true,
+            checkboxes: true,
             border: true,
             selectionType: 'single',
+            imageHtmlField:'delete_url',
             select: function (e, node, id) {
-            if(id !== 'undefined'){
+            if(id !== 'undefined' && typeof id != Number){
                 window.location.href=id;
             }
+            
+         },
+        });
+        setTimeout(function(){ 
+    
+            node = tree.getNodeByText('Job Id- {{job.job_id}}'); 
+            tree.expand(node);
+            
+            $('#all_room_names input').each(function () {
+                node = tree.getNodeByText(this.value) 
+                tree.expand(node);
+             });      
              
-         }
-         
-        }); 
-        
+            // tree.expandAll()
+            // for disable 
+            $('#disabled_nodes input').each(function () {
+               // console.log(tree.getNodeById(this.value))
+                nodeSelected = tree.getNodeById(this.value)  !== undefined ?tree.getNodeById(this.value) :tree.getNodeByText(this.value)
+                console.log('selected ===>',this.value)
+                tree.disable(nodeSelected,false);
+                tree.expand(nodeSelected);  
+                tree.check(nodeSelected);
+                
+                  
+             });
+                   
+         }, 200);
+         getCheckedNodesCustom=()=>{
+               
+               var a = [],
+                   b = tree.find('li [data-role="checkbox"] input[type="checkbox"]');
+              
+                   $.each(b, function () {
+                       var b = $(this);
+                       if( b.checkbox("state")==="checked" ){
+                       a.push(b.closest("li").find('button').data("delete_id"));
+                       a.push(b.closest("li").find('button').data("model"));
+                       a.push(b.closest("li").find('button').data("description"));
+                       }
+                   })
+                   
+              return a
+           }  
+           setTimeout(function(){ 
+    
+            tree.on('checkboxChange', function (e, $node, record, state) {
+                    //alert('The new state of record ' + record.text + ' is ' + state);   
+                    $('#send_order').removeAttr("disabled")
+                });
+            $('#send_order').on("click",function(){
+                var result = getCheckedNodesCustom();
+                sendOrder("{% url 'franchise:job-detail-send-order' job.id %}",result)
+            })
+            
+            },300);
+        function sendOrder(url,result){
+            $.ajax({                       
+            url: url,                  
+            data: {"send_order_list":JSON.stringify(result)
+                },
+            success: function (data) {
+               data=JSON.parse(data)
+                if(data['status']==200){
+               Swal.fire({
+                     title:    'Order Sent',
+                     text: 'Your order has been sent Successfully ',
+                     icon:  'success',
+                     
+                     customClass: {
+                     confirmButton: 'btn btn-primary',            
+                      },
+                     });
+                  } 
+            window.location.reload();
+            }   
+        });
 
+        }  
         // unchecked the selected room
         if ($("input[type=radio]").is(':checked')){
             $("input[type=radio]").prop('checked', false);
@@ -282,7 +377,7 @@
     $('#room_'+roomId).trigger('click');
   }
     const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get('room');
+    const roomId = urlParams.get('room');   
             if(roomId){
             setTimeout(enableRoom(roomId),100)
             
@@ -290,6 +385,54 @@
 
     });
     
+ deleteRoomItem=(url,pk,model,description)=>{
+   $.ajax({                       
+            url: url,                  
+            data: {"pk":pk,'model':model,'description':description
+                },
+            success: function (data) {
+               data=JSON.parse(data)
+                if(data['status']==204){
+               Swal.fire({
+                     title:    'Deleted!',
+                     text: 'Your data has been deleted.',
+                     icon:  'success',
+                     customClass: {
+                     confirmButton: 'btn btn-primary',            
+                      },
+                     });
+                  } 
+                window.location.replace("{% url 'franchise:job-detail' job.id %}")
+            }   
+        });
+}
+
+    $(document).on("click", ".del-data", function (e) {
+      pk= $(this).data('delete_id')
+      model=$(this).data('model')
+      description=$(this).data('description')
+    
+    Swal.fire({
+        title: 'Are you sure? <br> All of the following related items will be deleted: <b>Room,</b> <br><b>Room Options Master</b>',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,       
+        customClass: {
+            confirmButton: 'btn btn-primary',
+            cancelButton: 'btn btn-secondary'
+          },
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+         deleteRoomItem("{% url 'franchise:delete-room' %}",pk,model,description)
+        }
+      })
+    e.preventDefault();
+});
+
+
+
+
 </script>
-<script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+
 {% endblock %}
